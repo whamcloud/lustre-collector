@@ -1,8 +1,13 @@
+// Copyright (c) 2018 DDN. All rights reserved.
+// Use of this source code is governed by a MIT-style
+// license that can be found in the LICENSE file.
+
+use base_parsers::{digits, till_newline, word};
 use combine::error::ParseError;
-use combine::parser::char::{alpha_num, digit, newline, spaces, string};
-use combine::parser::repeat::take_until;
+use combine::parser::char::{newline, spaces, string};
 use combine::stream::Stream;
 use combine::{choice, many, many1, token, try, Parser};
+use snapshot_time::snapshot_time;
 
 #[derive(PartialEq, Debug, Serialize, Deserialize)]
 pub struct BrwStatsBucketVals {
@@ -31,42 +36,6 @@ where
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     string(x).map(move |_| String::from(y))
-}
-
-fn word<I>() -> impl Parser<Input = I, Output = String>
-where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
-{
-    many1(alpha_num().or(token('_')))
-}
-
-fn digits<I>() -> impl Parser<Input = I, Output = String>
-where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
-{
-    many1(digit())
-}
-
-fn till_newline<I>() -> impl Parser<Input = I, Output = String>
-where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
-{
-    take_until(newline())
-}
-
-fn snapshot_time<I>() -> impl Parser<Input = I, Output = String>
-where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
-{
-    (
-        string("snapshot_time:").skip(spaces()),
-        digits().skip(token('.')),
-        digits().skip(till_newline()),
-    ).map(|(_, secs, nsecs)| format!("{}.{}", secs, nsecs))
 }
 
 fn rw_columns<I>() -> impl Parser<Input = I, Output = ()>
@@ -178,30 +147,6 @@ where
 mod tests {
     use super::*;
     use combine::stream::state::{SourcePosition, State};
-
-    #[test]
-    fn test_snapshot_time() {
-        let x = State::new(
-            r#"snapshot_time:         1534158712.738772898 (secs.nsecs)
-"#,
-        );
-
-        let result = snapshot_time().easy_parse(x);
-
-        assert_eq!(
-            result,
-            Ok((
-                "1534158712.738772898".to_string(),
-                State {
-                    input: "\n",
-                    positioner: SourcePosition {
-                        line: 1,
-                        column: 57
-                    }
-                }
-            ))
-        );
-    }
 
     #[test]
     fn test_rw_columns() {
