@@ -2,28 +2,28 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use base_parsers::{digits, till_newline, word};
+use base_parsers::{digits, not_word, till_newline, word};
 use combine::error::ParseError;
 use combine::parser::char::{newline, spaces, string};
 use combine::stream::Stream;
 use combine::{choice, many, many1, token, try, Parser};
 use snapshot_time::snapshot_time;
 
-#[derive(PartialEq, Debug, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, Serialize)]
 pub struct BrwStatsBucketVals {
-    count: String,
-    pct: String,
-    cum_pct: String,
+    pub count: String,
+    pub pct: String,
+    pub cum_pct: String,
 }
 
-#[derive(PartialEq, Debug, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, Serialize)]
 pub struct BrwStatsBuckets {
     pub name: String,
     pub read: BrwStatsBucketVals,
     pub write: BrwStatsBucketVals,
 }
 
-#[derive(PartialEq, Debug, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, Serialize)]
 pub struct BrwStats {
     pub name: String,
     pub unit: String,
@@ -44,7 +44,6 @@ where
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     (
-        spaces(),
         string("read"),
         spaces(),
         token('|'),
@@ -82,7 +81,7 @@ where
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     (
-        word().skip(token(':')),
+        not_word("obdfilter").skip(token(':')),
         spaces().with(digits()),
         spaces().with(digits()),
         spaces().with(digits()),
@@ -128,7 +127,7 @@ where
     ((
         rw_columns().skip(newline()),
         header().skip(newline()),
-        many(bucket().skip(newline())),
+        many(bucket().skip(newline())).skip(spaces()),
     )).map(|(_, stats, xs)| BrwStats {
         buckets: xs,
         ..stats
@@ -151,7 +150,7 @@ mod tests {
     #[test]
     fn test_rw_columns() {
         let x = State::new(
-            r#"                           read      |     write
+            r#"read      |     write
 "#,
         );
 
@@ -165,7 +164,7 @@ mod tests {
                     input: "\n",
                     positioner: SourcePosition {
                         line: 1,
-                        column: 49
+                        column: 22
                     }
                 }
             ))
@@ -239,7 +238,7 @@ mod tests {
     #[test]
     fn test_section() {
         let x = State::new(
-            r#"                           read      |     write
+            r#"read      |     write
 pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
 32:		         0   0   0   |    1  11  11
 64:		         0   0   0   |    0   0  11
@@ -350,7 +349,7 @@ pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
     #[test]
     fn test_empty_section() {
         let x = State::new(
-            r#"                           read      |     write
+            r#"read      |     write
 pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
 "#,
         );
