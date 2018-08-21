@@ -7,6 +7,7 @@ extern crate serde_derive;
 
 extern crate serde;
 extern crate serde_json;
+extern crate serde_yaml;
 
 extern crate combine;
 use combine::Parser;
@@ -14,6 +15,7 @@ use std::str;
 
 mod base_parsers;
 mod brw_stats_parser;
+mod obdfilter;
 mod snapshot_time;
 mod stats_parser;
 

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use base_parsers::{digits, word};
+use base_parsers::{digits, not_word, word};
 use combine::error::ParseError;
 use combine::parser::char::{newline, spaces, string};
 use combine::parser::choice::or;
@@ -12,13 +12,13 @@ use snapshot_time::snapshot_time;
 
 #[derive(PartialEq, Debug, Serialize, Deserialize)]
 pub struct Stat {
-    name: String,
-    samples: String,
-    units: String,
-    min: Option<String>,
-    max: Option<String>,
-    sum: Option<String>,
-    sumsquare: Option<String>,
+    pub name: String,
+    pub samples: String,
+    pub units: String,
+    pub min: Option<String>,
+    pub max: Option<String>,
+    pub sum: Option<String>,
+    pub sumsquare: Option<String>,
 }
 
 fn name_count_units<I>() -> impl Parser<Input = I, Output = (String, String, String)>
@@ -27,7 +27,7 @@ where
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     (
-        word().skip(spaces()),
+        not_word("obdfilter").skip(spaces()),
         digits(),
         spaces().with(string("samples")),
         spaces().with(between(token('['), token(']'), word())),
@@ -104,7 +104,7 @@ where
     )
 }
 
-fn stats<I>() -> impl Parser<Input = I, Output = Vec<Stat>>
+pub fn stats<I>() -> impl Parser<Input = I, Output = Vec<Stat>>
 where
     I: Stream<Item = char>,
     I::Error: ParseError<I::Item, I::Range, I::Position>,
