@@ -2,25 +2,18 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use base_parsers::{digits, not_word, till_newline, word};
+use base_parsers::{digits, till_newline, word};
 use combine::error::ParseError;
 use combine::parser::char::{newline, spaces, string};
 use combine::stream::Stream;
-use combine::{choice, many, many1, token, try, Parser};
+use combine::{choice, many, many1, one_of, optional, token, try, Parser};
 use snapshot_time::snapshot_time;
 
 #[derive(PartialEq, Debug, Serialize)]
-pub struct BrwStatsBucketVals {
-    pub count: String,
-    pub pct: String,
-    pub cum_pct: String,
-}
-
-#[derive(PartialEq, Debug, Serialize)]
 pub struct BrwStatsBuckets {
-    pub name: String,
-    pub read: BrwStatsBucketVals,
-    pub write: BrwStatsBucketVals,
+    pub name: u64,
+    pub read: u64,
+    pub write: u64,
 }
 
 #[derive(PartialEq, Debug, Serialize)]
@@ -28,6 +21,20 @@ pub struct BrwStats {
     pub name: String,
     pub unit: String,
     pub buckets: Vec<BrwStatsBuckets>,
+}
+
+fn human_to_bytes((x, y): (String, Option<char>)) -> u64 {
+    let num = x.parse::<u64>().unwrap();
+
+    let mult = match y {
+        None => 1,
+        Some('K') | Some('k') => 2_u64.pow(10),
+        Some('M') | Some('m') => 2_u64.pow(20),
+        Some('G') | Some('g') => 2_u64.pow(30),
+        Some(x) => panic!(format!("Conversion to : {} not covered", x)),
+    };
+
+    num * mult
 }
 
 fn string_to<I>(x: &'static str, y: &'static str) -> impl Parser<Input = I, Output = String>
@@ -81,42 +88,19 @@ where
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     (
-        not_word("obdfilter").skip(token(':')),
-        spaces().with(digits()),
+        digits()
+            .and(optional(one_of("KkMmGg".chars())))
+            .map(human_to_bytes),
+        token(':'),
+        spaces().with(digits()).map(|x| x.parse::<u64>().unwrap()),
         spaces().with(digits()),
         spaces().with(digits()),
         spaces().skip(token('|')),
-        spaces().with(digits()),
+        spaces().with(digits()).map(|x| x.parse::<u64>().unwrap()),
         spaces().with(digits()),
         spaces().with(digits()),
         till_newline(),
-    ).map(
-        |(
-            name,
-            read_count,
-            read_pct,
-            read_cum_pct,
-            _,
-            write_count,
-            write_pct,
-            write_cum_pct,
-            _,
-        )| {
-            BrwStatsBuckets {
-                name,
-                read: BrwStatsBucketVals {
-                    count: read_count,
-                    pct: read_pct,
-                    cum_pct: read_cum_pct,
-                },
-                write: BrwStatsBucketVals {
-                    count: write_count,
-                    pct: write_pct,
-                    cum_pct: write_cum_pct,
-                },
-            }
-        },
-    )
+    ).map(|(name, _, read, _, _, _, write, _, _, _)| BrwStatsBuckets { name, read, write })
 }
 
 fn section<I>() -> impl Parser<Input = I, Output = BrwStats>
@@ -146,6 +130,17 @@ where
 mod tests {
     use super::*;
     use combine::stream::state::{SourcePosition, State};
+
+    #[test]
+    fn test_human_to_bytes() {
+        assert_eq!(human_to_bytes(("1".to_string(), Some('k'))), 1024);
+        assert_eq!(human_to_bytes(("2".to_string(), Some('K'))), 2048);
+        assert_eq!(human_to_bytes(("1".to_string(), Some('m'))), 1048576);
+        assert_eq!(human_to_bytes(("2".to_string(), Some('M'))), 2097152);
+        assert_eq!(human_to_bytes(("1".to_string(), Some('g'))), 1073741824);
+        assert_eq!(human_to_bytes(("5".to_string(), Some('G'))), 5368709120);
+        assert_eq!(human_to_bytes(("5".to_string(), None)), 5);
+    }
 
     #[test]
     fn test_rw_columns() {
@@ -212,17 +207,9 @@ mod tests {
             result,
             Ok((
                 BrwStatsBuckets {
-                    name: "32".to_string(),
-                    read: BrwStatsBucketVals {
-                        count: "0".to_string(),
-                        pct: "0".to_string(),
-                        cum_pct: "0".to_string(),
-                    },
-                    write: BrwStatsBucketVals {
-                        count: "1".to_string(),
-                        pct: "11".to_string(),
-                        cum_pct: "11".to_string(),
-                    },
+                    name: 32,
+                    read: 0,
+                    write: 1,
                 },
                 State {
                     input: "\n",
@@ -259,82 +246,34 @@ pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
                     unit: "rpcs".to_string(),
                     buckets: vec![
                         BrwStatsBuckets {
-                            name: "32".to_string(),
-                            read: BrwStatsBucketVals {
-                                count: "0".to_string(),
-                                pct: "0".to_string(),
-                                cum_pct: "0".to_string(),
-                            },
-                            write: BrwStatsBucketVals {
-                                count: "1".to_string(),
-                                pct: "11".to_string(),
-                                cum_pct: "11".to_string(),
-                            },
+                            name: 32,
+                            read: 0,
+                            write: 1,
                         },
                         BrwStatsBuckets {
-                            name: "64".to_string(),
-                            read: BrwStatsBucketVals {
-                                count: "0".to_string(),
-                                pct: "0".to_string(),
-                                cum_pct: "0".to_string(),
-                            },
-                            write: BrwStatsBucketVals {
-                                count: "0".to_string(),
-                                pct: "0".to_string(),
-                                cum_pct: "11".to_string(),
-                            },
+                            name: 64,
+                            read: 0,
+                            write: 0,
                         },
                         BrwStatsBuckets {
-                            name: "128".to_string(),
-                            read: BrwStatsBucketVals {
-                                count: "0".to_string(),
-                                pct: "0".to_string(),
-                                cum_pct: "0".to_string(),
-                            },
-                            write: BrwStatsBucketVals {
-                                count: "0".to_string(),
-                                pct: "0".to_string(),
-                                cum_pct: "11".to_string(),
-                            },
+                            name: 128,
+                            read: 0,
+                            write: 0,
                         },
                         BrwStatsBuckets {
-                            name: "256".to_string(),
-                            read: BrwStatsBucketVals {
-                                count: "0".to_string(),
-                                pct: "0".to_string(),
-                                cum_pct: "0".to_string(),
-                            },
-                            write: BrwStatsBucketVals {
-                                count: "0".to_string(),
-                                pct: "0".to_string(),
-                                cum_pct: "11".to_string(),
-                            },
+                            name: 256,
+                            read: 0,
+                            write: 0,
                         },
                         BrwStatsBuckets {
-                            name: "512".to_string(),
-                            read: BrwStatsBucketVals {
-                                count: "0".to_string(),
-                                pct: "0".to_string(),
-                                cum_pct: "0".to_string(),
-                            },
-                            write: BrwStatsBucketVals {
-                                count: "0".to_string(),
-                                pct: "0".to_string(),
-                                cum_pct: "11".to_string(),
-                            },
+                            name: 512,
+                            read: 0,
+                            write: 0,
                         },
                         BrwStatsBuckets {
-                            name: "1K".to_string(),
-                            read: BrwStatsBucketVals {
-                                count: "0".to_string(),
-                                pct: "0".to_string(),
-                                cum_pct: "0".to_string(),
-                            },
-                            write: BrwStatsBucketVals {
-                                count: "8".to_string(),
-                                pct: "88".to_string(),
-                                cum_pct: "100".to_string(),
-                            },
+                            name: 1024,
+                            read: 0,
+                            write: 8,
                         },
                     ],
                 },
@@ -533,82 +472,34 @@ disk I/O size          ios   % cum % |  ios         % cum %
                             unit: "rpcs".to_string(),
                             buckets: vec![
                                 BrwStatsBuckets {
-                                    name: "32".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "1".to_string(),
-                                        pct: "11".to_string(),
-                                        cum_pct: "11".to_string(),
-                                    },
+                                    name: 32,
+                                    read: 0,
+                                    write: 1,
                                 },
                                 BrwStatsBuckets {
-                                    name: "64".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "11".to_string(),
-                                    },
+                                    name: 64,
+                                    read: 0,
+                                    write: 0,
                                 },
                                 BrwStatsBuckets {
-                                    name: "128".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "11".to_string(),
-                                    },
+                                    name: 128,
+                                    read: 0,
+                                    write: 0,
                                 },
                                 BrwStatsBuckets {
-                                    name: "256".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "1".to_string(),
-                                        pct: "2".to_string(),
-                                        cum_pct: "3".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "11".to_string(),
-                                    },
+                                    name: 256,
+                                    read: 1,
+                                    write: 0,
                                 },
                                 BrwStatsBuckets {
-                                    name: "512".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "11".to_string(),
-                                    },
+                                    name: 512,
+                                    read: 0,
+                                    write: 0,
                                 },
                                 BrwStatsBuckets {
-                                    name: "1K".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "8".to_string(),
-                                        pct: "88".to_string(),
-                                        cum_pct: "100".to_string(),
-                                    },
+                                    name: 1024,
+                                    read: 0,
+                                    write: 8,
                                 },
                             ],
                         },
@@ -617,30 +508,14 @@ disk I/O size          ios   % cum % |  ios         % cum %
                             unit: "rpcs".to_string(),
                             buckets: vec![
                                 BrwStatsBuckets {
-                                    name: "0".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "6".to_string(),
-                                        pct: "66".to_string(),
-                                        cum_pct: "66".to_string(),
-                                    },
+                                    name: 0,
+                                    read: 0,
+                                    write: 6,
                                 },
                                 BrwStatsBuckets {
-                                    name: "1".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "3".to_string(),
-                                        pct: "33".to_string(),
-                                        cum_pct: "100".to_string(),
-                                    },
+                                    name: 1,
+                                    read: 0,
+                                    write: 3,
                                 },
                             ],
                         },
@@ -648,17 +523,9 @@ disk I/O size          ios   % cum % |  ios         % cum %
                             name: "discont_blocks".to_string(),
                             unit: "rpcs".to_string(),
                             buckets: vec![BrwStatsBuckets {
-                                name: "0".to_string(),
-                                read: BrwStatsBucketVals {
-                                    count: "0".to_string(),
-                                    pct: "0".to_string(),
-                                    cum_pct: "0".to_string(),
-                                },
-                                write: BrwStatsBucketVals {
-                                    count: "9".to_string(),
-                                    pct: "100".to_string(),
-                                    cum_pct: "100".to_string(),
-                                },
+                                name: 0,
+                                read: 0,
+                                write: 9,
                             }],
                         },
                         BrwStats {
@@ -666,56 +533,24 @@ disk I/O size          ios   % cum % |  ios         % cum %
                             unit: "ios".to_string(),
                             buckets: vec![
                                 BrwStatsBuckets {
-                                    name: "1".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "1".to_string(),
-                                        pct: "11".to_string(),
-                                        cum_pct: "11".to_string(),
-                                    },
+                                    name: 1,
+                                    read: 0,
+                                    write: 1,
                                 },
                                 BrwStatsBuckets {
-                                    name: "2".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "11".to_string(),
-                                    },
+                                    name: 2,
+                                    read: 0,
+                                    write: 0,
                                 },
                                 BrwStatsBuckets {
-                                    name: "3".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "11".to_string(),
-                                    },
+                                    name: 3,
+                                    read: 0,
+                                    write: 0,
                                 },
                                 BrwStatsBuckets {
-                                    name: "4".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "8".to_string(),
-                                        pct: "88".to_string(),
-                                        cum_pct: "100".to_string(),
-                                    },
+                                    name: 4,
+                                    read: 0,
+                                    write: 8,
                                 },
                             ],
                         },
@@ -724,173 +559,69 @@ disk I/O size          ios   % cum % |  ios         % cum %
                             unit: "ios".to_string(),
                             buckets: vec![
                                 BrwStatsBuckets {
-                                    name: "1".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "3".to_string(),
-                                        pct: "9".to_string(),
-                                        cum_pct: "9".to_string(),
-                                    },
+                                    name: 1,
+                                    read: 0,
+                                    write: 3,
                                 },
                                 BrwStatsBuckets {
-                                    name: "2".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "3".to_string(),
-                                        pct: "9".to_string(),
-                                        cum_pct: "18".to_string(),
-                                    },
+                                    name: 2,
+                                    read: 0,
+                                    write: 3,
                                 },
                                 BrwStatsBuckets {
-                                    name: "3".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "3".to_string(),
-                                        pct: "9".to_string(),
-                                        cum_pct: "27".to_string(),
-                                    },
+                                    name: 3,
+                                    read: 0,
+                                    write: 3,
                                 },
                                 BrwStatsBuckets {
-                                    name: "4".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "3".to_string(),
-                                        pct: "9".to_string(),
-                                        cum_pct: "36".to_string(),
-                                    },
+                                    name: 4,
+                                    read: 0,
+                                    write: 3,
                                 },
                                 BrwStatsBuckets {
-                                    name: "5".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "3".to_string(),
-                                        pct: "9".to_string(),
-                                        cum_pct: "45".to_string(),
-                                    },
+                                    name: 5,
+                                    read: 0,
+                                    write: 3,
                                 },
                                 BrwStatsBuckets {
-                                    name: "6".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "3".to_string(),
-                                        pct: "9".to_string(),
-                                        cum_pct: "54".to_string(),
-                                    },
+                                    name: 6,
+                                    read: 0,
+                                    write: 3,
                                 },
                                 BrwStatsBuckets {
-                                    name: "7".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "3".to_string(),
-                                        pct: "9".to_string(),
-                                        cum_pct: "63".to_string(),
-                                    },
+                                    name: 7,
+                                    read: 0,
+                                    write: 3,
                                 },
                                 BrwStatsBuckets {
-                                    name: "8".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "3".to_string(),
-                                        pct: "9".to_string(),
-                                        cum_pct: "72".to_string(),
-                                    },
+                                    name: 8,
+                                    read: 0,
+                                    write: 3,
                                 },
                                 BrwStatsBuckets {
-                                    name: "9".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "2".to_string(),
-                                        pct: "6".to_string(),
-                                        cum_pct: "78".to_string(),
-                                    },
+                                    name: 9,
+                                    read: 0,
+                                    write: 2,
                                 },
                                 BrwStatsBuckets {
-                                    name: "10".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "2".to_string(),
-                                        pct: "6".to_string(),
-                                        cum_pct: "84".to_string(),
-                                    },
+                                    name: 10,
+                                    read: 0,
+                                    write: 2,
                                 },
                                 BrwStatsBuckets {
-                                    name: "11".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "2".to_string(),
-                                        pct: "6".to_string(),
-                                        cum_pct: "90".to_string(),
-                                    },
+                                    name: 11,
+                                    read: 0,
+                                    write: 2,
                                 },
                                 BrwStatsBuckets {
-                                    name: "12".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "2".to_string(),
-                                        pct: "6".to_string(),
-                                        cum_pct: "96".to_string(),
-                                    },
+                                    name: 12,
+                                    read: 0,
+                                    write: 2,
                                 },
                                 BrwStatsBuckets {
-                                    name: "13".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "1".to_string(),
-                                        pct: "3".to_string(),
-                                        cum_pct: "100".to_string(),
-                                    },
+                                    name: 13,
+                                    read: 0,
+                                    write: 1,
                                 },
                             ],
                         },
@@ -899,56 +630,24 @@ disk I/O size          ios   % cum % |  ios         % cum %
                             unit: "ios".to_string(),
                             buckets: vec![
                                 BrwStatsBuckets {
-                                    name: "32".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "1".to_string(),
-                                        pct: "11".to_string(),
-                                        cum_pct: "11".to_string(),
-                                    },
+                                    name: 32,
+                                    read: 0,
+                                    write: 1,
                                 },
                                 BrwStatsBuckets {
-                                    name: "64".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "11".to_string(),
-                                    },
+                                    name: 64,
+                                    read: 0,
+                                    write: 0,
                                 },
                                 BrwStatsBuckets {
-                                    name: "128".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "2".to_string(),
-                                        pct: "22".to_string(),
-                                        cum_pct: "33".to_string(),
-                                    },
+                                    name: 128,
+                                    read: 0,
+                                    write: 2,
                                 },
                                 BrwStatsBuckets {
-                                    name: "256".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "6".to_string(),
-                                        pct: "66".to_string(),
-                                        cum_pct: "100".to_string(),
-                                    },
+                                    name: 256,
+                                    read: 0,
+                                    write: 6,
                                 },
                             ],
                         },
@@ -957,56 +656,24 @@ disk I/O size          ios   % cum % |  ios         % cum %
                             unit: "ios".to_string(),
                             buckets: vec![
                                 BrwStatsBuckets {
-                                    name: "128K".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "1".to_string(),
-                                        pct: "3".to_string(),
-                                        cum_pct: "3".to_string(),
-                                    },
+                                    name: 131072,
+                                    read: 0,
+                                    write: 1,
                                 },
                                 BrwStatsBuckets {
-                                    name: "256K".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "3".to_string(),
-                                    },
+                                    name: 262144,
+                                    read: 0,
+                                    write: 0,
                                 },
                                 BrwStatsBuckets {
-                                    name: "512K".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "3".to_string(),
-                                    },
+                                    name: 524288,
+                                    read: 0,
+                                    write: 0,
                                 },
                                 BrwStatsBuckets {
-                                    name: "1M".to_string(),
-                                    read: BrwStatsBucketVals {
-                                        count: "0".to_string(),
-                                        pct: "0".to_string(),
-                                        cum_pct: "0".to_string(),
-                                    },
-                                    write: BrwStatsBucketVals {
-                                        count: "32".to_string(),
-                                        pct: "96".to_string(),
-                                        cum_pct: "100".to_string(),
-                                    },
+                                    name: 1048576,
+                                    read: 0,
+                                    write: 32,
                                 },
                             ],
                         },
