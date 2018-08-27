@@ -2,26 +2,23 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
+use combine::{
+    between,
+    error::ParseError,
+    many1,
+    parser::{
+        char::{newline, spaces, string},
+        choice::or,
+    },
+    stream::Stream,
+    token, Parser,
+};
+
 use base_parsers::{digits, not_word, word};
-use combine::error::ParseError;
-use combine::parser::char::{newline, spaces, string};
-use combine::parser::choice::or;
-use combine::stream::Stream;
-use combine::{between, many1, token, Parser};
 use snapshot_time::snapshot_time;
+use stats::Stat;
 
-#[derive(PartialEq, Debug, Serialize, Deserialize)]
-pub struct Stat {
-    pub name: String,
-    pub samples: String,
-    pub units: String,
-    pub min: Option<String>,
-    pub max: Option<String>,
-    pub sum: Option<String>,
-    pub sumsquare: Option<String>,
-}
-
-fn name_count_units<I>() -> impl Parser<Input = I, Output = (String, String, String)>
+fn name_count_units<I>() -> impl Parser<Input = I, Output = (String, u64, String)>
 where
     I: Stream<Item = char>,
     I::Error: ParseError<I::Item, I::Range, I::Position>,
@@ -34,7 +31,7 @@ where
     ).map(|(x, y, _, z)| (x, y, z))
 }
 
-fn min_max_sum<I>() -> impl Parser<Input = I, Output = (String, String, String)>
+fn min_max_sum<I>() -> impl Parser<Input = I, Output = (u64, u64, u64)>
 where
     I: Stream<Item = char>,
     I::Error: ParseError<I::Item, I::Range, I::Position>,
@@ -46,7 +43,7 @@ where
     )
 }
 
-fn sum_sq<I>() -> impl Parser<Input = I, Output = String>
+fn sum_sq<I>() -> impl Parser<Input = I, Output = u64>
 where
     I: Stream<Item = char>,
     I::Error: ParseError<I::Item, I::Range, I::Position>,
@@ -64,11 +61,8 @@ where
         or(
             newline().map(|_| (None, None)),
             (
-                min_max_sum().map(|x| Some(x)),
-                or(
-                    newline().map(|_| None),
-                    sum_sq().map(|x| Some(x)).skip(newline()),
-                ),
+                min_max_sum().map(Some),
+                or(newline().map(|_| None), sum_sq().map(Some).skip(newline())),
             ),
         ),
     ).map(
@@ -129,7 +123,7 @@ mod tests {
         assert_eq!(
             result,
             Ok((
-                ("create".to_string(), "726".to_string(), "reqs".to_string()),
+                ("create".to_string(), 726, "reqs".to_string()),
                 State {
                     input: "\n",
                     positioner: SourcePosition {
@@ -155,11 +149,11 @@ mod tests {
             Ok((
                 Stat {
                     name: "cache_miss".to_string(),
-                    samples: "21108".to_string(),
+                    samples: 21108,
                     units: "pages".to_string(),
-                    min: Some("1".to_string()),
-                    max: Some("1".to_string()),
-                    sum: Some("21108".to_string()),
+                    min: Some(1),
+                    max: Some(1),
+                    sum: Some(21108),
                     sumsquare: None
                 },
                 State {
@@ -184,12 +178,12 @@ mod tests {
             Ok((
                 Stat {
                     name: "obd_ping".to_string(),
-                    samples: "1108".to_string(),
                     units: "usec".to_string(),
-                    min: Some("15".to_string()),
-                    max: Some("72".to_string()),
-                    sum: Some("47014".to_string()),
-                    sumsquare: Some("2156132".to_string())
+                    samples: 1108,
+                    min: Some(15),
+                    max: Some(72),
+                    sum: Some(47014),
+                    sumsquare: Some(2156132)
                 },
                 State {
                     input: "",
@@ -226,16 +220,16 @@ ping                      1075 samples [reqs]
                 vec![
                     Stat {
                         name: "write_bytes".to_string(),
-                        samples: "9".to_string(),
+                        samples: 9,
                         units: "bytes".to_string(),
-                        min: Some("98303".to_string()),
-                        max: Some("4194304".to_string()),
-                        sum: Some("33554431".to_string()),
+                        min: Some(98303),
+                        max: Some(4194304),
+                        sum: Some(33554431),
                         sumsquare: None,
                     },
                     Stat {
                         name: "create".to_string(),
-                        samples: "4".to_string(),
+                        samples: 4,
                         units: "reqs".to_string(),
                         min: None,
                         max: None,
@@ -244,7 +238,7 @@ ping                      1075 samples [reqs]
                     },
                     Stat {
                         name: "statfs".to_string(),
-                        samples: "5634".to_string(),
+                        samples: 5634,
                         units: "reqs".to_string(),
                         min: None,
                         max: None,
@@ -253,7 +247,7 @@ ping                      1075 samples [reqs]
                     },
                     Stat {
                         name: "get_info".to_string(),
-                        samples: "2".to_string(),
+                        samples: 2,
                         units: "reqs".to_string(),
                         min: None,
                         max: None,
@@ -262,7 +256,7 @@ ping                      1075 samples [reqs]
                     },
                     Stat {
                         name: "connect".to_string(),
-                        samples: "4".to_string(),
+                        samples: 4,
                         units: "reqs".to_string(),
                         min: None,
                         max: None,
@@ -271,7 +265,7 @@ ping                      1075 samples [reqs]
                     },
                     Stat {
                         name: "reconnect".to_string(),
-                        samples: "1".to_string(),
+                        samples: 1,
                         units: "reqs".to_string(),
                         min: None,
                         max: None,
@@ -280,7 +274,7 @@ ping                      1075 samples [reqs]
                     },
                     Stat {
                         name: "disconnect".to_string(),
-                        samples: "3".to_string(),
+                        samples: 3,
                         units: "reqs".to_string(),
                         min: None,
                         max: None,
@@ -289,7 +283,7 @@ ping                      1075 samples [reqs]
                     },
                     Stat {
                         name: "statfs".to_string(),
-                        samples: "18".to_string(),
+                        samples: 18,
                         units: "reqs".to_string(),
                         min: None,
                         max: None,
@@ -298,7 +292,7 @@ ping                      1075 samples [reqs]
                     },
                     Stat {
                         name: "preprw".to_string(),
-                        samples: "9".to_string(),
+                        samples: 9,
                         units: "reqs".to_string(),
                         min: None,
                         max: None,
@@ -307,7 +301,7 @@ ping                      1075 samples [reqs]
                     },
                     Stat {
                         name: "commitrw".to_string(),
-                        samples: "9".to_string(),
+                        samples: 9,
                         units: "reqs".to_string(),
                         min: None,
                         max: None,
@@ -316,7 +310,7 @@ ping                      1075 samples [reqs]
                     },
                     Stat {
                         name: "ping".to_string(),
-                        samples: "1075".to_string(),
+                        samples: 1075,
                         units: "reqs".to_string(),
                         min: None,
                         max: None,
