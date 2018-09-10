@@ -231,7 +231,7 @@ where
                 param,
                 value,
             })),
-            _ => Err(StreamErrorFor::<I>::expected_static_message("_UUID")),
+            _ => Err(StreamErrorFor::<I>::expected_static_message("ObdfilterStat Variant")),
         }})
         .map(Record::Target)
         .message("while parsing obdfilter")
