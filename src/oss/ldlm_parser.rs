@@ -179,6 +179,7 @@ where
         .message("while parsing ldlm")
 }
 
+#[cfg(test)]
 mod tests {
     use super::*;
 
