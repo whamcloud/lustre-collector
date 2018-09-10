@@ -5,13 +5,13 @@
 use combine::{
     char::{alpha_num, digit, newline, string},
     error::ParseError,
-    many1,
+    many1, one_of,
     parser::repeat::take_until,
     stream::Stream,
     token, try, unexpected, value, Parser,
 };
 
-use stats::Param;
+use stats::{Param, Target};
 
 pub fn period<I>() -> impl Parser<Input = I, Output = char>
 where
@@ -27,6 +27,15 @@ where
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     many1(alpha_num().or(token('_')))
+}
+
+/// Parses a target name
+pub fn target<I>() -> impl Parser<Input = I, Output = Target>
+where
+    I: Stream<Item = char>,
+    I::Error: ParseError<I::Item, I::Range, I::Position>,
+{
+    many1(alpha_num().or(one_of("_-".chars()))).map(Target)
 }
 
 /// Takes many consecutive digits and

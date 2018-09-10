@@ -34,12 +34,12 @@ pub struct HostStat<T> {
 }
 
 #[derive(PartialEq, Debug, Serialize)]
-/// Stats collected via obdfilter.
-pub struct ObdFilterStat {
+/// Stats specific to a target.
+pub struct TargetStat<T> {
     pub host: Option<Host>,
     pub param: Param,
     pub target: Target,
-    pub value: ObdFilterStats,
+    pub value: T,
 }
 
 #[derive(PartialEq, Debug, Serialize)]
@@ -58,38 +58,50 @@ pub struct BrwStats {
 
 #[derive(PartialEq, Debug, Serialize)]
 pub enum HostStats {
-    MemUsedMax(HostStat<u64>),
-    MemUsed(HostStat<u64>),
+    MemusedMax(HostStat<u64>),
+    Memused(HostStat<u64>),
     LNetMemUsed(HostStat<u64>),
-    Health(HostStat<String>),
+    HealthCheck(HostStat<String>),
 }
 
-/// The obdfilter stats currently collected
+/// The target stats currently collected
 #[derive(PartialEq, Debug, Serialize)]
-pub enum ObdFilterStats {
+pub enum TargetStats {
     /// Operations per OST. Read and write data is particularly interesting
-    Stats(Vec<Stat>),
-    BrwStats(Vec<BrwStats>),
+    Stats(TargetStat<Vec<Stat>>),
+    BrwStats(TargetStat<Vec<BrwStats>>),
     /// Available inodes
-    FilesFree(u64),
+    FilesFree(TargetStat<u64>),
     /// Total inodes
-    FilesTotal(u64),
+    FilesTotal(TargetStat<u64>),
     /// Type of target
-    FsType(String),
+    FsType(TargetStat<String>),
     /// Available disk space
-    BytesAvail(u64),
+    BytesAvail(TargetStat<u64>),
     /// Free disk space
-    BytesFree(u64),
+    BytesFree(TargetStat<u64>),
     /// Total disk space
-    BytesTotal(u64),
-    NumExports(u64),
-    TotDirty(u64),
-    TotGranted(u64),
-    TotPending(u64),
+    BytesTotal(TargetStat<u64>),
+    NumExports(TargetStat<u64>),
+    TotDirty(TargetStat<u64>),
+    TotGranted(TargetStat<u64>),
+    TotPending(TargetStat<u64>),
+    ContendedLocks(TargetStat<u64>),
+    ContentionSeconds(TargetStat<u64>),
+    CtimeAgeLimit(TargetStat<u64>),
+    EarlyLockCancel(TargetStat<u64>),
+    LockCount(TargetStat<u64>),
+    LockTimeouts(TargetStat<u64>),
+    LockUnusedCount(TargetStat<u64>),
+    LruMaxAge(TargetStat<u64>),
+    LruSize(TargetStat<u64>),
+    MaxNolockBytes(TargetStat<u64>),
+    MaxParallelAst(TargetStat<u64>),
+    ResourceCount(TargetStat<u64>),
 }
 
 #[derive(PartialEq, Debug, Serialize)]
-pub enum Stats {
-    HostStats(HostStats),
-    TargetStats(ObdFilterStat),
+pub enum Record {
+    Host(HostStats),
+    Target(TargetStats),
 }

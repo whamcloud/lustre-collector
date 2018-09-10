@@ -3,8 +3,15 @@
 // license that can be found in the LICENSE file.
 
 use base_parsers::{digits, param, word};
-use combine::{choice, error::ParseError, parser::char::newline, Parser, Stream};
-use stats::{HostStat, HostStats};
+use combine::{
+    choice,
+    error::{ParseError, StreamError},
+    parser::char::newline,
+    stream::{Stream, StreamErrorFor},
+    Parser,
+};
+
+use stats::{HostStat, HostStats, Param, Record};
 
 pub const MEMUSED_MAX: &str = "memused_max";
 pub const MEMUSED: &str = "memused";
@@ -20,42 +27,63 @@ pub fn top_level_params() -> Vec<String> {
         .collect::<Vec<String>>()
 }
 
-pub fn parse<I>() -> impl Parser<Input = I, Output = HostStats>
+enum TopLevelStat {
+    Memused(u64),
+    MemusedMax(u64),
+    LnetMemused(u64),
+    HealthCheck(String),
+}
+
+fn top_level_stat<I>() -> impl Parser<Input = I, Output = (Param, TopLevelStat)>
 where
     I: Stream<Item = char>,
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     choice((
-        (param(MEMUSED), digits()).map(|(param, value)| {
-            HostStats::MemUsed(HostStat {
-                host: None,
-                param,
-                value,
-            })
-        }),
-        (param(MEMUSED_MAX), digits()).map(|(param, value)| {
-            HostStats::MemUsedMax(HostStat {
-                host: None,
-                param,
-                value,
-            })
-        }),
-        (param(LNET_MEMUSED), digits()).map(|(param, value)| {
-            HostStats::LNetMemUsed(HostStat {
-                host: None,
-                param,
-                value,
-            })
-        }),
-        (param(HEALTH_CHECK), word()).map(|(param, value)| {
-            HostStats::Health(HostStat {
-                host: None,
-                param,
-                value,
-            })
-        }),
+        (param(MEMUSED), digits().map(TopLevelStat::Memused)),
+        (param(MEMUSED_MAX), digits().map(TopLevelStat::MemusedMax)),
+        (param(LNET_MEMUSED), digits().map(TopLevelStat::LnetMemused)),
+        (param(HEALTH_CHECK), word().map(TopLevelStat::HealthCheck)),
     )).skip(newline())
-        .message("while getting top_level_param")
+}
+
+pub fn parse<I>() -> impl Parser<Input = I, Output = Record>
+where
+    I: Stream<Item = char>,
+    I::Error: ParseError<I::Item, I::Range, I::Position>,
+{
+    #[cfg_attr(rustfmt, rustfmt_skip)]
+    top_level_stat()
+        .and_then(|(param, v)| {
+            #[allow(unreachable_patterns)]
+            match v {
+                TopLevelStat::Memused(value) => Ok(HostStats::Memused(HostStat {
+                    host: None,
+                    param,
+                    value,
+                })),
+                TopLevelStat::MemusedMax(value) => Ok(HostStats::MemusedMax(HostStat {
+                    host: None,
+                    param,
+                    value,
+                })),
+                TopLevelStat::LnetMemused(value) => Ok(HostStats::LNetMemUsed(HostStat {
+                    host: None,
+                    param,
+                    value,
+                })),
+                TopLevelStat::HealthCheck(value) => Ok(HostStats::HealthCheck(HostStat {
+                    host: None,
+                    param,
+                    value,
+                })),
+                _ => Err(StreamErrorFor::<I>::unexpected_static_message(
+                    "Unexpected top-level param",
+                )),
+            }
+        })
+        .map(Record::Host)
+        .message("while parsing top_level_param")
 }
 
 #[cfg(test)]
@@ -85,11 +113,11 @@ mod tests {
         assert_eq!(
             result,
             Ok((
-                HostStats::MemUsedMax(HostStat {
+                Record::Host(HostStats::MemusedMax(HostStat {
                     host: None,
                     param: Param(MEMUSED_MAX.to_string()),
                     value: 77991501
-                }),
+                })),
                 State {
                     input: "",
                     positioner: SourcePosition { line: 2, column: 1 }
