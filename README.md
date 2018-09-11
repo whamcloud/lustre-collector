@@ -13,5 +13,5 @@ It is provided as a standalone binary that can be called to retrieve stats in th
 lustre_collector
 
 # Will return stats in YAML format
-lustre_collector --format=Yaml
+lustre_collector --format=yaml
 ```
