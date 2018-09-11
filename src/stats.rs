@@ -28,7 +28,6 @@ pub struct Stat {
 #[derive(PartialEq, Debug, Serialize)]
 /// A Stat specific to a host.
 pub struct HostStat<T> {
-    pub host: Option<Host>,
     pub param: Param,
     pub value: T,
 }
@@ -36,7 +35,6 @@ pub struct HostStat<T> {
 #[derive(PartialEq, Debug, Serialize)]
 /// Stats specific to a target.
 pub struct TargetStat<T> {
-    pub host: Option<Host>,
     pub param: Param,
     pub target: Target,
     pub value: T,
@@ -57,6 +55,7 @@ pub struct BrwStats {
 }
 
 #[derive(PartialEq, Debug, Serialize)]
+#[serde(untagged)]
 pub enum HostStats {
     MemusedMax(HostStat<u64>),
     Memused(HostStat<u64>),
@@ -66,6 +65,7 @@ pub enum HostStats {
 
 /// The target stats currently collected
 #[derive(PartialEq, Debug, Serialize)]
+#[serde(untagged)]
 pub enum TargetStats {
     /// Operations per OST. Read and write data is particularly interesting
     Stats(TargetStat<Vec<Stat>>),
@@ -101,6 +101,7 @@ pub enum TargetStats {
 }
 
 #[derive(PartialEq, Debug, Serialize)]
+#[serde(untagged)]
 pub enum Record {
     Host(HostStats),
     Target(TargetStats),

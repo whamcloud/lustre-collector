@@ -143,27 +143,22 @@ obdfilter.fs-OST0000.tot_pending=0
             Ok((
                 vec![
                     Record::Host(HostStats::Memused(HostStat {
-                        host: None,
                         param: Param("memused".to_string()),
                         value: 77988429,
                     })),
                     Record::Host(HostStats::MemusedMax(HostStat {
-                        host: None,
                         param: Param("memused_max".to_string()),
                         value: 77991501,
                     })),
                     Record::Host(HostStats::LNetMemUsed(HostStat {
-                        host: None,
                         param: Param("lnet_memused".to_string()),
                         value: 8082453,
                     })),
                     Record::Host(HostStats::HealthCheck(HostStat {
-                        host: None,
                         param: Param("health_check".to_string()),
                         value: "healthy".to_string(),
                     })),
                     Record::Target(TargetStats::Stats(TargetStat {
-                        host: None,
                         param: Param("stats".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: vec![
@@ -269,7 +264,6 @@ obdfilter.fs-OST0000.tot_pending=0
                         ],
                     })),
                     Record::Target(TargetStats::BrwStats(TargetStat {
-                        host: None,
                         param: Param("brw_stats".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: vec![
@@ -536,61 +530,51 @@ obdfilter.fs-OST0000.tot_pending=0
                         ],
                     })),
                     Record::Target(TargetStats::FilesFree(TargetStat {
-                        host: None,
                         param: Param("filesfree".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 327382,
                     })),
                     Record::Target(TargetStats::FilesTotal(TargetStat {
-                        host: None,
                         param: Param("filestotal".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 327680,
                     })),
                     Record::Target(TargetStats::FsType(TargetStat {
-                        host: None,
                         param: Param("fstype".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: "osd-ldiskfs".to_string(),
                     })),
                     Record::Target(TargetStats::BytesAvail(TargetStat {
-                        host: None,
                         param: Param("kbytesavail".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 4594143232,
                     })),
                     Record::Target(TargetStats::BytesFree(TargetStat {
-                        host: None,
                         param: Param("kbytesfree".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 4879355904,
                     })),
                     Record::Target(TargetStats::BytesTotal(TargetStat {
-                        host: None,
                         param: Param("kbytestotal".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 4947677184,
                     })),
                     Record::Target(TargetStats::NumExports(TargetStat {
-                        host: None,
                         param: Param("num_exports".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 2,
                     })),
                     Record::Target(TargetStats::TotDirty(TargetStat {
-                        host: None,
                         param: Param("tot_dirty".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 0,
                     })),
                     Record::Target(TargetStats::TotGranted(TargetStat {
-                        host: None,
                         param: Param("tot_granted".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 8666816,
                     })),
                     Record::Target(TargetStats::TotPending(TargetStat {
-                        host: None,
                         param: Param("tot_pending".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 0,

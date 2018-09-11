@@ -100,73 +100,61 @@ where
     (ldlm_target(), ldlm_stat())
         .and_then(|(target, (Param(p), value))| match p.clone().as_ref() {
             CONTENDED_LOCKS => Ok(TargetStats::ContendedLocks(TargetStat {
-                host: None,
                 target,
                 param: Param(p),
                 value,
             })),
             CONTENTION_SECONDS => Ok(TargetStats::ContentionSeconds(TargetStat {
-                host: None,
                 target,
                 param: Param(p),
                 value,
             })),
             CTIME_AGE_LIMIT => Ok(TargetStats::CtimeAgeLimit(TargetStat {
-                host: None,
                 target,
                 param: Param(p),
                 value,
             })),
             EARLY_LOCK_CANCEL => Ok(TargetStats::EarlyLockCancel(TargetStat {
-                host: None,
                 target,
                 param: Param(p),
                 value,
             })),
             LOCK_COUNT => Ok(TargetStats::LockCount(TargetStat {
-                host: None,
                 target,
                 param: Param(p),
                 value,
             })),
             LOCK_TIMEOUTS => Ok(TargetStats::LockTimeouts(TargetStat {
-                host: None,
                 target,
                 param: Param(p),
                 value,
             })),
             LOCK_UNUSED_COUNT => Ok(TargetStats::LockUnusedCount(TargetStat {
-                host: None,
                 target,
                 param: Param(p),
                 value,
             })),
             LRU_MAX_AGE => Ok(TargetStats::LruMaxAge(TargetStat {
-                host: None,
                 target,
                 param: Param(p),
                 value,
             })),
             LRU_SIZE => Ok(TargetStats::LruSize(TargetStat {
-                host: None,
                 target,
                 param: Param(p),
                 value,
             })),
             MAX_NOLOCK_BYTES => Ok(TargetStats::MaxNolockBytes(TargetStat {
-                host: None,
                 target,
                 param: Param(p),
                 value,
             })),
             MAX_PARALLEL_AST => Ok(TargetStats::MaxParallelAst(TargetStat {
-                host: None,
                 target,
                 param: Param(p),
                 value,
             })),
             RESOURCE_COUNT => Ok(TargetStats::ResourceCount(TargetStat {
-                host: None,
                 target,
                 param: Param(p),
                 value,

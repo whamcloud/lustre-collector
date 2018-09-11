@@ -58,22 +58,18 @@ where
             #[allow(unreachable_patterns)]
             match v {
                 TopLevelStat::Memused(value) => Ok(HostStats::Memused(HostStat {
-                    host: None,
                     param,
                     value,
                 })),
                 TopLevelStat::MemusedMax(value) => Ok(HostStats::MemusedMax(HostStat {
-                    host: None,
                     param,
                     value,
                 })),
                 TopLevelStat::LnetMemused(value) => Ok(HostStats::LNetMemUsed(HostStat {
-                    host: None,
                     param,
                     value,
                 })),
                 TopLevelStat::HealthCheck(value) => Ok(HostStats::HealthCheck(HostStat {
-                    host: None,
                     param,
                     value,
                 })),
@@ -114,7 +110,6 @@ mod tests {
             result,
             Ok((
                 Record::Host(HostStats::MemusedMax(HostStat {
-                    host: None,
                     param: Param(MEMUSED_MAX.to_string()),
                     value: 77991501
                 })),
