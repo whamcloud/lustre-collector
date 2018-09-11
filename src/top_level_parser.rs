@@ -11,7 +11,7 @@ use combine::{
     Parser,
 };
 
-use stats::{HostStat, HostStats, Param, Record};
+use types::{HostStat, HostStats, Param, Record};
 
 pub const MEMUSED_MAX: &str = "memused_max";
 pub const MEMUSED: &str = "memused";
@@ -52,31 +52,26 @@ where
     I: Stream<Item = char>,
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
-    #[cfg_attr(rustfmt, rustfmt_skip)]
     top_level_stat()
         .and_then(|(param, v)| {
             #[allow(unreachable_patterns)]
-            match v {
-                TopLevelStat::Memused(value) => Ok(HostStats::Memused(HostStat {
-                    param,
-                    value,
-                })),
-                TopLevelStat::MemusedMax(value) => Ok(HostStats::MemusedMax(HostStat {
-                    param,
-                    value,
-                })),
-                TopLevelStat::LnetMemused(value) => Ok(HostStats::LNetMemUsed(HostStat {
-                    param,
-                    value,
-                })),
-                TopLevelStat::HealthCheck(value) => Ok(HostStats::HealthCheck(HostStat {
-                    param,
-                    value,
-                })),
+            let r = match v {
+                TopLevelStat::Memused(value) => Ok(HostStats::Memused(HostStat { param, value })),
+                TopLevelStat::MemusedMax(value) => {
+                    Ok(HostStats::MemusedMax(HostStat { param, value }))
+                }
+                TopLevelStat::LnetMemused(value) => {
+                    Ok(HostStats::LNetMemUsed(HostStat { param, value }))
+                }
+                TopLevelStat::HealthCheck(value) => {
+                    Ok(HostStats::HealthCheck(HostStat { param, value }))
+                }
                 _ => Err(StreamErrorFor::<I>::unexpected_static_message(
                     "Unexpected top-level param",
                 )),
-            }
+            };
+
+            r
         })
         .map(Record::Host)
         .message("while parsing top_level_param")
@@ -87,7 +82,7 @@ mod tests {
 
     use super::*;
     use combine::stream::state::{SourcePosition, State};
-    use stats::{HostStat, HostStats, Param};
+    use types::{HostStat, HostStats, Param};
 
     #[test]
     fn test_params() {

@@ -11,7 +11,7 @@ use combine::{
     token, try, unexpected, value, Parser,
 };
 
-use stats::{Param, Target};
+use types::{Param, Target};
 
 pub fn period<I>() -> impl Parser<Input = I, Output = char>
 where
@@ -64,17 +64,19 @@ where
     string(x).map(move |_| String::from(y))
 }
 
-pub fn not_word<I>(x: &'static str) -> impl Parser<Input = I, Output = String>
+pub fn not_words<I>(xs: &'static [&'static str]) -> impl Parser<Input = I, Output = String>
 where
     I: Stream<Item = char>,
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     try(word().then(move |y| {
-        if x == y {
-            unexpected(x).map(|_| "".to_string()).right()
-        } else {
-            value(y.to_string()).left()
+        for &x in xs {
+            if x.to_string() == y {
+                return unexpected(x).map(|_| "".to_string()).right();
+            }
         }
+
+        value(y.to_string()).left()
     }))
 }
 
@@ -92,7 +94,7 @@ where
 mod tests {
     use super::*;
     use combine::stream::state::{SourcePosition, State};
-    use stats::Param;
+    use types::Param;
 
     #[test]
     fn test_param() {

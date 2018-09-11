@@ -11,7 +11,7 @@ use combine::{
 };
 
 use base_parsers::{digits, param, period, target};
-use stats::{Param, Record, Target, TargetStat, TargetStats};
+use types::{Param, Record, Target, TargetStat, TargetStats, TargetVariant};
 
 pub const CONTENDED_LOCKS: &str = "contended_locks";
 pub const CONTENTION_SECONDS: &str = "contention_seconds";
@@ -100,61 +100,73 @@ where
     (ldlm_target(), ldlm_stat())
         .and_then(|(target, (Param(p), value))| match p.clone().as_ref() {
             CONTENDED_LOCKS => Ok(TargetStats::ContendedLocks(TargetStat {
+                kind: TargetVariant::OST,
                 target,
                 param: Param(p),
                 value,
             })),
             CONTENTION_SECONDS => Ok(TargetStats::ContentionSeconds(TargetStat {
+                kind: TargetVariant::OST,
                 target,
                 param: Param(p),
                 value,
             })),
             CTIME_AGE_LIMIT => Ok(TargetStats::CtimeAgeLimit(TargetStat {
+                kind: TargetVariant::OST,
                 target,
                 param: Param(p),
                 value,
             })),
             EARLY_LOCK_CANCEL => Ok(TargetStats::EarlyLockCancel(TargetStat {
+                kind: TargetVariant::OST,
                 target,
                 param: Param(p),
                 value,
             })),
             LOCK_COUNT => Ok(TargetStats::LockCount(TargetStat {
+                kind: TargetVariant::OST,
                 target,
                 param: Param(p),
                 value,
             })),
             LOCK_TIMEOUTS => Ok(TargetStats::LockTimeouts(TargetStat {
+                kind: TargetVariant::OST,
                 target,
                 param: Param(p),
                 value,
             })),
             LOCK_UNUSED_COUNT => Ok(TargetStats::LockUnusedCount(TargetStat {
+                kind: TargetVariant::OST,
                 target,
                 param: Param(p),
                 value,
             })),
             LRU_MAX_AGE => Ok(TargetStats::LruMaxAge(TargetStat {
+                kind: TargetVariant::OST,
                 target,
                 param: Param(p),
                 value,
             })),
             LRU_SIZE => Ok(TargetStats::LruSize(TargetStat {
+                kind: TargetVariant::OST,
                 target,
                 param: Param(p),
                 value,
             })),
             MAX_NOLOCK_BYTES => Ok(TargetStats::MaxNolockBytes(TargetStat {
+                kind: TargetVariant::OST,
                 target,
                 param: Param(p),
                 value,
             })),
             MAX_PARALLEL_AST => Ok(TargetStats::MaxParallelAst(TargetStat {
+                kind: TargetVariant::OST,
                 target,
                 param: Param(p),
                 value,
             })),
             RESOURCE_COUNT => Ok(TargetStats::ResourceCount(TargetStat {
+                kind: TargetVariant::OST,
                 target,
                 param: Param(p),
                 value,

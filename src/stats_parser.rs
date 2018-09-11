@@ -14,9 +14,9 @@ use combine::{
     token, Parser,
 };
 
-use base_parsers::{digits, not_word, word};
+use base_parsers::{digits, not_words, word};
 use snapshot_time::snapshot_time;
-use stats::Stat;
+use types::Stat;
 
 fn name_count_units<I>() -> impl Parser<Input = I, Output = (String, u64, String)>
 where
@@ -24,7 +24,7 @@ where
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     (
-        not_word("obdfilter").skip(spaces()),
+        not_words(&["obdfilter", "mgs"]).skip(spaces()),
         digits(),
         spaces().with(string("samples")),
         spaces().with(between(token('['), token(']'), word())),

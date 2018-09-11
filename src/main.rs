@@ -32,12 +32,13 @@ use combine::Parser;
 use std::str;
 
 mod base_parsers;
+mod mgs;
 mod oss;
+mod parser;
 mod snapshot_time;
-mod stats;
 mod stats_parser;
-
-use oss::oss_parser;
+mod top_level_parser;
+mod types;
 
 use std::process::Command;
 
@@ -81,21 +82,23 @@ fn main() {
 
     let output = Command::new("lctl")
         .arg("get_param")
-        .args(oss_parser::params())
+        .args(parser::params())
         .output()
         .expect("failed to get lctl stats");
 
-    let stats = str::from_utf8(&output.stdout).unwrap();
+    let stats = str::from_utf8(&output.stdout).expect("while converting stdout from utf8");
 
-    let parsed = oss_parser::parse().easy_parse(State::new(stats));
+    let (record, state) = parser::parse()
+        .easy_parse(State::new(stats))
+        .expect("while parsing stats");
+
+    if state.input != "" {
+        eprintln!("Content left in input buffer: {}", state.input)
+    }
 
     let r = match format {
-        Format::Json => {
-            serde_json::to_string(&parsed.unwrap().0).chain_err(|| "serializing to JSON")
-        }
-        Format::Yaml => {
-            serde_yaml::to_string(&parsed.unwrap().0).chain_err(|| "serializing to YAML")
-        }
+        Format::Json => serde_json::to_string(&record).chain_err(|| "serializing to JSON"),
+        Format::Yaml => serde_yaml::to_string(&record).chain_err(|| "serializing to YAML"),
     };
 
     match r {
