@@ -2,14 +2,18 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
+use combine::{
+    choice,
+    error::{ParseError, StreamError},
+    many1, one_of,
+    parser::char::{alpha_num, newline, string},
+    stream::{Stream, StreamErrorFor},
+    Parser,
+};
+
 use base_parsers::{digits, param, period, till_newline};
-use combine::error::ParseError;
-use combine::parser::char::{alpha_num, newline, string};
-use combine::parser::choice::choice;
-use combine::stream::Stream;
-use combine::{many1, one_of, Parser};
 use oss::brw_stats_parser::brw_stats;
-use stats::{ObdFilterStat, ObdFilterStats, Param, Target};
+use stats::{BrwStats, Param, Record, Stat, Target, TargetStat, TargetStats};
 use stats_parser::stats;
 
 pub const STATS: &str = "stats";
@@ -62,81 +66,175 @@ where
         .message("while parsing target_name")
 }
 
-fn obdfilter_stat<I>() -> impl Parser<Input = I, Output = (Param, ObdFilterStats)>
+#[derive(Debug)]
+enum ObdfilterStat {
+    Stats(Vec<Stat>),
+    BrwStats(Vec<BrwStats>),
+    /// Available inodes
+    FilesFree(u64),
+    /// Total inodes
+    FilesTotal(u64),
+    /// Type of target
+    FsType(String),
+    /// Available disk space
+    BytesAvail(u64),
+    /// Free disk space
+    BytesFree(u64),
+    /// Total disk space
+    BytesTotal(u64),
+    NumExports(u64),
+    TotDirty(u64),
+    TotGranted(u64),
+    TotPending(u64),
+}
+
+fn obdfilter_stat<I>() -> impl Parser<Input = I, Output = (Param, ObdfilterStat)>
 where
     I: Stream<Item = char>,
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     choice((
         // "job_stats",
-        (param(STATS), stats().map(ObdFilterStats::Stats)),
-        (param(BRW_STATS), brw_stats().map(ObdFilterStats::BrwStats)),
+        (param(STATS), stats().map(ObdfilterStat::Stats)),
+        (param(BRW_STATS), brw_stats().map(ObdfilterStat::BrwStats)),
         (
             param(FILES_FREE),
-            digits().skip(newline()).map(ObdFilterStats::FilesFree),
+            digits().skip(newline()).map(ObdfilterStat::FilesFree),
         ),
         (
             param(FILES_TOTAL),
-            digits().skip(newline()).map(ObdFilterStats::FilesTotal),
-        ),
-        (
-            param(FILES_TOTAL),
-            digits().skip(newline()).map(ObdFilterStats::FilesTotal),
+            digits().skip(newline()).map(ObdfilterStat::FilesTotal),
         ),
         (
             param(FS_TYPE),
-            till_newline().skip(newline()).map(ObdFilterStats::FsType),
+            till_newline().skip(newline()).map(ObdfilterStat::FsType),
         ),
         (
             param(KBYTES_AVAIL),
             digits()
                 .skip(newline())
-                .map(|x| ObdFilterStats::BytesAvail(x * 1024)),
+                .map(|x| x * 1024)
+                .map(ObdfilterStat::BytesAvail),
         ),
         (
             param(KBYTES_FREE),
             digits()
                 .skip(newline())
-                .map(|x| ObdFilterStats::BytesFree(x * 1024)),
+                .map(|x| x * 1024)
+                .map(ObdfilterStat::BytesFree),
         ),
         (
             param(KBYTES_TOTAL),
             digits()
                 .skip(newline())
-                .map(|x| ObdFilterStats::BytesTotal(x * 1024)),
+                .map(|x| x * 1024)
+                .map(ObdfilterStat::BytesTotal),
         ),
         (
             param(NUM_EXPORTS),
-            digits().skip(newline()).map(ObdFilterStats::NumExports),
+            digits().skip(newline()).map(ObdfilterStat::NumExports),
         ),
         (
             param(TOT_DIRTY),
-            digits().skip(newline()).map(ObdFilterStats::TotDirty),
+            digits().skip(newline()).map(ObdfilterStat::TotDirty),
         ),
         (
             param(TOT_GRANTED),
-            digits().skip(newline()).map(ObdFilterStats::TotGranted),
+            digits().skip(newline()).map(ObdfilterStat::TotGranted),
         ),
         (
             param(TOT_PENDING),
-            digits().skip(newline()).map(ObdFilterStats::TotPending),
+            digits().skip(newline()).map(ObdfilterStat::TotPending),
         ),
-    )).message("while getting obdfilter_stat")
+    )).message("while parsing obdfilter")
 }
 
-pub fn parse<I>() -> impl Parser<Input = I, Output = ObdFilterStat>
+pub fn parse<I>() -> impl Parser<Input = I, Output = Record>
 where
     I: Stream<Item = char>,
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
+    #[cfg_attr(rustfmt, rustfmt_skip)]
     (target_name(), obdfilter_stat())
-        .map(|(target, (param, value))| ObdFilterStat {
-            host: None,
-            target,
-            param,
-            value,
-        })
-        .message("while parsing")
+        .and_then(|(target, (param, value))| {
+            #[allow(unreachable_patterns)]
+            match value {
+            ObdfilterStat::Stats(value) => Ok(TargetStats::Stats(TargetStat {
+                target,
+                host: None,
+                param,
+                value,
+            })),
+            ObdfilterStat::BrwStats(value) => Ok(TargetStats::BrwStats(TargetStat {
+                target,
+                host: None,
+                param,
+                value,
+            })),
+            ObdfilterStat::FilesFree(value) => Ok(TargetStats::FilesFree(TargetStat {
+                target,
+                host: None,
+                param,
+                value,
+            })),
+            ObdfilterStat::FilesTotal(value) => Ok(TargetStats::FilesTotal(TargetStat {
+                target,
+                host: None,
+                param,
+                value,
+            })),
+            ObdfilterStat::FsType(value) => Ok(TargetStats::FsType(TargetStat {
+                target,
+                host: None,
+                param,
+                value,
+            })),
+            ObdfilterStat::BytesAvail(value) => Ok(TargetStats::BytesAvail(TargetStat {
+                target,
+                host: None,
+                param,
+                value,
+            })),
+            ObdfilterStat::BytesFree(value) => Ok(TargetStats::BytesFree(TargetStat {
+                target,
+                host: None,
+                param,
+                value,
+            })),
+            ObdfilterStat::BytesTotal(value) => Ok(TargetStats::BytesTotal(TargetStat {
+                target,
+                host: None,
+                param,
+                value,
+            })),
+            ObdfilterStat::NumExports(value) => Ok(TargetStats::NumExports(TargetStat {
+                target,
+                host: None,
+                param,
+                value,
+            })),
+            ObdfilterStat::TotDirty(value) => Ok(TargetStats::TotDirty(TargetStat {
+                target,
+                host: None,
+                param,
+                value,
+            })),
+            ObdfilterStat::TotGranted(value) => Ok(TargetStats::TotGranted(TargetStat {
+                target,
+                host: None,
+                param,
+                value,
+            })),
+            ObdfilterStat::TotPending(value) => Ok(TargetStats::TotPending(TargetStat {
+                target,
+                host: None,
+                param,
+                value,
+            })),
+            _ => Err(StreamErrorFor::<I>::expected_static_message("ObdfilterStat Variant")),
+        }})
+        .map(Record::Target)
+        .message("while parsing obdfilter")
 }
 
 #[cfg(test)]
