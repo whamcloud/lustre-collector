@@ -2,48 +2,40 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use combine::{choice, error::ParseError, many, Parser, Stream};
-use oss::{ldlm_parser, obdfilter_parser, top_level_parser};
-use stats::Record;
+use combine::{choice, error::ParseError, Parser, Stream};
+use oss::{ldlm_parser, obdfilter_parser};
+use types::Record;
 
 pub fn params() -> Vec<String> {
-    let mut a = top_level_parser::top_level_params();
-    a.extend(obdfilter_parser::obd_params());
+    let mut a = obdfilter_parser::obd_params();
     a.extend(ldlm_parser::ldlm_params());
 
     a
 }
 
-pub fn parse<I>() -> impl Parser<Input = I, Output = Vec<Record>>
+pub fn parse<I>() -> impl Parser<Input = I, Output = Record>
 where
     I: Stream<Item = char>,
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
-    many(choice((
-        top_level_parser::parse(),
-        obdfilter_parser::parse(),
-        ldlm_parser::parse(),
-    )))
+    choice((obdfilter_parser::parse(), ldlm_parser::parse()))
 }
 
 #[cfg(test)]
 mod tests {
 
     use super::*;
+    use combine::many;
     use combine::stream::state::{SourcePosition, State};
-    use stats::{
-        BrwStats, BrwStatsBucket, HostStat, HostStats, Param, Record, Stat, Target, TargetStat,
-        TargetStats,
+    use types::{
+        BrwStats, BrwStatsBucket, Param, Record, Stat, Target, TargetStat, TargetStats,
+        TargetVariant,
     };
 
     #[test]
     fn test_params() {
         let x = State::new(
-            r#"memused=77988429
-memused_max=77991501
-lnet_memused=8082453
-health_check=healthy
-obdfilter.fs-OST0000.stats=
+            r#"obdfilter.fs-OST0000.stats=
 snapshot_time             1535148988.363769785 secs.nsecs
 write_bytes               9 samples [bytes] 98303 4194304 33554431
 create                    4 samples [reqs]
@@ -136,29 +128,14 @@ obdfilter.fs-OST0000.tot_pending=0
 "#,
         );
 
-        let result = parse().easy_parse(x);
+        let result = many(parse()).easy_parse(x);
 
         assert_eq!(
             result,
             Ok((
                 vec![
-                    Record::Host(HostStats::Memused(HostStat {
-                        param: Param("memused".to_string()),
-                        value: 77988429,
-                    })),
-                    Record::Host(HostStats::MemusedMax(HostStat {
-                        param: Param("memused_max".to_string()),
-                        value: 77991501,
-                    })),
-                    Record::Host(HostStats::LNetMemUsed(HostStat {
-                        param: Param("lnet_memused".to_string()),
-                        value: 8082453,
-                    })),
-                    Record::Host(HostStats::HealthCheck(HostStat {
-                        param: Param("health_check".to_string()),
-                        value: "healthy".to_string(),
-                    })),
                     Record::Target(TargetStats::Stats(TargetStat {
+                        kind: TargetVariant::OST,
                         param: Param("stats".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: vec![
@@ -264,6 +241,7 @@ obdfilter.fs-OST0000.tot_pending=0
                         ],
                     })),
                     Record::Target(TargetStats::BrwStats(TargetStat {
+                        kind: TargetVariant::OST,
                         param: Param("brw_stats".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: vec![
@@ -530,51 +508,61 @@ obdfilter.fs-OST0000.tot_pending=0
                         ],
                     })),
                     Record::Target(TargetStats::FilesFree(TargetStat {
+                        kind: TargetVariant::OST,
                         param: Param("filesfree".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 327382,
                     })),
                     Record::Target(TargetStats::FilesTotal(TargetStat {
+                        kind: TargetVariant::OST,
                         param: Param("filestotal".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 327680,
                     })),
                     Record::Target(TargetStats::FsType(TargetStat {
+                        kind: TargetVariant::OST,
                         param: Param("fstype".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: "osd-ldiskfs".to_string(),
                     })),
                     Record::Target(TargetStats::BytesAvail(TargetStat {
+                        kind: TargetVariant::OST,
                         param: Param("kbytesavail".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 4594143232,
                     })),
                     Record::Target(TargetStats::BytesFree(TargetStat {
+                        kind: TargetVariant::OST,
                         param: Param("kbytesfree".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 4879355904,
                     })),
                     Record::Target(TargetStats::BytesTotal(TargetStat {
+                        kind: TargetVariant::OST,
                         param: Param("kbytestotal".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 4947677184,
                     })),
                     Record::Target(TargetStats::NumExports(TargetStat {
+                        kind: TargetVariant::OST,
                         param: Param("num_exports".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 2,
                     })),
                     Record::Target(TargetStats::TotDirty(TargetStat {
+                        kind: TargetVariant::OST,
                         param: Param("tot_dirty".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 0,
                     })),
                     Record::Target(TargetStats::TotGranted(TargetStat {
+                        kind: TargetVariant::OST,
                         param: Param("tot_granted".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 8666816,
                     })),
                     Record::Target(TargetStats::TotPending(TargetStat {
+                        kind: TargetVariant::OST,
                         param: Param("tot_pending".to_string()),
                         target: Target("fs-OST0000".to_string()),
                         value: 0,
@@ -583,7 +571,7 @@ obdfilter.fs-OST0000.tot_pending=0
                 State {
                     input: "",
                     positioner: SourcePosition {
-                        line: 95,
+                        line: 91,
                         column: 1,
                     },
                 }

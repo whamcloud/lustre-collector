@@ -8,7 +8,7 @@ use combine::parser::char::{newline, spaces, string};
 use combine::stream::Stream;
 use combine::{choice, many, many1, one_of, optional, token, try, Parser};
 use snapshot_time::snapshot_time;
-use stats::{BrwStats, BrwStatsBucket};
+use types::{BrwStats, BrwStatsBucket};
 
 fn human_to_bytes((x, y): (u64, Option<char>)) -> u64 {
     let mult = match y {

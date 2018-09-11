@@ -33,8 +33,15 @@ pub struct HostStat<T> {
 }
 
 #[derive(PartialEq, Debug, Serialize)]
+pub enum TargetVariant {
+    OST,
+    MGT,
+}
+
+#[derive(PartialEq, Debug, Serialize)]
 /// Stats specific to a target.
 pub struct TargetStat<T> {
+    pub kind: TargetVariant,
     pub param: Param,
     pub target: Target,
     pub value: T,
@@ -98,6 +105,8 @@ pub enum TargetStats {
     MaxNolockBytes(TargetStat<u64>),
     MaxParallelAst(TargetStat<u64>),
     ResourceCount(TargetStat<u64>),
+    ThreadsMin(TargetStat<u64>),
+    ThreadsMax(TargetStat<u64>),
 }
 
 #[derive(PartialEq, Debug, Serialize)]
