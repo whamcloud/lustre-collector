@@ -161,73 +161,62 @@ where
             match value {
             ObdfilterStat::Stats(value) => Ok(TargetStats::Stats(TargetStat {
                 target,
-                host: None,
                 param,
                 value,
             })),
             ObdfilterStat::BrwStats(value) => Ok(TargetStats::BrwStats(TargetStat {
                 target,
-                host: None,
                 param,
                 value,
             })),
             ObdfilterStat::FilesFree(value) => Ok(TargetStats::FilesFree(TargetStat {
                 target,
-                host: None,
                 param,
                 value,
             })),
             ObdfilterStat::FilesTotal(value) => Ok(TargetStats::FilesTotal(TargetStat {
                 target,
-                host: None,
                 param,
                 value,
             })),
             ObdfilterStat::FsType(value) => Ok(TargetStats::FsType(TargetStat {
                 target,
-                host: None,
                 param,
                 value,
             })),
             ObdfilterStat::BytesAvail(value) => Ok(TargetStats::BytesAvail(TargetStat {
                 target,
-                host: None,
                 param,
                 value,
             })),
             ObdfilterStat::BytesFree(value) => Ok(TargetStats::BytesFree(TargetStat {
                 target,
-                host: None,
                 param,
                 value,
             })),
             ObdfilterStat::BytesTotal(value) => Ok(TargetStats::BytesTotal(TargetStat {
                 target,
-                host: None,
                 param,
                 value,
             })),
             ObdfilterStat::NumExports(value) => Ok(TargetStats::NumExports(TargetStat {
                 target,
-                host: None,
+                
                 param,
                 value,
             })),
             ObdfilterStat::TotDirty(value) => Ok(TargetStats::TotDirty(TargetStat {
                 target,
-                host: None,
                 param,
                 value,
             })),
             ObdfilterStat::TotGranted(value) => Ok(TargetStats::TotGranted(TargetStat {
                 target,
-                host: None,
                 param,
                 value,
             })),
             ObdfilterStat::TotPending(value) => Ok(TargetStats::TotPending(TargetStat {
                 target,
-                host: None,
                 param,
                 value,
             })),
