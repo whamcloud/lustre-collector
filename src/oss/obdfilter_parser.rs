@@ -200,8 +200,7 @@ where
                 value,
             })),
             ObdfilterStat::NumExports(value) => Ok(TargetStats::NumExports(TargetStat {
-                target,
-                
+                target,                
                 param,
                 value,
             })),
