@@ -58,6 +58,7 @@ where
 mod tests {
     use super::*;
     use serde_yaml;
+    use types::{BytesStat, ReqsStat};
 
     #[test]
     fn test_yaml_deserialize() {
@@ -77,9 +78,67 @@ mod tests {
   set_info:        { samples:           0, unit:  reqs }
   quotactl:        { samples:           0, unit:  reqs }"#;
 
-        assert_eq!(
-            serde_yaml::from_str::<JobStatsOst>(x).unwrap(),
-            JobStatsOst { job_stats: None }
-        )
+        let expected = JobStatsOst {
+            job_stats: Some(vec![JobStatOst {
+                job_id: "cp.0".to_string(),
+                snapshot_time: 1_537_070_542,
+                read_bytes: BytesStat {
+                    samples: 256,
+                    unit: "bytes".to_string(),
+                    min: 4_194_304,
+                    max: 4_194_304,
+                    sum: 1_073_741_824,
+                },
+                write_bytes: BytesStat {
+                    samples: 0,
+                    unit: "bytes".to_string(),
+                    min: 0,
+                    max: 0,
+                    sum: 0,
+                },
+                getattr: ReqsStat {
+                    samples: 0,
+                    unit: "reqs".to_string(),
+                },
+                setattr: ReqsStat {
+                    samples: 0,
+                    unit: "reqs".to_string(),
+                },
+                punch: ReqsStat {
+                    samples: 0,
+                    unit: "reqs".to_string(),
+                },
+                sync: ReqsStat {
+                    samples: 0,
+                    unit: "reqs".to_string(),
+                },
+                destroy: ReqsStat {
+                    samples: 0,
+                    unit: "reqs".to_string(),
+                },
+                create: ReqsStat {
+                    samples: 0,
+                    unit: "reqs".to_string(),
+                },
+                statfs: ReqsStat {
+                    samples: 0,
+                    unit: "reqs".to_string(),
+                },
+                get_info: ReqsStat {
+                    samples: 0,
+                    unit: "reqs".to_string(),
+                },
+                set_info: ReqsStat {
+                    samples: 0,
+                    unit: "reqs".to_string(),
+                },
+                quotactl: ReqsStat {
+                    samples: 0,
+                    unit: "reqs".to_string(),
+                },
+            }]),
+        };
+
+        assert_eq!(serde_yaml::from_str::<JobStatsOst>(x).unwrap(), expected)
     }
 }
