@@ -18,7 +18,8 @@ where
         spaces(),
         digits().skip(token('.')),
         digits().skip(till_newline()),
-    ).map(|(_, _, secs, nsecs)| format!("{}.{}", secs, nsecs))
+    )
+        .map(|(_, _, secs, nsecs)| format!("{}.{}", secs, nsecs))
 }
 
 #[cfg(test)]
