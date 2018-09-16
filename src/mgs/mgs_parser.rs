@@ -25,7 +25,8 @@ pub fn params() -> Vec<String> {
         format!("mgs.*.mgs.{}", THREADS_MAX),
         format!("mgs.*.mgs.{}", THREADS_MIN),
         format!("mgs.*.{}", NUM_EXPORTS),
-    ].into_iter()
+    ]
+        .into_iter()
         .map(|x| x.to_owned())
         .collect::<Vec<_>>()
 }
@@ -72,7 +73,8 @@ where
                     digits().skip(newline()).map(MgsStat::ThreadsMax),
                 ),
             )),
-        ).map(|(_, (y, z))| (y, z)),
+        )
+            .map(|(_, (y, z))| (y, z)),
     ))
 }
 
@@ -115,7 +117,6 @@ where
             };
 
             r
-        })
-        .map(Record::Target)
+        }).map(Record::Target)
         .message("while parsing mgs params")
 }

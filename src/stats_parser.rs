@@ -28,7 +28,8 @@ where
         digits(),
         spaces().with(string("samples")),
         spaces().with(between(token('['), token(']'), word())),
-    ).map(|(x, y, _, z)| (x, y, z))
+    )
+        .map(|(x, y, _, z)| (x, y, z))
 }
 
 fn min_max_sum<I>() -> impl Parser<Input = I, Output = (u64, u64, u64)>
@@ -65,37 +66,38 @@ where
                 or(newline().map(|_| None), sum_sq().map(Some).skip(newline())),
             ),
         ),
-    ).map(
-        |((name, samples, units), (min_max, sum))| match (min_max, sum) {
-            (Some((min, max, sum)), Some(sumsquare)) => Stat {
-                name,
-                samples,
-                units,
-                min: Some(min),
-                max: Some(max),
-                sum: Some(sum),
-                sumsquare: Some(sumsquare),
-            },
-            (Some((min, max, sum)), None) => Stat {
-                name,
-                samples,
-                units,
-                min: Some(min),
-                max: Some(max),
-                sum: Some(sum),
-                sumsquare: None,
-            },
-            (None, _) => Stat {
-                name,
-                samples,
-                units,
-                min: None,
-                max: None,
-                sum: None,
-                sumsquare: None,
-            },
-        },
     )
+        .map(
+            |((name, samples, units), (min_max, sum))| match (min_max, sum) {
+                (Some((min, max, sum)), Some(sumsquare)) => Stat {
+                    name,
+                    samples,
+                    units,
+                    min: Some(min),
+                    max: Some(max),
+                    sum: Some(sum),
+                    sumsquare: Some(sumsquare),
+                },
+                (Some((min, max, sum)), None) => Stat {
+                    name,
+                    samples,
+                    units,
+                    min: Some(min),
+                    max: Some(max),
+                    sum: Some(sum),
+                    sumsquare: None,
+                },
+                (None, _) => Stat {
+                    name,
+                    samples,
+                    units,
+                    min: None,
+                    max: None,
+                    sum: None,
+                    sumsquare: None,
+                },
+            },
+        )
 }
 
 pub fn stats<I>() -> impl Parser<Input = I, Output = Vec<Stat>>
@@ -183,7 +185,7 @@ mod tests {
                     min: Some(15),
                     max: Some(72),
                     sum: Some(47014),
-                    sumsquare: Some(2156132)
+                    sumsquare: Some(2_156_132)
                 },
                 State {
                     input: "",
@@ -223,8 +225,8 @@ ping                      1075 samples [reqs]
                         samples: 9,
                         units: "bytes".to_string(),
                         min: Some(98303),
-                        max: Some(4194304),
-                        sum: Some(33554431),
+                        max: Some(4_194_304),
+                        sum: Some(33_554_431),
                         sumsquare: None,
                     },
                     Stat {

@@ -15,6 +15,44 @@ pub struct Target(pub String);
 pub struct Param(pub String);
 
 #[derive(PartialEq, Debug, Serialize, Deserialize)]
+pub struct ReqsStat {
+    pub samples: i64,
+    pub unit: String,
+}
+
+#[derive(PartialEq, Debug, Serialize, Deserialize)]
+pub struct BytesStat {
+    pub samples: i64,
+    pub unit: String,
+    pub min: i64,
+    pub max: i64,
+    pub sum: i64,
+}
+
+#[derive(PartialEq, Debug, Serialize, Deserialize)]
+pub struct JobStatsOst {
+    pub job_stats: Option<Vec<JobStatOst>>,
+}
+
+#[derive(PartialEq, Debug, Serialize, Deserialize)]
+pub struct JobStatOst {
+    pub job_id: String,
+    pub snapshot_time: i64,
+    pub read_bytes: BytesStat,
+    pub write_bytes: BytesStat,
+    pub getattr: ReqsStat,
+    pub setattr: ReqsStat,
+    pub punch: ReqsStat,
+    pub sync: ReqsStat,
+    pub destroy: ReqsStat,
+    pub create: ReqsStat,
+    pub statfs: ReqsStat,
+    pub get_info: ReqsStat,
+    pub set_info: ReqsStat,
+    pub quotactl: ReqsStat,
+}
+
+#[derive(PartialEq, Debug, Serialize, Deserialize)]
 pub struct Stat {
     pub name: String,
     pub units: String,
@@ -75,6 +113,7 @@ pub enum HostStats {
 #[serde(untagged)]
 pub enum TargetStats {
     /// Operations per OST. Read and write data is particularly interesting
+    JobStatsOst(TargetStat<Option<Vec<JobStatOst>>>),
     Stats(TargetStat<Vec<Stat>>),
     BrwStats(TargetStat<Vec<BrwStats>>),
     /// Available inodes

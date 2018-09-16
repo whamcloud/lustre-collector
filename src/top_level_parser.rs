@@ -72,8 +72,7 @@ where
             };
 
             r
-        })
-        .map(Record::Host)
+        }).map(Record::Host)
         .message("while parsing top_level_param")
 }
 
@@ -106,7 +105,7 @@ mod tests {
             Ok((
                 Record::Host(HostStats::MemusedMax(HostStat {
                     param: Param(MEMUSED_MAX.to_string()),
-                    value: 77991501
+                    value: 77_991_501
                 })),
                 State {
                     input: "",

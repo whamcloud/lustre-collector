@@ -4,6 +4,7 @@
 
 #![allow(unknown_lints)]
 #![warn(clippy)]
+#![cfg_attr(feature = "cargo-clippy", allow(let_and_return))]
 // `error_chain!` can recurse deeply
 #![recursion_limit = "1024"]
 
@@ -72,11 +73,10 @@ fn main() {
                 .short("f")
                 .long("format")
                 .possible_values(&variants.iter().map(|x| x.as_str()).collect::<Vec<_>>()[..])
-                .default_value(&variants.iter().nth(0).unwrap())
+                .default_value(&variants[0])
                 .help("Sets the output formatting")
                 .takes_value(true),
-        )
-        .get_matches();
+        ).get_matches();
 
     let format = value_t!(matches, "format", Format).unwrap_or_else(|e| e.exit());
 
