@@ -59,15 +59,15 @@ where
     (
         string("ldlm.namespaces."),
         choice((string("mdt-"), string("filter-"))).with(target()),
-    ).and_then(|(_, Target(x))| {
+    )
+        .and_then(|(_, Target(x))| {
             let xs: Vec<&str> = x.split("_UUID").collect();
 
             match xs.as_slice() {
                 [y, _] => Ok(Target(y.to_string())),
                 _ => Err(StreamErrorFor::<I>::expected_static_message("_UUID")),
             }
-        })
-        .skip(period())
+        }).skip(period())
         .message("while parsing lock_namespaces")
 }
 
@@ -174,8 +174,7 @@ where
             _ => Err(StreamErrorFor::<I>::unexpected_static_message(
                 "Unexpected top-level param",
             )),
-        })
-        .map(Record::Target)
+        }).map(Record::Target)
         .message("while parsing ldlm")
 }
 

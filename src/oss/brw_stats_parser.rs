@@ -34,7 +34,8 @@ where
         spaces(),
         string("write"),
         till_newline(),
-    ).map(|_| ())
+    )
+        .map(|_| ())
 }
 
 fn header<I>() -> impl Parser<Input = I, Output = BrwStats>
@@ -77,7 +78,8 @@ where
         spaces().with(digits()),
         spaces().with(digits()),
         till_newline(),
-    ).map(|(name, _, read, _, _, _, write, _, _, _)| BrwStatsBucket { name, read, write })
+    )
+        .map(|(name, _, read, _, _, _, write, _, _, _)| BrwStatsBucket { name, read, write })
 }
 
 fn section<I>() -> impl Parser<Input = I, Output = BrwStats>
@@ -89,10 +91,11 @@ where
         rw_columns().skip(newline()),
         header().skip(newline()),
         many(bucket().skip(newline())).skip(spaces()),
-    ).map(|(_, stats, xs)| BrwStats {
-        buckets: xs,
-        ..stats
-    })
+    )
+        .map(|(_, stats, xs)| BrwStats {
+            buckets: xs,
+            ..stats
+        })
 }
 
 pub fn brw_stats<I>() -> impl Parser<Input = I, Output = Vec<BrwStats>>
@@ -112,10 +115,10 @@ mod tests {
     fn test_human_to_bytes() {
         assert_eq!(human_to_bytes((1, Some('k'))), 1024);
         assert_eq!(human_to_bytes((2, Some('K'))), 2048);
-        assert_eq!(human_to_bytes((1, Some('m'))), 1048576);
-        assert_eq!(human_to_bytes((2, Some('M'))), 2097152);
-        assert_eq!(human_to_bytes((1, Some('g'))), 1073741824);
-        assert_eq!(human_to_bytes((5, Some('G'))), 5368709120);
+        assert_eq!(human_to_bytes((1, Some('m'))), 1_048_576);
+        assert_eq!(human_to_bytes((2, Some('M'))), 2_097_152);
+        assert_eq!(human_to_bytes((1, Some('g'))), 1_073_741_824);
+        assert_eq!(human_to_bytes((5, Some('G'))), 5_368_709_120);
         assert_eq!(human_to_bytes((5, None)), 5);
     }
 
@@ -625,22 +628,22 @@ disk I/O size          ios   % cum % |  ios         % cum %
                         unit: "ios".to_string(),
                         buckets: vec![
                             BrwStatsBucket {
-                                name: 131072,
+                                name: 131_072,
                                 read: 0,
                                 write: 1,
                             },
                             BrwStatsBucket {
-                                name: 262144,
+                                name: 262_144,
                                 read: 0,
                                 write: 0,
                             },
                             BrwStatsBucket {
-                                name: 524288,
+                                name: 524_288,
                                 read: 0,
                                 write: 0,
                             },
                             BrwStatsBucket {
-                                name: 1048576,
+                                name: 1_048_576,
                                 read: 0,
                                 write: 32,
                             },

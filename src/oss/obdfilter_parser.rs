@@ -12,9 +12,13 @@ use combine::{
 
 use base_parsers::{digits, param, period, target, till_newline};
 use oss::brw_stats_parser::brw_stats;
+use oss::job_stats;
 use stats_parser::stats;
-use types::{BrwStats, Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant};
+use types::{
+    BrwStats, JobStatOst, Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant,
+};
 
+pub const JOBSTATS: &str = "job_stats";
 pub const STATS: &str = "stats";
 pub const BRW_STATS: &str = "brw_stats";
 pub const FILES_FREE: &str = "filesfree";
@@ -28,7 +32,8 @@ pub const TOT_DIRTY: &str = "tot_dirty";
 pub const TOT_GRANTED: &str = "tot_granted";
 pub const TOT_PENDING: &str = "tot_pending";
 
-pub const OBD_STATS: [&str; 12] = [
+pub const OBD_STATS: [&str; 13] = [
+    JOBSTATS,
     STATS,
     BRW_STATS,
     FILES_FREE,
@@ -65,6 +70,7 @@ where
 
 #[derive(Debug)]
 enum ObdfilterStat {
+    JobStats(Option<Vec<JobStatOst>>),
     Stats(Vec<Stat>),
     BrwStats(Vec<BrwStats>),
     /// Available inodes
@@ -91,7 +97,10 @@ where
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     choice((
-        // "job_stats",
+        (
+            param(JOBSTATS),
+            job_stats::parse().map(ObdfilterStat::JobStats),
+        ),
         (param(STATS), stats().map(ObdfilterStat::Stats)),
         (param(BRW_STATS), brw_stats().map(ObdfilterStat::BrwStats)),
         (
@@ -155,6 +164,12 @@ where
         .and_then(|(target, (param, value))| {
             #[allow(unreachable_patterns)]
             let r = match value {
+                ObdfilterStat::JobStats(value) => Ok(TargetStats::JobStatsOst(TargetStat {
+                    kind: TargetVariant::OST,
+                    target,
+                    param,
+                    value,
+                })),
                 ObdfilterStat::Stats(value) => Ok(TargetStats::Stats(TargetStat {
                     kind: TargetVariant::OST,
                     target,
@@ -232,8 +247,7 @@ where
                 )),
             };
             r
-        })
-        .map(Record::Target)
+        }).map(Record::Target)
         .message("while parsing obdfilter")
 }
 

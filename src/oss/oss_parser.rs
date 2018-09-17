@@ -144,8 +144,8 @@ obdfilter.fs-OST0000.tot_pending=0
                                 units: "bytes".to_string(),
                                 samples: 9,
                                 min: Some(98303),
-                                max: Some(4194304),
-                                sum: Some(33554431),
+                                max: Some(4_194_304),
+                                sum: Some(33_554_431),
                                 sumsquare: None,
                             },
                             Stat {
@@ -484,22 +484,22 @@ obdfilter.fs-OST0000.tot_pending=0
                                 unit: "ios".to_string(),
                                 buckets: vec![
                                     BrwStatsBucket {
-                                        name: 131072,
+                                        name: 131_072,
                                         read: 0,
                                         write: 1,
                                     },
                                     BrwStatsBucket {
-                                        name: 262144,
+                                        name: 262_144,
                                         read: 0,
                                         write: 0,
                                     },
                                     BrwStatsBucket {
-                                        name: 524288,
+                                        name: 524_288,
                                         read: 0,
                                         write: 0,
                                     },
                                     BrwStatsBucket {
-                                        name: 1048576,
+                                        name: 1_048_576,
                                         read: 0,
                                         write: 32,
                                     },
@@ -511,13 +511,13 @@ obdfilter.fs-OST0000.tot_pending=0
                         kind: TargetVariant::OST,
                         param: Param("filesfree".to_string()),
                         target: Target("fs-OST0000".to_string()),
-                        value: 327382,
+                        value: 327_382,
                     })),
                     Record::Target(TargetStats::FilesTotal(TargetStat {
                         kind: TargetVariant::OST,
                         param: Param("filestotal".to_string()),
                         target: Target("fs-OST0000".to_string()),
-                        value: 327680,
+                        value: 327_680,
                     })),
                     Record::Target(TargetStats::FsType(TargetStat {
                         kind: TargetVariant::OST,
@@ -529,19 +529,19 @@ obdfilter.fs-OST0000.tot_pending=0
                         kind: TargetVariant::OST,
                         param: Param("kbytesavail".to_string()),
                         target: Target("fs-OST0000".to_string()),
-                        value: 4594143232,
+                        value: 4_594_143_232,
                     })),
                     Record::Target(TargetStats::BytesFree(TargetStat {
                         kind: TargetVariant::OST,
                         param: Param("kbytesfree".to_string()),
                         target: Target("fs-OST0000".to_string()),
-                        value: 4879355904,
+                        value: 4_879_355_904,
                     })),
                     Record::Target(TargetStats::BytesTotal(TargetStat {
                         kind: TargetVariant::OST,
                         param: Param("kbytestotal".to_string()),
                         target: Target("fs-OST0000".to_string()),
-                        value: 4947677184,
+                        value: 4_947_677_184,
                     })),
                     Record::Target(TargetStats::NumExports(TargetStat {
                         kind: TargetVariant::OST,
@@ -559,7 +559,7 @@ obdfilter.fs-OST0000.tot_pending=0
                         kind: TargetVariant::OST,
                         param: Param("tot_granted".to_string()),
                         target: Target("fs-OST0000".to_string()),
-                        value: 8666816,
+                        value: 8_666_816,
                     })),
                     Record::Target(TargetStats::TotPending(TargetStat {
                         kind: TargetVariant::OST,

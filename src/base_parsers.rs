@@ -71,7 +71,7 @@ where
 {
     try(word().then(move |y| {
         for &x in xs {
-            if x.to_string() == y {
+            if x == y {
                 return unexpected(x).map(|_| "".to_string()).right();
             }
         }
