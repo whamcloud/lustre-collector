@@ -30,6 +30,14 @@ where
     many1(alpha_num().or(token('_')))
 }
 
+pub fn words<I>() -> impl Parser<Input = I, Output = String>
+where
+    I: Stream<Item = char>,
+    I::Error: ParseError<I::Item, I::Range, I::Position>,
+{
+    many1(alpha_num().or(token('_').or(token(' '))))
+}
+
 /// Parses a target name
 pub fn target<I>() -> impl Parser<Input = I, Output = Target>
 where

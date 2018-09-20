@@ -2,6 +2,8 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
+use std::collections::HashMap;
+
 #[derive(Debug, PartialEq, Serialize)]
 /// The hostname cooresponding to these stats.
 pub struct Host(pub String);
@@ -52,6 +54,84 @@ pub struct JobStatOst {
     pub quotactl: ReqsStat,
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct LocalNiS {
+    pub nid: String,
+    pub status: String,
+    pub interfaces: Option<HashMap<i64, String>>,
+    pub statistics: LNetStatistics,
+    pub tunables: Tunables,
+    #[serde(rename = "lnd tunables")]
+    pub lnd_tunables: Option<HashMap<String, String>>,
+    #[serde(rename = "tcp bonding")]
+    pub tcp_bonding: i64,
+    #[serde(rename = "dev cpt")]
+    pub dev_cpt: i64,
+    #[serde(rename = "CPT")]
+    pub cpt: String,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Net {
+    #[serde(rename = "net type")]
+    pub net_type: String,
+    #[serde(rename = "local NI(s)")]
+    pub local_nis: Vec<LocalNiS>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Numa {
+    pub range: i64,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Peer {
+    #[serde(rename = "primary nid")]
+    pub primary_nid: String,
+    #[serde(rename = "Multi-Rail")]
+    pub multi_rail: String,
+    #[serde(rename = "peer ni")]
+    pub peer_ni: Vec<PeerNi>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct PeerNi {
+    pub nid: String,
+    pub state: String,
+    pub max_ni_tx_credits: i64,
+    pub available_tx_credits: i64,
+    pub min_tx_credits: i64,
+    pub tx_q_num_of_buf: i64,
+    pub available_rtr_credits: i64,
+    pub min_rtr_credits: i64,
+    pub send_count: i64,
+    pub recv_count: i64,
+    pub drop_count: i64,
+    pub refcount: i64,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct LNetExport {
+    pub net: Vec<Net>,
+    pub peer: Option<Vec<Peer>>,
+    pub numa: Numa,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct LNetStatistics {
+    pub send_count: i64,
+    pub recv_count: i64,
+    pub drop_count: i64,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Tunables {
+    pub peer_timeout: i64,
+    pub peer_credits: i64,
+    pub peer_buffer_credits: i64,
+    pub credits: i64,
+}
+
 #[derive(PartialEq, Debug, Serialize, Deserialize)]
 pub struct Stat {
     pub name: String,
@@ -82,6 +162,14 @@ pub struct TargetStat<T> {
     pub kind: TargetVariant,
     pub param: Param,
     pub target: Target,
+    pub value: T,
+}
+
+#[derive(PartialEq, Debug, Serialize)]
+/// Stats specific to a LNet Nid.
+pub struct LNetStat<T> {
+    pub nid: String,
+    pub param: Param,
     pub value: T,
 }
 
@@ -150,7 +238,16 @@ pub enum TargetStats {
 
 #[derive(PartialEq, Debug, Serialize)]
 #[serde(untagged)]
+pub enum LNetStats {
+    SendCount(LNetStat<i64>),
+    RecvCount(LNetStat<i64>),
+    DropCount(LNetStat<i64>),
+}
+
+#[derive(PartialEq, Debug, Serialize)]
+#[serde(untagged)]
 pub enum Record {
     Host(HostStats),
     Target(TargetStats),
+    LNetStat(LNetStats),
 }
