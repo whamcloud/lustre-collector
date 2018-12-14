@@ -14,9 +14,11 @@ use combine::{
     token, Parser,
 };
 
-use base_parsers::{digits, not_words, word};
-use snapshot_time::snapshot_time;
-use types::Stat;
+use crate::{
+    base_parsers::{digits, not_words, word},
+    snapshot_time::snapshot_time,
+    types::Stat,
+};
 
 fn name_count_units<I>() -> impl Parser<Input = I, Output = (String, u64, String)>
 where

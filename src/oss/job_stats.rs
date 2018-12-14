@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 use combine::{
+    attempt,
     error::{ParseError, StreamError},
     optional,
     parser::{
@@ -10,12 +11,12 @@ use combine::{
         repeat::take_until,
     },
     stream::{Stream, StreamErrorFor},
-    try, Parser,
+    Parser,
 };
 
 use serde_yaml;
 
-use types::{JobStatOst, JobStatsOst};
+use crate::types::{JobStatOst, JobStatsOst};
 
 pub fn parse<I>() -> impl Parser<Input = I, Output = Option<Vec<JobStatOst>>>
 where
@@ -24,7 +25,7 @@ where
 {
     (
         optional(newline()), // If Jobstats are present, the whole yaml blob will be on a newline
-        take_until(try((newline(), alpha_num()))),
+        take_until(attempt((newline(), alpha_num()))),
     )
         .skip(newline())
         .and_then(|(_, x): (_, String)| {
@@ -37,8 +38,8 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::types::{BytesStat, ReqsStat};
     use serde_yaml;
-    use types::{BytesStat, ReqsStat};
 
     #[test]
     fn test_yaml_deserialize() {

@@ -3,15 +3,16 @@
 // license that can be found in the LICENSE file.
 
 use combine::{
+    attempt,
     char::{alpha_num, digit, newline, string},
     error::ParseError,
     many1, one_of,
     parser::repeat::take_until,
     stream::Stream,
-    token, try, unexpected, value, Parser,
+    token, unexpected, value, Parser,
 };
 
-use types::{Param, Target};
+use crate::types::{Param, Target};
 
 pub fn period<I>() -> impl Parser<Input = I, Output = char>
 where
@@ -69,7 +70,7 @@ where
     I: Stream<Item = char>,
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
-    try(word().then(move |y| {
+    attempt(word().then(move |y| {
         for &x in xs {
             if x == y {
                 return unexpected(x).map(|_| "".to_string()).right();
@@ -85,7 +86,7 @@ where
     I: Stream<Item = char>,
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
-    try(string(x).skip(token('=')))
+    attempt(string(x).skip(token('=')))
         .map(|x| Param(x.to_string()))
         .message("while getting param")
 }
@@ -93,8 +94,8 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::types::Param;
     use combine::stream::state::{SourcePosition, State};
-    use types::Param;
 
     #[test]
     fn test_param() {

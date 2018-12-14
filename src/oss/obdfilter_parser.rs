@@ -10,12 +10,14 @@ use combine::{
     Parser,
 };
 
-use base_parsers::{digits, param, period, target, till_newline};
-use oss::brw_stats_parser::brw_stats;
-use oss::job_stats;
-use stats_parser::stats;
-use types::{
-    BrwStats, JobStatOst, Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant,
+use crate::{
+    base_parsers::{digits, param, period, target, till_newline},
+    oss::brw_stats_parser::brw_stats,
+    oss::job_stats,
+    stats_parser::stats,
+    types::{
+        BrwStats, JobStatOst, Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant,
+    },
 };
 
 pub const JOBSTATS: &str = "job_stats";
@@ -152,7 +154,8 @@ where
             param(TOT_PENDING),
             digits().skip(newline()).map(ObdfilterStat::TotPending),
         ),
-    )).message("while parsing obdfilter")
+    ))
+    .message("while parsing obdfilter")
 }
 
 pub fn parse<I>() -> impl Parser<Input = I, Output = Record>
@@ -247,7 +250,8 @@ where
                 )),
             };
             r
-        }).map(Record::Target)
+        })
+        .map(Record::Target)
         .message("while parsing obdfilter")
 }
 

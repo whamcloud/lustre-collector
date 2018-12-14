@@ -2,12 +2,8 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use mgs::mgs_parser;
-use oss::oss_parser;
-use top_level_parser;
-
+use crate::{mgs::mgs_parser, oss::oss_parser, top_level_parser, types::Record};
 use combine::{choice, error::ParseError, many, Parser, Stream};
-use types::Record;
 
 pub fn params() -> Vec<String> {
     let mut a = top_level_parser::top_level_params();

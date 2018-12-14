@@ -2,7 +2,6 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use base_parsers::{digits, param, word};
 use combine::{
     choice,
     error::{ParseError, StreamError},
@@ -11,7 +10,10 @@ use combine::{
     Parser,
 };
 
-use types::{HostStat, HostStats, Param, Record};
+use crate::{
+    base_parsers::{digits, param, word},
+    types::{HostStat, HostStats, Param, Record},
+};
 
 pub const MEMUSED_MAX: &str = "memused_max";
 pub const MEMUSED: &str = "memused";
@@ -44,7 +46,8 @@ where
         (param(MEMUSED_MAX), digits().map(TopLevelStat::MemusedMax)),
         (param(LNET_MEMUSED), digits().map(TopLevelStat::LnetMemused)),
         (param(HEALTH_CHECK), word().map(TopLevelStat::HealthCheck)),
-    )).skip(newline())
+    ))
+    .skip(newline())
 }
 
 pub fn parse<I>() -> impl Parser<Input = I, Output = Record>
@@ -72,7 +75,8 @@ where
             };
 
             r
-        }).map(Record::Host)
+        })
+        .map(Record::Host)
         .message("while parsing top_level_param")
 }
 
@@ -80,8 +84,8 @@ where
 mod tests {
 
     use super::*;
+    use crate::types::{HostStat, HostStats, Param};
     use combine::stream::state::{SourcePosition, State};
-    use types::{HostStat, HostStats, Param};
 
     #[test]
     fn test_params() {

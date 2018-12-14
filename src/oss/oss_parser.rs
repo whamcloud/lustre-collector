@@ -2,9 +2,11 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
+use crate::{
+    oss::{ldlm_parser, obdfilter_parser},
+    types::Record,
+};
 use combine::{choice, error::ParseError, Parser, Stream};
-use oss::{ldlm_parser, obdfilter_parser};
-use types::Record;
 
 pub fn params() -> Vec<String> {
     let mut a = obdfilter_parser::obd_params();
@@ -25,12 +27,12 @@ where
 mod tests {
 
     use super::*;
-    use combine::many;
-    use combine::stream::state::{SourcePosition, State};
-    use types::{
+    use crate::types::{
         BrwStats, BrwStatsBucket, Param, Record, Stat, Target, TargetStat, TargetStats,
         TargetVariant,
     };
+    use combine::many;
+    use combine::stream::state::{SourcePosition, State};
 
     #[test]
     fn test_params() {

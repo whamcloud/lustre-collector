@@ -2,9 +2,8 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-#![allow(unknown_lints)]
-#![warn(clippy)]
-#![cfg_attr(feature = "cargo-clippy", allow(let_and_return))]
+#![warn(clippy::all)]
+#![cfg_attr(feature = "cargo-clippy", allow(clippy::let_and_return))]
 // `error_chain!` can recurse deeply
 #![recursion_limit = "1024"]
 
@@ -20,11 +19,6 @@ extern crate clap;
 
 #[macro_use]
 extern crate serde_derive;
-
-extern crate combine;
-extern crate serde;
-extern crate serde_json;
-extern crate serde_yaml;
 
 use clap::{App, Arg};
 
@@ -45,12 +39,12 @@ use std::process::Command;
 
 mod errors {
     // Create the Error, ErrorKind, ResultExt, and Result types
-    error_chain!{}
+    error_chain! {}
 }
 
-use errors::*;
+use self::errors::*;
 
-arg_enum!{
+arg_enum! {
     #[derive(PartialEq, Debug)]
     enum Format {
         Json,
@@ -76,7 +70,8 @@ fn main() {
                 .default_value(&variants[0])
                 .help("Sets the output formatting")
                 .takes_value(true),
-        ).get_matches();
+        )
+        .get_matches();
 
     let format = value_t!(matches, "format", Format).unwrap_or_else(|e| e.exit());
 
