@@ -2,16 +2,18 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use base_parsers::{digits, param, period, target};
-use stats_parser::stats;
-use types::{Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant};
+use crate::{
+    base_parsers::{digits, param, period, target},
+    stats_parser::stats,
+    types::{Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant},
+};
 
 use combine::{
-    choice,
+    attempt, choice,
     error::{ParseError, StreamError},
     parser::char::{newline, string},
     stream::{Stream, StreamErrorFor},
-    try, Parser,
+    Parser,
 };
 
 pub const STATS: &str = "stats";
@@ -26,9 +28,9 @@ pub fn params() -> Vec<String> {
         format!("mgs.*.mgs.{}", THREADS_MIN),
         format!("mgs.*.{}", NUM_EXPORTS),
     ]
-        .into_iter()
-        .map(|x| x.to_owned())
-        .collect::<Vec<_>>()
+    .into_iter()
+    .map(|x| x.to_owned())
+    .collect::<Vec<_>>()
 }
 
 #[derive(Debug)]
@@ -45,7 +47,10 @@ where
     I: Stream<Item = char>,
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
-    (try(string("mgs")).skip(period()), target().skip(period()))
+    (
+        attempt(string("mgs")).skip(period()),
+        target().skip(period()),
+    )
         .map(|(_, x)| x)
         .message("while parsing target_name")
 }
@@ -117,6 +122,7 @@ where
             };
 
             r
-        }).map(Record::Target)
+        })
+        .map(Record::Target)
         .message("while parsing mgs params")
 }

@@ -2,13 +2,15 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use base_parsers::{digits, string_to, till_newline, word};
+use crate::{
+    base_parsers::{digits, string_to, till_newline, word},
+    snapshot_time::snapshot_time,
+    types::{BrwStats, BrwStatsBucket},
+};
 use combine::error::ParseError;
 use combine::parser::char::{newline, spaces, string};
 use combine::stream::Stream;
-use combine::{choice, many, many1, one_of, optional, token, try, Parser};
-use snapshot_time::snapshot_time;
-use types::{BrwStats, BrwStatsBucket};
+use combine::{attempt, choice, many, many1, one_of, optional, token, Parser};
 
 fn human_to_bytes((x, y): (u64, Option<char>)) -> u64 {
     let mult = match y {
@@ -44,13 +46,13 @@ where
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     let keys = choice([
-        try(string_to("pages per bulk r/w", "pages")),
-        try(string_to("discontiguous pages", "discont_pages")),
-        try(string_to("discontiguous blocks", "discont_blocks")),
-        try(string_to("disk fragmented I/Os", "dio_frags")),
-        try(string_to("disk I/Os in flight", "rpc_hist")),
-        try(string_to("I/O time (1/1000s)", "io_time")),
-        try(string_to("disk I/O size", "disk_iosize")),
+        attempt(string_to("pages per bulk r/w", "pages")),
+        attempt(string_to("discontiguous pages", "discont_pages")),
+        attempt(string_to("discontiguous blocks", "discont_blocks")),
+        attempt(string_to("disk fragmented I/Os", "dio_frags")),
+        attempt(string_to("disk I/Os in flight", "rpc_hist")),
+        attempt(string_to("I/O time (1/1000s)", "io_time")),
+        attempt(string_to("disk I/O size", "disk_iosize")),
     ]);
 
     (keys.skip(spaces()), word().skip(till_newline())).map(|(name, unit)| BrwStats {

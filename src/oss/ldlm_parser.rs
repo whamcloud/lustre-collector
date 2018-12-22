@@ -10,8 +10,10 @@ use combine::{
     Parser,
 };
 
-use base_parsers::{digits, param, period, target};
-use types::{Param, Record, Target, TargetStat, TargetStats, TargetVariant};
+use crate::{
+    base_parsers::{digits, param, period, target},
+    types::{Param, Record, Target, TargetStat, TargetStats, TargetVariant},
+};
 
 pub const CONTENDED_LOCKS: &str = "contended_locks";
 pub const CONTENTION_SECONDS: &str = "contention_seconds";
@@ -67,7 +69,8 @@ where
                 [y, _] => Ok(Target(y.to_string())),
                 _ => Err(StreamErrorFor::<I>::expected_static_message("_UUID")),
             }
-        }).skip(period())
+        })
+        .skip(period())
         .message("while parsing lock_namespaces")
 }
 
@@ -174,7 +177,8 @@ where
             _ => Err(StreamErrorFor::<I>::unexpected_static_message(
                 "Unexpected top-level param",
             )),
-        }).map(Record::Target)
+        })
+        .map(Record::Target)
         .message("while parsing ldlm")
 }
 

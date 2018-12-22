@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use base_parsers::{digits, till_newline};
+use crate::base_parsers::{digits, till_newline};
 use combine::error::ParseError;
 use combine::parser::char::{spaces, string};
 use combine::stream::Stream;
