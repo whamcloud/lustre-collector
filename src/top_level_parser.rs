@@ -24,7 +24,7 @@ pub const TOP_LEVEL_PARAMS: [&str; 4] = [MEMUSED, MEMUSED_MAX, LNET_MEMUSED, HEA
 
 pub fn top_level_params() -> Vec<String> {
     TOP_LEVEL_PARAMS
-        .into_iter()
+        .iter()
         .map(|x| x.to_string())
         .collect::<Vec<String>>()
 }
