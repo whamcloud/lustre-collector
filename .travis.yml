@@ -4,6 +4,13 @@ cache: cargo
 jobs:
   include:
     - stage: test
+      name: "copr build test"
+      language: generic
+      script:
+        - export SPEC=lustre_collector.spec
+        - docker run -it -e SPEC="$SPEC" -e LOCAL_ONLY="True" -v $(pwd):/build:rw imlteam/copr
+        - ((`find _topdir/RPMS -name *.rpm | wc -l` > 0))
+    - stage: test
       name: "Unit Tests"
       script:
         - cargo test
@@ -19,5 +26,16 @@ jobs:
         - rustup component add clippy
       script:
         - cargo clippy
+    - stage: cd
+      name: "Continuous Deployment"
+      language: generic
+      script:
+        - export OWNER=managerforlustre
+        - export PROJECT=manager-for-lustre-devel
+        - export PACKAGE=lustre_collector
+        - export SPEC=lustre_collector.spec
+        - docker run -it -e OWNER="$OWNER" -e PROJECT="$PROJECT" -e PACKAGE="$PACKAGE" -e SPEC="$SPEC" -e KEY="$encrypted_253525cedcf6_key" -e IV="$encrypted_253525cedcf6_iv" -v $(pwd):/build:rw imlteam/copr
 stages:
   - test
+  - name: cd
+    if: branch = master AND type = push AND fork = false
