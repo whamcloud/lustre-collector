@@ -1,5 +1,5 @@
 language: rust
-rust: 1.31.0
+rust: 1.37.0
 cache: cargo
 jobs:
   include:
@@ -16,7 +16,7 @@ jobs:
     - stage: test
       name: "Linting Check"
       before_script:
-        - rustup component add clippy-preview
+        - rustup component add clippy
       script:
         - cargo clippy
 stages:
