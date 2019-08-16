@@ -54,7 +54,7 @@ pub const OBD_STATS: [&str; 13] = [
 /// consumption in proper ltcl get_param format.
 pub fn obd_params() -> Vec<String> {
     OBD_STATS
-        .into_iter()
+        .iter()
         .map(|x| format!("obdfilter.*OST*.{}", x))
         .collect::<Vec<String>>()
 }

@@ -47,7 +47,7 @@ pub const LDLM_STATS: [&str; 12] = [
 /// consumption in proper ltcl get_param format.
 pub fn ldlm_params() -> Vec<String> {
     LDLM_STATS
-        .into_iter()
+        .iter()
         .map(|x| format!("ldlm.namespaces.{{mdt-,filter-}}*.{}", x))
         .collect::<Vec<String>>()
 }
@@ -101,7 +101,7 @@ where
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     (ldlm_target(), ldlm_stat())
-        .and_then(|(target, (Param(p), value))| match p.clone().as_ref() {
+        .and_then(|(target, (Param(p), value))| match p.as_ref() {
             CONTENDED_LOCKS => Ok(TargetStats::ContendedLocks(TargetStat {
                 kind: TargetVariant::OST,
                 target,

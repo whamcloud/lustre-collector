@@ -28,7 +28,7 @@ pub fn params() -> Vec<String> {
         format!("mgs.*.mgs.{}", THREADS_MIN),
         format!("mgs.*.{}", NUM_EXPORTS),
     ]
-    .into_iter()
+    .iter()
     .map(|x| x.to_owned())
     .collect::<Vec<_>>()
 }
