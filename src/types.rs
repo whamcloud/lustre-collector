@@ -118,7 +118,7 @@ pub mod lnet_exports {
 
     #[derive(Serialize, Deserialize)]
     pub struct Global {
-        numa_range: i64,
+        numa_range: Option<i64>,
         max_intf: i64,
         discovery: i64,
         drop_asym_route: i64,
