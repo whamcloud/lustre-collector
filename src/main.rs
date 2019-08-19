@@ -20,13 +20,8 @@ extern crate clap;
 #[macro_use]
 extern crate serde_derive;
 
-use clap::{App, Arg};
-
-use combine::stream::state::State;
-use combine::Parser;
-use std::str;
-
 mod base_parsers;
+mod lnetctl_parser;
 mod mgs;
 mod oss;
 mod parser;
@@ -35,7 +30,10 @@ mod stats_parser;
 mod top_level_parser;
 mod types;
 
-use std::process::Command;
+use crate::types::Record;
+use clap::{App, Arg};
+use combine::{stream::state::State, Parser};
+use std::{process::Command, str, thread};
 
 mod errors {
     // Create the Error, ErrorKind, ResultExt, and Result types
@@ -50,6 +48,31 @@ arg_enum! {
         Json,
         Yaml
     }
+}
+
+fn get_lctl_output() -> Result<Vec<u8>> {
+    let r = Command::new("lctl")
+        .arg("get_param")
+        .args(parser::params())
+        .output()
+        .chain_err(|| "calling lctl get_param")?;
+
+    Ok(r.stdout)
+}
+
+fn parse_lctl_output(lctl_output: &[u8]) -> Result<Vec<Record>> {
+    let lctl_stats =
+        str::from_utf8(lctl_output).chain_err(|| "converting lctl stdout from utf8")?;
+
+    let (lctl_record, state) = parser::parse()
+        .easy_parse(State::new(lctl_stats))
+        .expect("while parsing stats");
+
+    if state.input != "" {
+        eprintln!("Content left in input buffer: {}", state.input)
+    }
+
+    Ok(lctl_record)
 }
 
 fn main() {
@@ -75,21 +98,28 @@ fn main() {
 
     let format = value_t!(matches, "format", Format).unwrap_or_else(|e| e.exit());
 
-    let output = Command::new("lctl")
-        .arg("get_param")
-        .args(parser::params())
+    let handle = thread::spawn(move || -> Result<Vec<Record>> {
+        let lctl_output = get_lctl_output()?;
+        let lctl_record = parse_lctl_output(&lctl_output)?;
+
+        Ok(lctl_record)
+    });
+
+    let lnetctl_output = Command::new("lnetctl")
+        .arg("export")
         .output()
-        .expect("failed to get lctl stats");
+        .expect("failed to get lnetctl stats");
 
-    let stats = str::from_utf8(&output.stdout).expect("while converting stdout from utf8");
+    let lnetctl_stats =
+        str::from_utf8(&lnetctl_output.stdout).expect("while converting lnetctl stdout from utf8");
 
-    let (record, state) = parser::parse()
-        .easy_parse(State::new(stats))
-        .expect("while parsing stats");
+    let lnet_record = lnetctl_parser::parse(lnetctl_stats).expect("while parsing lnetctl stats");
 
-    if state.input != "" {
-        eprintln!("Content left in input buffer: {}", state.input)
-    }
+    let lctl_record = handle.join().unwrap().unwrap();
+
+    let mut record = vec![];
+    record.extend(lctl_record);
+    record.extend(lnet_record);
 
     let r = match format {
         Format::Json => serde_json::to_string(&record).chain_err(|| "serializing to JSON"),

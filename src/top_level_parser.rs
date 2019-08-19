@@ -11,7 +11,7 @@ use combine::{
 };
 
 use crate::{
-    base_parsers::{digits, param, word},
+    base_parsers::{digits, param, words},
     types::{HostStat, HostStats, Param, Record},
 };
 
@@ -45,7 +45,7 @@ where
         (param(MEMUSED), digits().map(TopLevelStat::Memused)),
         (param(MEMUSED_MAX), digits().map(TopLevelStat::MemusedMax)),
         (param(LNET_MEMUSED), digits().map(TopLevelStat::LnetMemused)),
-        (param(HEALTH_CHECK), word().map(TopLevelStat::HealthCheck)),
+        (param(HEALTH_CHECK), words().map(TopLevelStat::HealthCheck)),
     ))
     .skip(newline())
 }
