@@ -65,6 +65,14 @@ where
     take_until(newline())
 }
 
+pub fn till_period<I>() -> impl Parser<Input = I, Output = String>
+where
+    I: Stream<Item = char>,
+    I::Error: ParseError<I::Item, I::Range, I::Position>,
+{
+    take_until(period())
+}
+
 pub fn string_to<I>(x: &'static str, y: &'static str) -> impl Parser<Input = I, Output = String>
 where
     I: Stream<Item = char>,

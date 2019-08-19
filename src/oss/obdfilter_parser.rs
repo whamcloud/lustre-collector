@@ -2,14 +2,6 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use combine::{
-    choice,
-    error::{ParseError, StreamError},
-    parser::char::{newline, string},
-    stream::{Stream, StreamErrorFor},
-    Parser,
-};
-
 use crate::{
     base_parsers::{digits, param, period, target, till_newline},
     oss::brw_stats_parser::brw_stats,
@@ -18,6 +10,13 @@ use crate::{
     types::{
         BrwStats, JobStatOst, Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant,
     },
+};
+use combine::{
+    choice,
+    error::ParseError,
+    parser::char::{newline, string},
+    stream::Stream,
+    Parser,
 };
 
 pub const JOBSTATS: &str = "job_stats";
@@ -56,7 +55,7 @@ pub fn obd_params() -> Vec<String> {
     OBD_STATS
         .iter()
         .map(|x| format!("obdfilter.*OST*.{}", x))
-        .collect::<Vec<String>>()
+        .collect()
 }
 
 /// Parses the name of a target
@@ -164,92 +163,85 @@ where
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     (target_name(), obdfilter_stat())
-        .and_then(|(target, (param, value))| {
-            #[allow(unreachable_patterns)]
-            let r = match value {
-                ObdfilterStat::JobStats(value) => Ok(TargetStats::JobStatsOst(TargetStat {
-                    kind: TargetVariant::OST,
-                    target,
-                    param,
-                    value,
-                })),
-                ObdfilterStat::Stats(value) => Ok(TargetStats::Stats(TargetStat {
-                    kind: TargetVariant::OST,
-                    target,
-                    param,
-                    value,
-                })),
-                ObdfilterStat::BrwStats(value) => Ok(TargetStats::BrwStats(TargetStat {
-                    kind: TargetVariant::OST,
-                    target,
-                    param,
-                    value,
-                })),
-                ObdfilterStat::FilesFree(value) => Ok(TargetStats::FilesFree(TargetStat {
-                    kind: TargetVariant::OST,
-                    target,
-                    param,
-                    value,
-                })),
-                ObdfilterStat::FilesTotal(value) => Ok(TargetStats::FilesTotal(TargetStat {
-                    kind: TargetVariant::OST,
-                    target,
-                    param,
-                    value,
-                })),
-                ObdfilterStat::FsType(value) => Ok(TargetStats::FsType(TargetStat {
-                    kind: TargetVariant::OST,
-                    target,
-                    param,
-                    value,
-                })),
-                ObdfilterStat::BytesAvail(value) => Ok(TargetStats::BytesAvail(TargetStat {
-                    kind: TargetVariant::OST,
-                    target,
-                    param,
-                    value,
-                })),
-                ObdfilterStat::BytesFree(value) => Ok(TargetStats::BytesFree(TargetStat {
-                    kind: TargetVariant::OST,
-                    target,
-                    param,
-                    value,
-                })),
-                ObdfilterStat::BytesTotal(value) => Ok(TargetStats::BytesTotal(TargetStat {
-                    kind: TargetVariant::OST,
-                    target,
-                    param,
-                    value,
-                })),
-                ObdfilterStat::NumExports(value) => Ok(TargetStats::NumExports(TargetStat {
-                    kind: TargetVariant::OST,
-                    target,
-                    param,
-                    value,
-                })),
-                ObdfilterStat::TotDirty(value) => Ok(TargetStats::TotDirty(TargetStat {
-                    kind: TargetVariant::OST,
-                    target,
-                    param,
-                    value,
-                })),
-                ObdfilterStat::TotGranted(value) => Ok(TargetStats::TotGranted(TargetStat {
-                    kind: TargetVariant::OST,
-                    target,
-                    param,
-                    value,
-                })),
-                ObdfilterStat::TotPending(value) => Ok(TargetStats::TotPending(TargetStat {
-                    kind: TargetVariant::OST,
-                    target,
-                    param,
-                    value,
-                })),
-                _ => Err(StreamErrorFor::<I>::expected_static_message(
-                    "ObdfilterStat Variant",
-                )),
-            };
-            r
+        .map(|(target, (param, value))| match value {
+            ObdfilterStat::JobStats(value) => TargetStats::JobStatsOst(TargetStat {
+                kind: TargetVariant::OST,
+                target,
+                param,
+                value,
+            }),
+            ObdfilterStat::Stats(value) => TargetStats::Stats(TargetStat {
+                kind: TargetVariant::OST,
+                target,
+                param,
+                value,
+            }),
+            ObdfilterStat::BrwStats(value) => TargetStats::BrwStats(TargetStat {
+                kind: TargetVariant::OST,
+                target,
+                param,
+                value,
+            }),
+            ObdfilterStat::FilesFree(value) => TargetStats::FilesFree(TargetStat {
+                kind: TargetVariant::OST,
+                target,
+                param,
+                value,
+            }),
+            ObdfilterStat::FilesTotal(value) => TargetStats::FilesTotal(TargetStat {
+                kind: TargetVariant::OST,
+                target,
+                param,
+                value,
+            }),
+            ObdfilterStat::FsType(value) => TargetStats::FsType(TargetStat {
+                kind: TargetVariant::OST,
+                target,
+                param,
+                value,
+            }),
+            ObdfilterStat::BytesAvail(value) => TargetStats::BytesAvail(TargetStat {
+                kind: TargetVariant::OST,
+                target,
+                param,
+                value,
+            }),
+            ObdfilterStat::BytesFree(value) => TargetStats::BytesFree(TargetStat {
+                kind: TargetVariant::OST,
+                target,
+                param,
+                value,
+            }),
+            ObdfilterStat::BytesTotal(value) => TargetStats::BytesTotal(TargetStat {
+                kind: TargetVariant::OST,
+                target,
+                param,
+                value,
+            }),
+            ObdfilterStat::NumExports(value) => TargetStats::NumExports(TargetStat {
+                kind: TargetVariant::OST,
+                target,
+                param,
+                value,
+            }),
+            ObdfilterStat::TotDirty(value) => TargetStats::TotDirty(TargetStat {
+                kind: TargetVariant::OST,
+                target,
+                param,
+                value,
+            }),
+            ObdfilterStat::TotGranted(value) => TargetStats::TotGranted(TargetStat {
+                kind: TargetVariant::OST,
+                target,
+                param,
+                value,
+            }),
+            ObdfilterStat::TotPending(value) => TargetStats::TotPending(TargetStat {
+                kind: TargetVariant::OST,
+                target,
+                param,
+                value,
+            }),
         })
         .map(Record::Target)
         .message("while parsing obdfilter")

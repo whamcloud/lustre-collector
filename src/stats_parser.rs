@@ -26,7 +26,7 @@ where
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     (
-        not_words(&["obdfilter", "mgs"]).skip(spaces()),
+        not_words(&["obdfilter", "mgs", "mdt"]).skip(spaces()),
         digits(),
         spaces().with(string("samples")),
         spaces().with(between(token('['), token(']'), word())),
@@ -114,6 +114,7 @@ where
 mod tests {
     use super::*;
     use combine::stream::state::{SourcePosition, State};
+    use insta::assert_debug_snapshot_matches;
 
     #[test]
     fn test_name_count_units() {
@@ -216,120 +217,22 @@ ping                      1075 samples [reqs]
 "#,
         );
 
-        let result = stats().easy_parse(x);
+        let result = stats().easy_parse(x).unwrap();
 
-        assert_eq!(
-            result,
-            Ok((
-                vec![
-                    Stat {
-                        name: "write_bytes".to_string(),
-                        samples: 9,
-                        units: "bytes".to_string(),
-                        min: Some(98303),
-                        max: Some(4_194_304),
-                        sum: Some(33_554_431),
-                        sumsquare: None,
-                    },
-                    Stat {
-                        name: "create".to_string(),
-                        samples: 4,
-                        units: "reqs".to_string(),
-                        min: None,
-                        max: None,
-                        sum: None,
-                        sumsquare: None,
-                    },
-                    Stat {
-                        name: "statfs".to_string(),
-                        samples: 5634,
-                        units: "reqs".to_string(),
-                        min: None,
-                        max: None,
-                        sum: None,
-                        sumsquare: None,
-                    },
-                    Stat {
-                        name: "get_info".to_string(),
-                        samples: 2,
-                        units: "reqs".to_string(),
-                        min: None,
-                        max: None,
-                        sum: None,
-                        sumsquare: None,
-                    },
-                    Stat {
-                        name: "connect".to_string(),
-                        samples: 4,
-                        units: "reqs".to_string(),
-                        min: None,
-                        max: None,
-                        sum: None,
-                        sumsquare: None,
-                    },
-                    Stat {
-                        name: "reconnect".to_string(),
-                        samples: 1,
-                        units: "reqs".to_string(),
-                        min: None,
-                        max: None,
-                        sum: None,
-                        sumsquare: None,
-                    },
-                    Stat {
-                        name: "disconnect".to_string(),
-                        samples: 3,
-                        units: "reqs".to_string(),
-                        min: None,
-                        max: None,
-                        sum: None,
-                        sumsquare: None,
-                    },
-                    Stat {
-                        name: "statfs".to_string(),
-                        samples: 18,
-                        units: "reqs".to_string(),
-                        min: None,
-                        max: None,
-                        sum: None,
-                        sumsquare: None,
-                    },
-                    Stat {
-                        name: "preprw".to_string(),
-                        samples: 9,
-                        units: "reqs".to_string(),
-                        min: None,
-                        max: None,
-                        sum: None,
-                        sumsquare: None,
-                    },
-                    Stat {
-                        name: "commitrw".to_string(),
-                        samples: 9,
-                        units: "reqs".to_string(),
-                        min: None,
-                        max: None,
-                        sum: None,
-                        sumsquare: None,
-                    },
-                    Stat {
-                        name: "ping".to_string(),
-                        samples: 1075,
-                        units: "reqs".to_string(),
-                        min: None,
-                        max: None,
-                        sum: None,
-                        sumsquare: None,
-                    },
-                ],
-                State {
-                    input: "",
-                    positioner: SourcePosition {
-                        line: 14,
-                        column: 1,
-                    },
-                }
-            ))
+        assert_debug_snapshot_matches!(result);
+    }
+
+    #[test]
+    fn test_mdstats() {
+        let x = State::new(
+            r#"
+snapshot_time             1566007540.707634939 secs.nsecs
+statfs                    16360 samples [reqs]
+"#,
         );
+
+        let result = stats().easy_parse(x).unwrap();
+
+        assert_debug_snapshot_matches!(result);
     }
 }

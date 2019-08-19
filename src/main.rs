@@ -1,27 +1,13 @@
-// Copyright (c) 2018 DDN. All rights reserved.
+// Copyright (c) 2019 DDN. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
-
-#![warn(clippy::all)]
-#![cfg_attr(feature = "cargo-clippy", allow(clippy::let_and_return))]
-// `error_chain!` can recurse deeply
-#![recursion_limit = "1024"]
-
-#[cfg(test)]
-#[macro_use]
-extern crate pretty_assertions;
-
-#[macro_use]
-extern crate error_chain;
 
 #[macro_use]
 extern crate clap;
 
-#[macro_use]
-extern crate serde_derive;
-
 mod base_parsers;
 mod lnetctl_parser;
+mod mds;
 mod mgs;
 mod oss;
 mod parser;
@@ -33,16 +19,19 @@ mod types;
 use crate::types::Record;
 use clap::{App, Arg};
 use combine::{stream::state::State, Parser};
-use std::{process::Command, str, thread};
+use std::{
+    process::{exit, Command},
+    str, thread,
+};
 
 mod errors {
     // Create the Error, ErrorKind, ResultExt, and Result types
-    error_chain! {}
+    error_chain::error_chain! {}
 }
 
 use self::errors::*;
 
-arg_enum! {
+clap::arg_enum! {
     #[derive(PartialEq, Debug)]
     enum Format {
         Json,
@@ -96,7 +85,7 @@ fn main() {
         )
         .get_matches();
 
-    let format = value_t!(matches, "format", Format).unwrap_or_else(|e| e.exit());
+    let format = clap::value_t!(matches, "format", Format).unwrap_or_else(|e| e.exit());
 
     let handle = thread::spawn(move || -> Result<Vec<Record>> {
         let lctl_output = get_lctl_output()?;
@@ -117,9 +106,7 @@ fn main() {
 
     let lctl_record = handle.join().unwrap().unwrap();
 
-    let mut record = vec![];
-    record.extend(lctl_record);
-    record.extend(lnet_record);
+    let record = vec![lctl_record, lnet_record];
 
     let r = match format {
         Format::Json => serde_json::to_string(&record).chain_err(|| "serializing to JSON"),
@@ -139,7 +126,7 @@ fn main() {
                 println!("backtrace: {:?}", backtrace);
             }
 
-            ::std::process::exit(1);
+            exit(1);
         }
     }
 }

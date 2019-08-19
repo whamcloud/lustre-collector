@@ -2,18 +2,11 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use combine::{
-    choice,
-    error::{ParseError, StreamError},
-    parser::char::newline,
-    stream::{Stream, StreamErrorFor},
-    Parser,
-};
-
 use crate::{
     base_parsers::{digits, param, words},
     types::{HostStat, HostStats, Param, Record},
 };
+use combine::{choice, error::ParseError, parser::char::newline, stream::Stream, Parser};
 
 pub const MEMUSED_MAX: &str = "memused_max";
 pub const MEMUSED: &str = "memused";
@@ -23,10 +16,7 @@ pub const HEALTH_CHECK: &str = "health_check";
 pub const TOP_LEVEL_PARAMS: [&str; 4] = [MEMUSED, MEMUSED_MAX, LNET_MEMUSED, HEALTH_CHECK];
 
 pub fn top_level_params() -> Vec<String> {
-    TOP_LEVEL_PARAMS
-        .iter()
-        .map(|x| x.to_string())
-        .collect::<Vec<String>>()
+    TOP_LEVEL_PARAMS.iter().map(|x| x.to_string()).collect()
 }
 
 enum TopLevelStat {
@@ -56,25 +46,11 @@ where
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     top_level_stat()
-        .and_then(|(param, v)| {
-            #[allow(unreachable_patterns)]
-            let r = match v {
-                TopLevelStat::Memused(value) => Ok(HostStats::Memused(HostStat { param, value })),
-                TopLevelStat::MemusedMax(value) => {
-                    Ok(HostStats::MemusedMax(HostStat { param, value }))
-                }
-                TopLevelStat::LnetMemused(value) => {
-                    Ok(HostStats::LNetMemUsed(HostStat { param, value }))
-                }
-                TopLevelStat::HealthCheck(value) => {
-                    Ok(HostStats::HealthCheck(HostStat { param, value }))
-                }
-                _ => Err(StreamErrorFor::<I>::unexpected_static_message(
-                    "Unexpected top-level param",
-                )),
-            };
-
-            r
+        .map(|(param, v)| match v {
+            TopLevelStat::Memused(value) => HostStats::Memused(HostStat { param, value }),
+            TopLevelStat::MemusedMax(value) => HostStats::MemusedMax(HostStat { param, value }),
+            TopLevelStat::LnetMemused(value) => HostStats::LNetMemUsed(HostStat { param, value }),
+            TopLevelStat::HealthCheck(value) => HostStats::HealthCheck(HostStat { param, value }),
         })
         .map(Record::Host)
         .message("while parsing top_level_param")

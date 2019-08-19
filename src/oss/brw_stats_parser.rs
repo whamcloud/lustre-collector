@@ -7,10 +7,15 @@ use crate::{
     snapshot_time::snapshot_time,
     types::{BrwStats, BrwStatsBucket},
 };
-use combine::error::ParseError;
-use combine::parser::char::{newline, spaces, string};
-use combine::stream::Stream;
-use combine::{attempt, choice, many, many1, one_of, optional, token, Parser};
+
+use combine::{
+    attempt, choice,
+    error::ParseError,
+    many, many1, one_of, optional,
+    parser::char::{newline, spaces, string},
+    stream::Stream,
+    token, Parser,
+};
 
 fn human_to_bytes((x, y): (u64, Option<char>)) -> u64 {
     let mult = match y {
@@ -436,7 +441,7 @@ disk I/O size          ios   % cum % |  ios         % cum %
 "#,
         );
 
-        let result = brw_stats().easy_parse(x).unwrap();
+        let result: (Vec<_>, _) = brw_stats().easy_parse(x).unwrap();
 
         assert_debug_snapshot_matches!(result);
     }
