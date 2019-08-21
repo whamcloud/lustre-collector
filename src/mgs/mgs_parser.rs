@@ -18,6 +18,7 @@ use combine::{
 pub const STATS: &str = "stats";
 pub const THREADS_MIN: &str = "threads_min";
 pub const THREADS_MAX: &str = "threads_max";
+pub const THREADS_STARTED: &str = "threads_started";
 pub const NUM_EXPORTS: &str = "num_exports";
 
 pub fn params() -> Vec<String> {
@@ -25,6 +26,7 @@ pub fn params() -> Vec<String> {
         format!("mgs.*.mgs.{}", STATS),
         format!("mgs.*.mgs.{}", THREADS_MAX),
         format!("mgs.*.mgs.{}", THREADS_MIN),
+        format!("mgs.*.mgs.{}", THREADS_STARTED),
         format!("mgs.*.{}", NUM_EXPORTS),
     ]
     .iter()
@@ -37,6 +39,7 @@ enum MgsStat {
     Stats(Vec<Stat>),
     ThreadsMin(u64),
     ThreadsMax(u64),
+    ThreadsStarted(u64),
     NumExports(u64),
 }
 
@@ -76,6 +79,10 @@ where
                     param(THREADS_MAX),
                     digits().skip(newline()).map(MgsStat::ThreadsMax),
                 ),
+                (
+                    param(THREADS_STARTED),
+                    digits().skip(newline()).map(MgsStat::ThreadsStarted),
+                ),
             )),
         )
             .map(|(_, (y, z))| (y, z)),
@@ -108,6 +115,12 @@ where
                 value,
             }),
             MgsStat::ThreadsMax(value) => TargetStats::ThreadsMax(TargetStat {
+                kind: TargetVariant::MGT,
+                target,
+                param,
+                value,
+            }),
+            MgsStat::ThreadsStarted(value) => TargetStats::ThreadsStarted(TargetStat {
                 kind: TargetVariant::MGT,
                 target,
                 param,
