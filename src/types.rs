@@ -280,6 +280,7 @@ pub enum TargetStats {
     ResourceCount(TargetStat<u64>),
     ThreadsMin(TargetStat<u64>),
     ThreadsMax(TargetStat<u64>),
+    ThreadsStarted(TargetStat<u64>),
 }
 
 #[derive(PartialEq, Debug, serde::Serialize)]
