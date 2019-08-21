@@ -2,25 +2,25 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-#[derive(Debug, PartialEq, Serialize)]
+#[derive(Debug, PartialEq, serde::Serialize)]
 /// The hostname cooresponding to these stats.
 pub struct Host(pub String);
 
-#[derive(Debug, PartialEq, Serialize)]
+#[derive(Debug, PartialEq, serde::Serialize)]
 /// The Lustre target cooresponding to these stats.
 pub struct Target(pub String);
 
-#[derive(Debug, PartialEq, Serialize)]
+#[derive(Debug, PartialEq, serde::Serialize)]
 /// The name of the stat.
 pub struct Param(pub String);
 
-#[derive(PartialEq, Debug, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct ReqsStat {
     pub samples: i64,
     pub unit: String,
 }
 
-#[derive(PartialEq, Debug, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct BytesStat {
     pub samples: i64,
     pub unit: String,
@@ -29,12 +29,12 @@ pub struct BytesStat {
     pub sum: i64,
 }
 
-#[derive(PartialEq, Debug, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct JobStatsOst {
     pub job_stats: Option<Vec<JobStatOst>>,
 }
 
-#[derive(PartialEq, Debug, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct JobStatOst {
     pub job_id: String,
     pub snapshot_time: i64,
@@ -55,7 +55,7 @@ pub struct JobStatOst {
 pub mod lnet_exports {
     use std::collections::HashMap;
 
-    #[derive(Serialize, Deserialize)]
+    #[derive(serde::Serialize, serde::Deserialize)]
     pub struct LocalNiS {
         pub nid: String,
         pub status: String,
@@ -75,7 +75,7 @@ pub mod lnet_exports {
         pub interfaces: Option<HashMap<i64, String>>,
     }
 
-    #[derive(Serialize, Deserialize)]
+    #[derive(serde::Serialize, serde::Deserialize)]
     pub struct Stats {
         pub put: i64,
         pub get: i64,
@@ -84,7 +84,7 @@ pub mod lnet_exports {
         pub hello: i64,
     }
 
-    #[derive(Serialize, Deserialize)]
+    #[derive(serde::Serialize, serde::Deserialize)]
     pub struct HealthStats {
         #[serde(rename = "health value")]
         health_value: i64,
@@ -97,7 +97,7 @@ pub mod lnet_exports {
         error: i64,
     }
 
-    #[derive(Serialize, Deserialize)]
+    #[derive(serde::Serialize, serde::Deserialize)]
     pub struct HealthStatsPeer {
         #[serde(rename = "health value")]
         health_value: i64,
@@ -108,7 +108,7 @@ pub mod lnet_exports {
         network_timeout: i64,
     }
 
-    #[derive(Serialize, Deserialize)]
+    #[derive(serde::Serialize, serde::Deserialize)]
     pub struct Net {
         #[serde(rename = "net type")]
         pub net_type: String,
@@ -116,7 +116,7 @@ pub mod lnet_exports {
         pub local_nis: Vec<LocalNiS>,
     }
 
-    #[derive(Serialize, Deserialize)]
+    #[derive(serde::Serialize, serde::Deserialize)]
     pub struct Global {
         numa_range: Option<i64>,
         max_intf: i64,
@@ -124,7 +124,7 @@ pub mod lnet_exports {
         drop_asym_route: i64,
     }
 
-    #[derive(Serialize, Deserialize)]
+    #[derive(serde::Serialize, serde::Deserialize)]
     pub struct Peer {
         #[serde(rename = "primary nid")]
         pub primary_nid: String,
@@ -134,7 +134,7 @@ pub mod lnet_exports {
         pub peer_ni: Vec<PeerNi>,
     }
 
-    #[derive(Serialize, Deserialize)]
+    #[derive(serde::Serialize, serde::Deserialize)]
     pub struct PeerNi {
         nid: String,
         state: String,
@@ -153,21 +153,21 @@ pub mod lnet_exports {
         health_stats: HealthStatsPeer,
     }
 
-    #[derive(Serialize, Deserialize)]
+    #[derive(serde::Serialize, serde::Deserialize)]
     pub struct LNetExport {
         pub net: Vec<Net>,
         pub peer: Option<Vec<Peer>>,
         pub global: Global,
     }
 
-    #[derive(Serialize, Deserialize)]
+    #[derive(serde::Serialize, serde::Deserialize)]
     pub struct LNetStatistics {
         pub send_count: i64,
         pub recv_count: i64,
         pub drop_count: i64,
     }
 
-    #[derive(Serialize, Deserialize)]
+    #[derive(serde::Serialize, serde::Deserialize)]
     pub struct Tunables {
         pub peer_timeout: i64,
         pub peer_credits: i64,
@@ -177,7 +177,7 @@ pub mod lnet_exports {
 
 }
 
-#[derive(PartialEq, Debug, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct Stat {
     pub name: String,
     pub units: String,
@@ -188,20 +188,21 @@ pub struct Stat {
     pub sumsquare: Option<u64>,
 }
 
-#[derive(PartialEq, Debug, Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize)]
 /// A Stat specific to a host.
 pub struct HostStat<T> {
     pub param: Param,
     pub value: T,
 }
 
-#[derive(PartialEq, Debug, Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize)]
 pub enum TargetVariant {
     OST,
     MGT,
+    MDT,
 }
 
-#[derive(PartialEq, Debug, Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize)]
 /// Stats specific to a target.
 pub struct TargetStat<T> {
     pub kind: TargetVariant,
@@ -210,7 +211,7 @@ pub struct TargetStat<T> {
     pub value: T,
 }
 
-#[derive(PartialEq, Debug, Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize)]
 /// Stats specific to a LNet Nid.
 pub struct LNetStat<T> {
     pub nid: String,
@@ -218,21 +219,21 @@ pub struct LNetStat<T> {
     pub value: T,
 }
 
-#[derive(PartialEq, Debug, Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize)]
 pub struct BrwStatsBucket {
     pub name: u64,
     pub read: u64,
     pub write: u64,
 }
 
-#[derive(PartialEq, Debug, Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize)]
 pub struct BrwStats {
     pub name: String,
     pub unit: String,
     pub buckets: Vec<BrwStatsBucket>,
 }
 
-#[derive(PartialEq, Debug, Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize)]
 #[serde(untagged)]
 pub enum HostStats {
     MemusedMax(HostStat<u64>),
@@ -242,7 +243,7 @@ pub enum HostStats {
 }
 
 /// The target stats currently collected
-#[derive(PartialEq, Debug, Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize)]
 #[serde(untagged)]
 pub enum TargetStats {
     /// Operations per OST. Read and write data is particularly interesting
@@ -281,7 +282,7 @@ pub enum TargetStats {
     ThreadsMax(TargetStat<u64>),
 }
 
-#[derive(PartialEq, Debug, Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize)]
 #[serde(untagged)]
 pub enum LNetStats {
     SendCount(LNetStat<i64>),
@@ -289,7 +290,7 @@ pub enum LNetStats {
     DropCount(LNetStat<i64>),
 }
 
-#[derive(PartialEq, Debug, Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize)]
 #[serde(untagged)]
 pub enum Record {
     Host(HostStats),

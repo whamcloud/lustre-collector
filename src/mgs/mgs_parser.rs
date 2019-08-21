@@ -7,12 +7,11 @@ use crate::{
     stats_parser::stats,
     types::{Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant},
 };
-
 use combine::{
     attempt, choice,
-    error::{ParseError, StreamError},
+    error::ParseError,
     parser::char::{newline, string},
-    stream::{Stream, StreamErrorFor},
+    stream::Stream,
     Parser,
 };
 
@@ -89,39 +88,31 @@ where
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     (target_name(), mgs_stat())
-        .and_then(|(target, (param, value))| {
-            #[allow(unreachable_patterns)]
-            let r = match value {
-                MgsStat::Stats(value) => Ok(TargetStats::Stats(TargetStat {
-                    kind: TargetVariant::MGT,
-                    target,
-                    param,
-                    value,
-                })),
-                MgsStat::NumExports(value) => Ok(TargetStats::NumExports(TargetStat {
-                    kind: TargetVariant::MGT,
-                    target,
-                    param,
-                    value,
-                })),
-                MgsStat::ThreadsMin(value) => Ok(TargetStats::ThreadsMin(TargetStat {
-                    kind: TargetVariant::MGT,
-                    target,
-                    param,
-                    value,
-                })),
-                MgsStat::ThreadsMax(value) => Ok(TargetStats::ThreadsMax(TargetStat {
-                    kind: TargetVariant::MGT,
-                    target,
-                    param,
-                    value,
-                })),
-                _ => Err(StreamErrorFor::<I>::expected_static_message(
-                    "MgsStat Variant",
-                )),
-            };
-
-            r
+        .map(|(target, (param, value))| match value {
+            MgsStat::Stats(value) => TargetStats::Stats(TargetStat {
+                kind: TargetVariant::MGT,
+                target,
+                param,
+                value,
+            }),
+            MgsStat::NumExports(value) => TargetStats::NumExports(TargetStat {
+                kind: TargetVariant::MGT,
+                target,
+                param,
+                value,
+            }),
+            MgsStat::ThreadsMin(value) => TargetStats::ThreadsMin(TargetStat {
+                kind: TargetVariant::MGT,
+                target,
+                param,
+                value,
+            }),
+            MgsStat::ThreadsMax(value) => TargetStats::ThreadsMax(TargetStat {
+                kind: TargetVariant::MGT,
+                target,
+                param,
+                value,
+            }),
         })
         .map(Record::Target)
         .message("while parsing mgs params")

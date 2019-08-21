@@ -49,24 +49,28 @@ pub fn ldlm_params() -> Vec<String> {
     LDLM_STATS
         .iter()
         .map(|x| format!("ldlm.namespaces.{{mdt-,filter-}}*.{}", x))
-        .collect::<Vec<String>>()
+        .collect()
 }
 
 /// Parses the name of the target
-pub fn ldlm_target<I>() -> impl Parser<Input = I, Output = Target>
+pub fn ldlm_target<I>() -> impl Parser<Input = I, Output = (TargetVariant, Target)>
 where
     I: Stream<Item = char>,
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     (
         string("ldlm.namespaces."),
-        choice((string("mdt-"), string("filter-"))).with(target()),
+        choice((
+            string("mdt-").map(|_| TargetVariant::MDT),
+            string("filter-").map(|_| TargetVariant::OST),
+        ))
+        .and(target()),
     )
-        .and_then(|(_, Target(x))| {
+        .and_then(|(_, (kind, Target(x)))| {
             let xs: Vec<&str> = x.split("_UUID").collect();
 
             match xs.as_slice() {
-                [y, _] => Ok(Target(y.to_string())),
+                [y, _] => Ok((kind, Target(y.to_string()))),
                 _ => Err(StreamErrorFor::<I>::expected_static_message("_UUID")),
             }
         })
@@ -101,75 +105,75 @@ where
     I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
     (ldlm_target(), ldlm_stat())
-        .and_then(|(target, (Param(p), value))| match p.as_ref() {
+        .and_then(|((kind, target), (Param(p), value))| match p.as_ref() {
             CONTENDED_LOCKS => Ok(TargetStats::ContendedLocks(TargetStat {
-                kind: TargetVariant::OST,
+                kind,
                 target,
                 param: Param(p),
                 value,
             })),
             CONTENTION_SECONDS => Ok(TargetStats::ContentionSeconds(TargetStat {
-                kind: TargetVariant::OST,
+                kind,
                 target,
                 param: Param(p),
                 value,
             })),
             CTIME_AGE_LIMIT => Ok(TargetStats::CtimeAgeLimit(TargetStat {
-                kind: TargetVariant::OST,
+                kind,
                 target,
                 param: Param(p),
                 value,
             })),
             EARLY_LOCK_CANCEL => Ok(TargetStats::EarlyLockCancel(TargetStat {
-                kind: TargetVariant::OST,
+                kind,
                 target,
                 param: Param(p),
                 value,
             })),
             LOCK_COUNT => Ok(TargetStats::LockCount(TargetStat {
-                kind: TargetVariant::OST,
+                kind,
                 target,
                 param: Param(p),
                 value,
             })),
             LOCK_TIMEOUTS => Ok(TargetStats::LockTimeouts(TargetStat {
-                kind: TargetVariant::OST,
+                kind,
                 target,
                 param: Param(p),
                 value,
             })),
             LOCK_UNUSED_COUNT => Ok(TargetStats::LockUnusedCount(TargetStat {
-                kind: TargetVariant::OST,
+                kind,
                 target,
                 param: Param(p),
                 value,
             })),
             LRU_MAX_AGE => Ok(TargetStats::LruMaxAge(TargetStat {
-                kind: TargetVariant::OST,
+                kind,
                 target,
                 param: Param(p),
                 value,
             })),
             LRU_SIZE => Ok(TargetStats::LruSize(TargetStat {
-                kind: TargetVariant::OST,
+                kind,
                 target,
                 param: Param(p),
                 value,
             })),
             MAX_NOLOCK_BYTES => Ok(TargetStats::MaxNolockBytes(TargetStat {
-                kind: TargetVariant::OST,
+                kind,
                 target,
                 param: Param(p),
                 value,
             })),
             MAX_PARALLEL_AST => Ok(TargetStats::MaxParallelAst(TargetStat {
-                kind: TargetVariant::OST,
+                kind,
                 target,
                 param: Param(p),
                 value,
             })),
             RESOURCE_COUNT => Ok(TargetStats::ResourceCount(TargetStat {
-                kind: TargetVariant::OST,
+                kind,
                 target,
                 param: Param(p),
                 value,

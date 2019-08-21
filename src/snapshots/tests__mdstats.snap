@@ -1,0 +1,26 @@
+---
+created: "2019-08-18T22:03:40.452743Z"
+creator: insta@0.10.1
+source: src/stats_parser.rs
+expression: result
+---
+(
+    [
+        Stat {
+            name: "statfs",
+            units: "reqs",
+            samples: 16360,
+            min: None,
+            max: None,
+            sum: None,
+            sumsquare: None,
+        },
+    ],
+    State {
+        input: "",
+        positioner: SourcePosition {
+            line: 4,
+            column: 1,
+        },
+    },
+)

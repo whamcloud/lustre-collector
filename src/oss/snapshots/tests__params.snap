@@ -1,0 +1,554 @@
+---
+created: "2019-08-18T22:08:09.867343Z"
+creator: insta@0.10.1
+source: src/oss/oss_parser.rs
+expression: result
+---
+(
+    [
+        Target(
+            Stats(
+                TargetStat {
+                    kind: OST,
+                    param: Param(
+                        "stats",
+                    ),
+                    target: Target(
+                        "fs-OST0000",
+                    ),
+                    value: [
+                        Stat {
+                            name: "write_bytes",
+                            units: "bytes",
+                            samples: 9,
+                            min: Some(
+                                98303,
+                            ),
+                            max: Some(
+                                4194304,
+                            ),
+                            sum: Some(
+                                33554431,
+                            ),
+                            sumsquare: None,
+                        },
+                        Stat {
+                            name: "create",
+                            units: "reqs",
+                            samples: 4,
+                            min: None,
+                            max: None,
+                            sum: None,
+                            sumsquare: None,
+                        },
+                        Stat {
+                            name: "statfs",
+                            units: "reqs",
+                            samples: 42297,
+                            min: None,
+                            max: None,
+                            sum: None,
+                            sumsquare: None,
+                        },
+                        Stat {
+                            name: "get_info",
+                            units: "reqs",
+                            samples: 2,
+                            min: None,
+                            max: None,
+                            sum: None,
+                            sumsquare: None,
+                        },
+                        Stat {
+                            name: "connect",
+                            units: "reqs",
+                            samples: 6,
+                            min: None,
+                            max: None,
+                            sum: None,
+                            sumsquare: None,
+                        },
+                        Stat {
+                            name: "reconnect",
+                            units: "reqs",
+                            samples: 1,
+                            min: None,
+                            max: None,
+                            sum: None,
+                            sumsquare: None,
+                        },
+                        Stat {
+                            name: "disconnect",
+                            units: "reqs",
+                            samples: 4,
+                            min: None,
+                            max: None,
+                            sum: None,
+                            sumsquare: None,
+                        },
+                        Stat {
+                            name: "statfs",
+                            units: "reqs",
+                            samples: 46806,
+                            min: None,
+                            max: None,
+                            sum: None,
+                            sumsquare: None,
+                        },
+                        Stat {
+                            name: "preprw",
+                            units: "reqs",
+                            samples: 9,
+                            min: None,
+                            max: None,
+                            sum: None,
+                            sumsquare: None,
+                        },
+                        Stat {
+                            name: "commitrw",
+                            units: "reqs",
+                            samples: 9,
+                            min: None,
+                            max: None,
+                            sum: None,
+                            sumsquare: None,
+                        },
+                        Stat {
+                            name: "ping",
+                            units: "reqs",
+                            samples: 8229,
+                            min: None,
+                            max: None,
+                            sum: None,
+                            sumsquare: None,
+                        },
+                    ],
+                },
+            ),
+        ),
+        Target(
+            BrwStats(
+                TargetStat {
+                    kind: OST,
+                    param: Param(
+                        "brw_stats",
+                    ),
+                    target: Target(
+                        "fs-OST0000",
+                    ),
+                    value: [
+                        BrwStats {
+                            name: "pages",
+                            unit: "rpcs",
+                            buckets: [
+                                BrwStatsBucket {
+                                    name: 32,
+                                    read: 0,
+                                    write: 1,
+                                },
+                                BrwStatsBucket {
+                                    name: 64,
+                                    read: 0,
+                                    write: 0,
+                                },
+                                BrwStatsBucket {
+                                    name: 128,
+                                    read: 0,
+                                    write: 0,
+                                },
+                                BrwStatsBucket {
+                                    name: 256,
+                                    read: 0,
+                                    write: 0,
+                                },
+                                BrwStatsBucket {
+                                    name: 512,
+                                    read: 0,
+                                    write: 0,
+                                },
+                                BrwStatsBucket {
+                                    name: 1024,
+                                    read: 0,
+                                    write: 8,
+                                },
+                            ],
+                        },
+                        BrwStats {
+                            name: "discont_pages",
+                            unit: "rpcs",
+                            buckets: [
+                                BrwStatsBucket {
+                                    name: 0,
+                                    read: 0,
+                                    write: 6,
+                                },
+                                BrwStatsBucket {
+                                    name: 1,
+                                    read: 0,
+                                    write: 3,
+                                },
+                            ],
+                        },
+                        BrwStats {
+                            name: "discont_blocks",
+                            unit: "rpcs",
+                            buckets: [
+                                BrwStatsBucket {
+                                    name: 0,
+                                    read: 0,
+                                    write: 9,
+                                },
+                            ],
+                        },
+                        BrwStats {
+                            name: "dio_frags",
+                            unit: "ios",
+                            buckets: [
+                                BrwStatsBucket {
+                                    name: 1,
+                                    read: 0,
+                                    write: 1,
+                                },
+                                BrwStatsBucket {
+                                    name: 2,
+                                    read: 0,
+                                    write: 0,
+                                },
+                                BrwStatsBucket {
+                                    name: 3,
+                                    read: 0,
+                                    write: 0,
+                                },
+                                BrwStatsBucket {
+                                    name: 4,
+                                    read: 0,
+                                    write: 8,
+                                },
+                            ],
+                        },
+                        BrwStats {
+                            name: "rpc_hist",
+                            unit: "ios",
+                            buckets: [
+                                BrwStatsBucket {
+                                    name: 1,
+                                    read: 0,
+                                    write: 2,
+                                },
+                                BrwStatsBucket {
+                                    name: 2,
+                                    read: 0,
+                                    write: 1,
+                                },
+                                BrwStatsBucket {
+                                    name: 3,
+                                    read: 0,
+                                    write: 1,
+                                },
+                                BrwStatsBucket {
+                                    name: 4,
+                                    read: 0,
+                                    write: 1,
+                                },
+                                BrwStatsBucket {
+                                    name: 5,
+                                    read: 0,
+                                    write: 3,
+                                },
+                                BrwStatsBucket {
+                                    name: 6,
+                                    read: 0,
+                                    write: 3,
+                                },
+                                BrwStatsBucket {
+                                    name: 7,
+                                    read: 0,
+                                    write: 3,
+                                },
+                                BrwStatsBucket {
+                                    name: 8,
+                                    read: 0,
+                                    write: 3,
+                                },
+                                BrwStatsBucket {
+                                    name: 9,
+                                    read: 0,
+                                    write: 1,
+                                },
+                                BrwStatsBucket {
+                                    name: 10,
+                                    read: 0,
+                                    write: 1,
+                                },
+                                BrwStatsBucket {
+                                    name: 11,
+                                    read: 0,
+                                    write: 1,
+                                },
+                                BrwStatsBucket {
+                                    name: 12,
+                                    read: 0,
+                                    write: 1,
+                                },
+                                BrwStatsBucket {
+                                    name: 13,
+                                    read: 0,
+                                    write: 2,
+                                },
+                                BrwStatsBucket {
+                                    name: 14,
+                                    read: 0,
+                                    write: 2,
+                                },
+                                BrwStatsBucket {
+                                    name: 15,
+                                    read: 0,
+                                    write: 2,
+                                },
+                                BrwStatsBucket {
+                                    name: 16,
+                                    read: 0,
+                                    write: 2,
+                                },
+                                BrwStatsBucket {
+                                    name: 17,
+                                    read: 0,
+                                    write: 1,
+                                },
+                                BrwStatsBucket {
+                                    name: 18,
+                                    read: 0,
+                                    write: 1,
+                                },
+                                BrwStatsBucket {
+                                    name: 19,
+                                    read: 0,
+                                    write: 1,
+                                },
+                                BrwStatsBucket {
+                                    name: 20,
+                                    read: 0,
+                                    write: 1,
+                                },
+                            ],
+                        },
+                        BrwStats {
+                            name: "io_time",
+                            unit: "ios",
+                            buckets: [
+                                BrwStatsBucket {
+                                    name: 4,
+                                    read: 0,
+                                    write: 1,
+                                },
+                                BrwStatsBucket {
+                                    name: 8,
+                                    read: 0,
+                                    write: 0,
+                                },
+                                BrwStatsBucket {
+                                    name: 16,
+                                    read: 0,
+                                    write: 0,
+                                },
+                                BrwStatsBucket {
+                                    name: 32,
+                                    read: 0,
+                                    write: 0,
+                                },
+                                BrwStatsBucket {
+                                    name: 64,
+                                    read: 0,
+                                    write: 0,
+                                },
+                                BrwStatsBucket {
+                                    name: 128,
+                                    read: 0,
+                                    write: 3,
+                                },
+                                BrwStatsBucket {
+                                    name: 256,
+                                    read: 0,
+                                    write: 5,
+                                },
+                            ],
+                        },
+                        BrwStats {
+                            name: "disk_iosize",
+                            unit: "ios",
+                            buckets: [
+                                BrwStatsBucket {
+                                    name: 131072,
+                                    read: 0,
+                                    write: 1,
+                                },
+                                BrwStatsBucket {
+                                    name: 262144,
+                                    read: 0,
+                                    write: 0,
+                                },
+                                BrwStatsBucket {
+                                    name: 524288,
+                                    read: 0,
+                                    write: 0,
+                                },
+                                BrwStatsBucket {
+                                    name: 1048576,
+                                    read: 0,
+                                    write: 32,
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ),
+        ),
+        Target(
+            FilesFree(
+                TargetStat {
+                    kind: OST,
+                    param: Param(
+                        "filesfree",
+                    ),
+                    target: Target(
+                        "fs-OST0000",
+                    ),
+                    value: 327382,
+                },
+            ),
+        ),
+        Target(
+            FilesTotal(
+                TargetStat {
+                    kind: OST,
+                    param: Param(
+                        "filestotal",
+                    ),
+                    target: Target(
+                        "fs-OST0000",
+                    ),
+                    value: 327680,
+                },
+            ),
+        ),
+        Target(
+            FsType(
+                TargetStat {
+                    kind: OST,
+                    param: Param(
+                        "fstype",
+                    ),
+                    target: Target(
+                        "fs-OST0000",
+                    ),
+                    value: "osd-ldiskfs",
+                },
+            ),
+        ),
+        Target(
+            BytesAvail(
+                TargetStat {
+                    kind: OST,
+                    param: Param(
+                        "kbytesavail",
+                    ),
+                    target: Target(
+                        "fs-OST0000",
+                    ),
+                    value: 4594143232,
+                },
+            ),
+        ),
+        Target(
+            BytesFree(
+                TargetStat {
+                    kind: OST,
+                    param: Param(
+                        "kbytesfree",
+                    ),
+                    target: Target(
+                        "fs-OST0000",
+                    ),
+                    value: 4879355904,
+                },
+            ),
+        ),
+        Target(
+            BytesTotal(
+                TargetStat {
+                    kind: OST,
+                    param: Param(
+                        "kbytestotal",
+                    ),
+                    target: Target(
+                        "fs-OST0000",
+                    ),
+                    value: 4947677184,
+                },
+            ),
+        ),
+        Target(
+            NumExports(
+                TargetStat {
+                    kind: OST,
+                    param: Param(
+                        "num_exports",
+                    ),
+                    target: Target(
+                        "fs-OST0000",
+                    ),
+                    value: 2,
+                },
+            ),
+        ),
+        Target(
+            TotDirty(
+                TargetStat {
+                    kind: OST,
+                    param: Param(
+                        "tot_dirty",
+                    ),
+                    target: Target(
+                        "fs-OST0000",
+                    ),
+                    value: 0,
+                },
+            ),
+        ),
+        Target(
+            TotGranted(
+                TargetStat {
+                    kind: OST,
+                    param: Param(
+                        "tot_granted",
+                    ),
+                    target: Target(
+                        "fs-OST0000",
+                    ),
+                    value: 8666816,
+                },
+            ),
+        ),
+        Target(
+            TotPending(
+                TargetStat {
+                    kind: OST,
+                    param: Param(
+                        "tot_pending",
+                    ),
+                    target: Target(
+                        "fs-OST0000",
+                    ),
+                    value: 0,
+                },
+            ),
+        ),
+    ],
+    State {
+        input: "",
+        positioner: SourcePosition {
+            line: 91,
+            column: 1,
+        },
+    },
+)

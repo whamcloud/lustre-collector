@@ -1,0 +1,341 @@
+---
+created: "2019-08-19T01:20:03.835420Z"
+creator: insta@0.10.1
+source: src/mds/mds_parser.rs
+expression: result
+---
+(
+    [
+        Target(
+            Stats(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "md_stats",
+                    ),
+                    target: Target(
+                        "fs-MDT0000",
+                    ),
+                    value: [
+                        Stat {
+                            name: "statfs",
+                            units: "reqs",
+                            samples: 20318,
+                            min: None,
+                            max: None,
+                            sum: None,
+                            sumsquare: None,
+                        },
+                    ],
+                },
+            ),
+        ),
+        Target(
+            Stats(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "md_stats",
+                    ),
+                    target: Target(
+                        "fs-MDT0001",
+                    ),
+                    value: [
+                        Stat {
+                            name: "statfs",
+                            units: "reqs",
+                            samples: 20805,
+                            min: None,
+                            max: None,
+                            sum: None,
+                            sumsquare: None,
+                        },
+                    ],
+                },
+            ),
+        ),
+        Target(
+            Stats(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "md_stats",
+                    ),
+                    target: Target(
+                        "fs-MDT0002",
+                    ),
+                    value: [
+                        Stat {
+                            name: "statfs",
+                            units: "reqs",
+                            samples: 20805,
+                            min: None,
+                            max: None,
+                            sum: None,
+                            sumsquare: None,
+                        },
+                    ],
+                },
+            ),
+        ),
+        Target(
+            NumExports(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "num_exports",
+                    ),
+                    target: Target(
+                        "fs-MDT0000",
+                    ),
+                    value: 16,
+                },
+            ),
+        ),
+        Target(
+            NumExports(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "num_exports",
+                    ),
+                    target: Target(
+                        "fs-MDT0001",
+                    ),
+                    value: 13,
+                },
+            ),
+        ),
+        Target(
+            NumExports(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "num_exports",
+                    ),
+                    target: Target(
+                        "fs-MDT0002",
+                    ),
+                    value: 13,
+                },
+            ),
+        ),
+        Target(
+            FilesFree(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "filesfree",
+                    ),
+                    target: Target(
+                        "fs-MDT0000",
+                    ),
+                    value: 2095841,
+                },
+            ),
+        ),
+        Target(
+            FilesTotal(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "filestotal",
+                    ),
+                    target: Target(
+                        "fs-MDT0000",
+                    ),
+                    value: 2097152,
+                },
+            ),
+        ),
+        Target(
+            FilesFree(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "filesfree",
+                    ),
+                    target: Target(
+                        "fs-MDT0001",
+                    ),
+                    value: 2096876,
+                },
+            ),
+        ),
+        Target(
+            FilesTotal(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "filestotal",
+                    ),
+                    target: Target(
+                        "fs-MDT0001",
+                    ),
+                    value: 2097152,
+                },
+            ),
+        ),
+        Target(
+            FilesFree(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "filesfree",
+                    ),
+                    target: Target(
+                        "fs-MDT0002",
+                    ),
+                    value: 2096876,
+                },
+            ),
+        ),
+        Target(
+            FilesTotal(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "filestotal",
+                    ),
+                    target: Target(
+                        "fs-MDT0002",
+                    ),
+                    value: 2097152,
+                },
+            ),
+        ),
+        Target(
+            BytesAvail(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "kbytesavail",
+                    ),
+                    target: Target(
+                        "fs-MDT0000",
+                    ),
+                    value: 2646564864,
+                },
+            ),
+        ),
+        Target(
+            BytesFree(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "kbytesfree",
+                    ),
+                    target: Target(
+                        "fs-MDT0000",
+                    ),
+                    value: 2913386496,
+                },
+            ),
+        ),
+        Target(
+            BytesTotal(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "kbytestotal",
+                    ),
+                    target: Target(
+                        "fs-MDT0000",
+                    ),
+                    value: 2983231488,
+                },
+            ),
+        ),
+        Target(
+            BytesAvail(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "kbytesavail",
+                    ),
+                    target: Target(
+                        "fs-MDT0001",
+                    ),
+                    value: 2695688192,
+                },
+            ),
+        ),
+        Target(
+            BytesFree(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "kbytesfree",
+                    ),
+                    target: Target(
+                        "fs-MDT0001",
+                    ),
+                    value: 2962509824,
+                },
+            ),
+        ),
+        Target(
+            BytesTotal(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "kbytestotal",
+                    ),
+                    target: Target(
+                        "fs-MDT0001",
+                    ),
+                    value: 2983231488,
+                },
+            ),
+        ),
+        Target(
+            BytesAvail(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "kbytesavail",
+                    ),
+                    target: Target(
+                        "fs-MDT0002",
+                    ),
+                    value: 2695688192,
+                },
+            ),
+        ),
+        Target(
+            BytesFree(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "kbytesfree",
+                    ),
+                    target: Target(
+                        "fs-MDT0002",
+                    ),
+                    value: 2962509824,
+                },
+            ),
+        ),
+        Target(
+            BytesTotal(
+                TargetStat {
+                    kind: MDT,
+                    param: Param(
+                        "kbytestotal",
+                    ),
+                    target: Target(
+                        "fs-MDT0002",
+                    ),
+                    value: 2983231488,
+                },
+            ),
+        ),
+    ],
+    State {
+        input: "",
+        positioner: SourcePosition {
+            line: 28,
+            column: 1,
+        },
+    },
+)
