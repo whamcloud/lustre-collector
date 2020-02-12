@@ -2,15 +2,15 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-#[derive(Debug, PartialEq, serde::Serialize)]
+#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 /// The hostname cooresponding to these stats.
 pub struct Host(pub String);
 
-#[derive(Debug, PartialEq, serde::Serialize)]
+#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 /// The Lustre target cooresponding to these stats.
 pub struct Target(pub String);
 
-#[derive(Debug, PartialEq, serde::Serialize)]
+#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 /// The name of the stat.
 pub struct Param(pub String);
 
@@ -187,21 +187,21 @@ pub struct Stat {
     pub sumsquare: Option<u64>,
 }
 
-#[derive(PartialEq, Debug, serde::Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 /// A Stat specific to a host.
 pub struct HostStat<T> {
     pub param: Param,
     pub value: T,
 }
 
-#[derive(PartialEq, Debug, serde::Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 pub enum TargetVariant {
     OST,
     MGT,
     MDT,
 }
 
-#[derive(PartialEq, Debug, serde::Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 /// Stats specific to a target.
 pub struct TargetStat<T> {
     pub kind: TargetVariant,
@@ -210,7 +210,7 @@ pub struct TargetStat<T> {
     pub value: T,
 }
 
-#[derive(PartialEq, Debug, serde::Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 /// Stats specific to a LNet Nid.
 pub struct LNetStat<T> {
     pub nid: String,
@@ -218,21 +218,21 @@ pub struct LNetStat<T> {
     pub value: T,
 }
 
-#[derive(PartialEq, Debug, serde::Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct BrwStatsBucket {
     pub name: u64,
     pub read: u64,
     pub write: u64,
 }
 
-#[derive(PartialEq, Debug, serde::Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct BrwStats {
     pub name: String,
     pub unit: String,
     pub buckets: Vec<BrwStatsBucket>,
 }
 
-#[derive(PartialEq, Debug, serde::Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 #[serde(untagged)]
 pub enum HostStats {
     MemusedMax(HostStat<u64>),
@@ -242,7 +242,7 @@ pub enum HostStats {
 }
 
 /// The target stats currently collected
-#[derive(PartialEq, Debug, serde::Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 #[serde(untagged)]
 pub enum TargetStats {
     /// Operations per OST. Read and write data is particularly interesting
@@ -282,7 +282,7 @@ pub enum TargetStats {
     ThreadsStarted(TargetStat<u64>),
 }
 
-#[derive(PartialEq, Debug, serde::Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 #[serde(untagged)]
 pub enum LNetStats {
     SendCount(LNetStat<i64>),
@@ -290,7 +290,7 @@ pub enum LNetStats {
     DropCount(LNetStat<i64>),
 }
 
-#[derive(PartialEq, Debug, serde::Serialize)]
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 #[serde(untagged)]
 pub enum Record {
     Host(HostStats),
