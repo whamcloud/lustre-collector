@@ -8,10 +8,10 @@ use combine::parser::char::{spaces, string};
 use combine::stream::Stream;
 use combine::{optional, token, Parser};
 
-pub fn snapshot_time<I>() -> impl Parser<Input = I, Output = String>
+pub fn snapshot_time<I>() -> impl Parser<I, Output = String>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
         string("snapshot_time").skip(optional(token(':'))),
@@ -25,52 +25,23 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use combine::stream::state::{SourcePosition, State};
 
     #[test]
     fn test_snapshot_time() {
-        let x = State::new(
-            r#"snapshot_time:         1534158712.738772898 (secs.nsecs)
-"#,
-        );
+        let x = r#"snapshot_time:         1534158712.738772898 (secs.nsecs)
+"#;
 
-        let result = snapshot_time().easy_parse(x);
+        let result = snapshot_time().parse(x);
 
-        assert_eq!(
-            result,
-            Ok((
-                "1534158712.738772898".to_string(),
-                State {
-                    input: "\n",
-                    positioner: SourcePosition {
-                        line: 1,
-                        column: 57
-                    }
-                }
-            ))
-        );
+        assert_eq!(result, Ok(("1534158712.738772898".to_string(), "\n",)));
     }
     #[test]
     fn test_snapshot_time_no_colon() {
-        let x = State::new(
-            r#"snapshot_time             1534769431.137892896 secs.nsecs
-"#,
-        );
+        let x = r#"snapshot_time             1534769431.137892896 secs.nsecs
+"#;
 
-        let result = snapshot_time().easy_parse(x);
+        let result = snapshot_time().parse(x);
 
-        assert_eq!(
-            result,
-            Ok((
-                "1534769431.137892896".to_string(),
-                State {
-                    input: "\n",
-                    positioner: SourcePosition {
-                        line: 1,
-                        column: 58
-                    }
-                }
-            ))
-        );
+        assert_eq!(result, Ok(("1534769431.137892896".to_string(), "\n")));
     }
 }

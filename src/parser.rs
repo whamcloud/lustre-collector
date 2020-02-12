@@ -13,10 +13,10 @@ pub fn params() -> Vec<String> {
     a
 }
 
-pub fn parse<I>() -> impl Parser<Input = I, Output = Vec<Record>>
+pub fn parse<I>() -> impl Parser<I, Output = Vec<Record>>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     many(choice((
         top_level_parser::parse(),

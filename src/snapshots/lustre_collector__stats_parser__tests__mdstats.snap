@@ -1,6 +1,4 @@
 ---
-created: "2019-08-18T22:03:40.452743Z"
-creator: insta@0.10.1
 source: src/stats_parser.rs
 expression: result
 ---
@@ -16,11 +14,5 @@ expression: result
             sumsquare: None,
         },
     ],
-    State {
-        input: "",
-        positioner: SourcePosition {
-            line: 4,
-            column: 1,
-        },
-    },
+    "",
 )

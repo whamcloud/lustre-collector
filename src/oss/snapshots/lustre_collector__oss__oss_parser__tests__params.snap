@@ -1,6 +1,4 @@
 ---
-created: "2019-08-18T22:08:09.867343Z"
-creator: insta@0.10.1
 source: src/oss/oss_parser.rs
 expression: result
 ---
@@ -544,11 +542,5 @@ expression: result
             ),
         ),
     ],
-    State {
-        input: "",
-        positioner: SourcePosition {
-            line: 91,
-            column: 1,
-        },
-    },
+    "",
 )

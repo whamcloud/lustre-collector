@@ -44,10 +44,10 @@ enum MgsStat {
 }
 
 /// Parses the name of a target
-fn target_name<I>() -> impl Parser<Input = I, Output = Target>
+fn target_name<I>() -> impl Parser<I, Output = Target>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
         attempt(string("mgs")).skip(period()),
@@ -57,10 +57,10 @@ where
         .message("while parsing target_name")
 }
 
-fn mgs_stat<I>() -> impl Parser<Input = I, Output = (Param, MgsStat)>
+fn mgs_stat<I>() -> impl Parser<I, Output = (Param, MgsStat)>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     choice((
         (
@@ -89,10 +89,10 @@ where
     ))
 }
 
-pub fn parse<I>() -> impl Parser<Input = I, Output = Record>
+pub fn parse<I>() -> impl Parser<I, Output = Record>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (target_name(), mgs_stat())
         .map(|(target, (param, value))| match value {

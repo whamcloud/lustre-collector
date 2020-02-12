@@ -1,6 +1,4 @@
 ---
-created: "2019-08-19T01:20:03.835420Z"
-creator: insta@0.10.1
 source: src/mds/mds_parser.rs
 expression: result
 ---
@@ -331,11 +329,5 @@ expression: result
             ),
         ),
     ],
-    State {
-        input: "",
-        positioner: SourcePosition {
-            line: 28,
-            column: 1,
-        },
-    },
+    "",
 )

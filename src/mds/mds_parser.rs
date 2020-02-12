@@ -38,10 +38,10 @@ enum MdtStat {
     BytesTotal(u64),
 }
 
-fn mdt_stat<I>() -> impl Parser<Input = I, Output = (Param, MdtStat)>
+fn mdt_stat<I>() -> impl Parser<I, Output = (Param, MdtStat)>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     choice((
         (
@@ -96,10 +96,10 @@ pub fn params() -> Vec<String> {
     .collect()
 }
 
-fn target_name<I>() -> impl Parser<Input = I, Output = Target>
+fn target_name<I>() -> impl Parser<I, Output = Target>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
         attempt(choice((string("mdt"), string("osd-").skip(till_period())))).skip(period()),
@@ -109,10 +109,10 @@ where
         .message("while parsing target_name")
 }
 
-pub fn parse<I>() -> impl Parser<Input = I, Output = Record>
+pub fn parse<I>() -> impl Parser<I, Output = Record>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (target_name(), mdt_stat())
         .map(|(target, (param, value))| match value {
@@ -166,13 +166,12 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use combine::{many, stream::state::State};
-    use insta::assert_debug_snapshot_matches;
+    use combine::many;
+    use insta::assert_debug_snapshot;
 
     #[test]
     fn test_params() {
-        let x = State::new(
-            r#"mdt.fs-MDT0000.md_stats=
+        let x = r#"mdt.fs-MDT0000.md_stats=
 snapshot_time             1566017453.009677077 secs.nsecs
 statfs                    20318 samples [reqs]
 mdt.fs-MDT0001.md_stats=
@@ -199,11 +198,10 @@ osd-ldiskfs.fs-MDT0001.kbytestotal=2913312
 osd-ldiskfs.fs-MDT0002.kbytesavail=2632508
 osd-ldiskfs.fs-MDT0002.kbytesfree=2893076
 osd-ldiskfs.fs-MDT0002.kbytestotal=2913312
-"#,
-        );
+"#;
 
-        let result: (Vec<_>, _) = many(parse()).easy_parse(x).unwrap();
+        let result: (Vec<_>, _) = many(parse()).parse(x).unwrap();
 
-        assert_debug_snapshot_matches!(result)
+        assert_debug_snapshot!(result)
     }
 }

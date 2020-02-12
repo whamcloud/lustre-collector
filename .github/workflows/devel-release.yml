@@ -1,0 +1,25 @@
+name: devel-release
+on:
+  push:
+    branches:
+      - master
+jobs:
+  push_lustre_collector:
+    name: Push to Copr devel
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v1
+
+      - name: Push RPM
+        uses: ./.github/actions/copr-rust
+        env:
+          PROD: false
+          OWNER: managerforlustre
+          PROJECT: manager-for-lustre-devel
+          PACKAGE: lustre_collector
+          SPEC: lustre_collector.spec
+          WORKSPACE: ${{ github.workspace }}
+          RUSTUP_TOOLCHAIN: stable-x86_64-unknown-linux-gnu
+          KEY: ${{ secrets.key }}
+          IV: ${{ secrets.iv }}
