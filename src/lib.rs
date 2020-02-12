@@ -18,6 +18,7 @@ pub use crate::error::LustreCollectorError;
 use crate::types::Record;
 use combine::Parser;
 use std::{io, str};
+pub use types::*;
 
 pub fn parse_lctl_output(lctl_output: &[u8]) -> Result<Vec<Record>, LustreCollectorError> {
     let mut lctl_stats = str::from_utf8(lctl_output)?;

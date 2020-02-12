@@ -1,5 +1,9 @@
 # Lustre Collector
 
+![rust](https://github.com/whamcloud/lustre-collector/workflows/rust/badge.svg?branch=master)
+
+![Crates.io](https://img.shields.io/crates/v/lustre_collector) ![docs.rs](https://docs.rs/lustre_collector/badge.svg?version=0.2.2)
+
 This repo provides a parsed representation of common Lustre statistics.
 
 It is provided as a standalone binary that can be called to retrieve stats in the desired output (Currently either JSON | YAML).
