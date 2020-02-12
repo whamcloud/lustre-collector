@@ -20,10 +20,10 @@ use crate::{
     types::Stat,
 };
 
-fn name_count_units<I>() -> impl Parser<Input = I, Output = (String, u64, String)>
+fn name_count_units<I>() -> impl Parser<I, Output = (String, u64, String)>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
         not_words(&["obdfilter", "mgs", "mdt"]).skip(spaces()),
@@ -34,10 +34,10 @@ where
         .map(|(x, y, _, z)| (x, y, z))
 }
 
-fn min_max_sum<I>() -> impl Parser<Input = I, Output = (u64, u64, u64)>
+fn min_max_sum<I>() -> impl Parser<I, Output = (u64, u64, u64)>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
         spaces().with(digits()),
@@ -46,18 +46,18 @@ where
     )
 }
 
-fn sum_sq<I>() -> impl Parser<Input = I, Output = u64>
+fn sum_sq<I>() -> impl Parser<I, Output = u64>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     spaces().with(digits())
 }
 
-fn stat<I>() -> impl Parser<Input = I, Output = Stat>
+fn stat<I>() -> impl Parser<I, Output = Stat>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
         name_count_units(),
@@ -102,10 +102,10 @@ where
         )
 }
 
-pub fn stats<I>() -> impl Parser<Input = I, Output = Vec<Stat>>
+pub fn stats<I>() -> impl Parser<I, Output = Vec<Stat>>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (newline().with(snapshot_time()), newline(), many1(stat())).map(|(_, _, xs)| xs)
 }
@@ -113,41 +113,27 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use combine::stream::state::{SourcePosition, State};
-    use insta::assert_debug_snapshot_matches;
+    use insta::assert_debug_snapshot;
 
     #[test]
     fn test_name_count_units() {
-        let x = State::new(
-            r#"create                    726 samples [reqs]
-"#,
-        );
+        let x = r#"create                    726 samples [reqs]
+"#;
 
-        let result = name_count_units().easy_parse(x);
+        let result = name_count_units().parse(x);
 
         assert_eq!(
             result,
-            Ok((
-                ("create".to_string(), 726, "reqs".to_string()),
-                State {
-                    input: "\n",
-                    positioner: SourcePosition {
-                        line: 1,
-                        column: 45
-                    }
-                }
-            ))
+            Ok((("create".to_string(), 726, "reqs".to_string()), "\n"))
         );
     }
 
     #[test]
     fn test_stat_no_sumsquare() {
-        let x = State::new(
-            r#"cache_miss                21108 samples [pages] 1 1 21108
-"#,
-        );
+        let x = r#"cache_miss                21108 samples [pages] 1 1 21108
+"#;
 
-        let result = stat().easy_parse(x);
+        let result = stat().parse(x);
 
         assert_eq!(
             result,
@@ -161,22 +147,17 @@ mod tests {
                     sum: Some(21108),
                     sumsquare: None
                 },
-                State {
-                    input: "",
-                    positioner: SourcePosition { line: 2, column: 1 }
-                }
+                ""
             ))
         );
     }
 
     #[test]
     fn test_stat() {
-        let x = State::new(
-            r#"obd_ping                  1108 samples [usec] 15 72 47014 2156132
-"#,
-        );
+        let x = r#"obd_ping                  1108 samples [usec] 15 72 47014 2156132
+"#;
 
-        let result = stat().easy_parse(x);
+        let result = stat().parse(x);
 
         assert_eq!(
             result,
@@ -190,18 +171,14 @@ mod tests {
                     sum: Some(47014),
                     sumsquare: Some(2_156_132)
                 },
-                State {
-                    input: "",
-                    positioner: SourcePosition { line: 2, column: 1 }
-                }
+                ""
             ))
         );
     }
 
     #[test]
     fn test_stats() {
-        let x = State::new(
-            r#"
+        let x = r#"
 snapshot_time             1534770326.579119384 secs.nsecs
 write_bytes               9 samples [bytes] 98303 4194304 33554431
 create                    4 samples [reqs]
@@ -214,25 +191,22 @@ statfs                    18 samples [reqs]
 preprw                    9 samples [reqs]
 commitrw                  9 samples [reqs]
 ping                      1075 samples [reqs]
-"#,
-        );
+"#;
 
-        let result = stats().easy_parse(x).unwrap();
+        let result = stats().parse(x).unwrap();
 
-        assert_debug_snapshot_matches!(result);
+        assert_debug_snapshot!(result);
     }
 
     #[test]
     fn test_mdstats() {
-        let x = State::new(
-            r#"
+        let x = r#"
 snapshot_time             1566007540.707634939 secs.nsecs
 statfs                    16360 samples [reqs]
-"#,
-        );
+"#;
 
-        let result = stats().easy_parse(x).unwrap();
+        let result = stats().parse(x).unwrap();
 
-        assert_debug_snapshot_matches!(result);
+        assert_debug_snapshot!(result);
     }
 }

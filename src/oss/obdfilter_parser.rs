@@ -59,10 +59,10 @@ pub fn obd_params() -> Vec<String> {
 }
 
 /// Parses the name of a target
-fn target_name<I>() -> impl Parser<Input = I, Output = Target>
+fn target_name<I>() -> impl Parser<I, Output = Target>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (string("obdfilter").skip(period()), target().skip(period()))
         .map(|(_, x)| x)
@@ -92,10 +92,10 @@ enum ObdfilterStat {
     TotPending(u64),
 }
 
-fn obdfilter_stat<I>() -> impl Parser<Input = I, Output = (Param, ObdfilterStat)>
+fn obdfilter_stat<I>() -> impl Parser<I, Output = (Param, ObdfilterStat)>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     choice((
         (
@@ -157,10 +157,10 @@ where
     .message("while parsing obdfilter")
 }
 
-pub fn parse<I>() -> impl Parser<Input = I, Output = Record>
+pub fn parse<I>() -> impl Parser<I, Output = Record>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (target_name(), obdfilter_stat())
         .map(|(target, (param, value))| match value {
@@ -253,7 +253,7 @@ mod tests {
 
     #[test]
     fn test_target_name() {
-        let result = target_name().easy_parse("obdfilter.fs-OST0000.num_exports=");
+        let result = target_name().parse("obdfilter.fs-OST0000.num_exports=");
 
         assert_eq!(
             result,

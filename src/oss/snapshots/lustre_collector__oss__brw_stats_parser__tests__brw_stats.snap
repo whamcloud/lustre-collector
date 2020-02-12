@@ -1,6 +1,4 @@
 ---
-created: "2019-08-18T22:10:59.541006Z"
-creator: insta@0.10.1
 source: src/oss/brw_stats_parser.rs
 expression: result
 ---
@@ -219,11 +217,5 @@ expression: result
             ],
         },
     ],
-    State {
-        input: "",
-        positioner: SourcePosition {
-            line: 58,
-            column: 1,
-        },
-    },
+    "",
 )

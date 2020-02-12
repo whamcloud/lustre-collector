@@ -16,7 +16,7 @@ pub const HEALTH_CHECK: &str = "health_check";
 pub const TOP_LEVEL_PARAMS: [&str; 4] = [MEMUSED, MEMUSED_MAX, LNET_MEMUSED, HEALTH_CHECK];
 
 pub fn top_level_params() -> Vec<String> {
-    TOP_LEVEL_PARAMS.iter().map(|x| x.to_string()).collect()
+    TOP_LEVEL_PARAMS.iter().map(|x| (*x).to_string()).collect()
 }
 
 enum TopLevelStat {
@@ -26,10 +26,10 @@ enum TopLevelStat {
     HealthCheck(String),
 }
 
-fn top_level_stat<I>() -> impl Parser<Input = I, Output = (Param, TopLevelStat)>
+fn top_level_stat<I>() -> impl Parser<I, Output = (Param, TopLevelStat)>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     choice((
         (param(MEMUSED), digits().map(TopLevelStat::Memused)),
@@ -40,10 +40,10 @@ where
     .skip(newline())
 }
 
-pub fn parse<I>() -> impl Parser<Input = I, Output = Record>
+pub fn parse<I>() -> impl Parser<I, Output = Record>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     top_level_stat()
         .map(|(param, v)| match v {
@@ -61,7 +61,6 @@ mod tests {
 
     use super::*;
     use crate::types::{HostStat, HostStats, Param};
-    use combine::stream::state::{SourcePosition, State};
 
     #[test]
     fn test_params() {
@@ -78,7 +77,7 @@ mod tests {
 
     #[test]
     fn test_row() {
-        let result = parse().easy_parse(State::new("memused_max=77991501\n"));
+        let result = parse().parse("memused_max=77991501\n");
 
         assert_eq!(
             result,
@@ -87,10 +86,7 @@ mod tests {
                     param: Param(MEMUSED_MAX.to_string()),
                     value: 77_991_501
                 })),
-                State {
-                    input: "",
-                    positioner: SourcePosition { line: 2, column: 1 }
-                }
+                ""
             ))
         )
     }

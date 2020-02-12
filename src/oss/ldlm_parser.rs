@@ -53,10 +53,10 @@ pub fn ldlm_params() -> Vec<String> {
 }
 
 /// Parses the name of the target
-pub fn ldlm_target<I>() -> impl Parser<Input = I, Output = (TargetVariant, Target)>
+pub fn ldlm_target<I>() -> impl Parser<I, Output = (TargetVariant, Target)>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
         string("ldlm.namespaces."),
@@ -70,7 +70,7 @@ where
             let xs: Vec<&str> = x.split("_UUID").collect();
 
             match xs.as_slice() {
-                [y, _] => Ok((kind, Target(y.to_string()))),
+                [y, _] => Ok((kind, Target((*y).to_string()))),
                 _ => Err(StreamErrorFor::<I>::expected_static_message("_UUID")),
             }
         })
@@ -78,10 +78,10 @@ where
         .message("while parsing lock_namespaces")
 }
 
-pub fn ldlm_stat<I>() -> impl Parser<Input = I, Output = (Param, u64)>
+pub fn ldlm_stat<I>() -> impl Parser<I, Output = (Param, u64)>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     choice((
         (param(CONTENDED_LOCKS), digits().skip(newline())),
@@ -99,10 +99,10 @@ where
     ))
 }
 
-pub fn parse<I>() -> impl Parser<Input = I, Output = Record>
+pub fn parse<I>() -> impl Parser<I, Output = Record>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (ldlm_target(), ldlm_stat())
         .and_then(|((kind, target), (Param(p), value))| match p.as_ref() {
@@ -213,7 +213,7 @@ mod tests {
 
     #[test]
     fn test_lock_namespaces() {
-        let result = ldlm_stat().easy_parse("contended_locks=32\n");
+        let result = ldlm_stat().parse("contended_locks=32\n");
 
         let r = Ok(((Param(CONTENDED_LOCKS.to_string()), 32), ""));
 

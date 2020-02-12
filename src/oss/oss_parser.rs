@@ -15,10 +15,10 @@ pub fn params() -> Vec<String> {
     a
 }
 
-pub fn parse<I>() -> impl Parser<Input = I, Output = Record>
+pub fn parse<I>() -> impl Parser<I, Output = Record>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     choice((obdfilter_parser::parse(), ldlm_parser::parse()))
 }
@@ -26,13 +26,12 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use combine::{many, stream::state::State};
-    use insta::assert_debug_snapshot_matches;
+    use combine::many;
+    use insta::assert_debug_snapshot;
 
     #[test]
     fn test_params() {
-        let x = State::new(
-            r#"obdfilter.fs-OST0000.stats=
+        let x = r#"obdfilter.fs-OST0000.stats=
 snapshot_time             1535148988.363769785 secs.nsecs
 write_bytes               9 samples [bytes] 98303 4194304 33554431
 create                    4 samples [reqs]
@@ -122,11 +121,10 @@ obdfilter.fs-OST0000.num_exports=2
 obdfilter.fs-OST0000.tot_dirty=0
 obdfilter.fs-OST0000.tot_granted=8666816
 obdfilter.fs-OST0000.tot_pending=0
-"#,
-        );
+"#;
 
-        let result: (Vec<_>, _) = many(parse()).easy_parse(x).unwrap();
+        let result: (Vec<_>, _) = many(parse()).parse(x).unwrap();
 
-        assert_debug_snapshot_matches!(result)
+        assert_debug_snapshot!(result)
     }
 }

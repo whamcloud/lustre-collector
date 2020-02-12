@@ -2,36 +2,17 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-#[macro_use]
-extern crate clap;
-
-mod base_parsers;
-mod lnetctl_parser;
-mod mds;
-mod mgs;
-mod oss;
-mod parser;
-mod snapshot_time;
-mod stats_parser;
-mod top_level_parser;
-mod types;
-
-use crate::types::Record;
-use clap::{App, Arg};
-use combine::{stream::state::State, Parser};
+use clap::{arg_enum, value_t, App, Arg};
+use lustre_collector::{
+    error::LustreCollectorError, parse_lctl_output, parse_lnetctl_output, parser, types::Record,
+};
 use std::{
+    error::Error as _,
     process::{exit, Command},
     str, thread,
 };
 
-mod errors {
-    // Create the Error, ErrorKind, ResultExt, and Result types
-    error_chain::error_chain! {}
-}
-
-use self::errors::*;
-
-clap::arg_enum! {
+arg_enum! {
     #[derive(PartialEq, Debug)]
     enum Format {
         Json,
@@ -39,29 +20,13 @@ clap::arg_enum! {
     }
 }
 
-fn get_lctl_output() -> Result<Vec<u8>> {
+fn get_lctl_output() -> Result<Vec<u8>, LustreCollectorError> {
     let r = Command::new("lctl")
         .arg("get_param")
         .args(parser::params())
-        .output()
-        .chain_err(|| "calling lctl get_param")?;
+        .output()?;
 
     Ok(r.stdout)
-}
-
-fn parse_lctl_output(lctl_output: &[u8]) -> Result<Vec<Record>> {
-    let lctl_stats =
-        str::from_utf8(lctl_output).chain_err(|| "converting lctl stdout from utf8")?;
-
-    let (lctl_record, state) = parser::parse()
-        .easy_parse(State::new(lctl_stats))
-        .expect("while parsing stats");
-
-    if state.input != "" {
-        eprintln!("Content left in input buffer: {}", state.input)
-    }
-
-    Ok(lctl_record)
 }
 
 fn main() {
@@ -85,9 +50,9 @@ fn main() {
         )
         .get_matches();
 
-    let format = clap::value_t!(matches, "format", Format).unwrap_or_else(|e| e.exit());
+    let format = value_t!(matches, "format", Format).unwrap_or_else(|e| e.exit());
 
-    let handle = thread::spawn(move || -> Result<Vec<Record>> {
+    let handle = thread::spawn(move || -> Result<Vec<Record>, LustreCollectorError> {
         let lctl_output = get_lctl_output()?;
         let lctl_record = parse_lctl_output(&lctl_output)?;
 
@@ -102,28 +67,32 @@ fn main() {
     let lnetctl_stats =
         str::from_utf8(&lnetctl_output.stdout).expect("while converting lnetctl stdout from utf8");
 
-    let lnet_record = lnetctl_parser::parse(lnetctl_stats).expect("while parsing lnetctl stats");
+    let lnet_record = parse_lnetctl_output(lnetctl_stats).expect("while parsing lnetctl stats");
 
     let lctl_record = handle.join().unwrap().unwrap();
 
     let record = vec![lctl_record, lnet_record];
 
     let r = match format {
-        Format::Json => serde_json::to_string(&record).chain_err(|| "serializing to JSON"),
-        Format::Yaml => serde_yaml::to_string(&record).chain_err(|| "serializing to YAML"),
+        Format::Json => {
+            serde_json::to_string(&record).map_err(LustreCollectorError::SerdeJsonError)
+        }
+        Format::Yaml => {
+            serde_yaml::to_string(&record).map_err(LustreCollectorError::SerdeYamlError)
+        }
     };
 
     match r {
         Ok(x) => println!("{}", x),
         Err(ref e) => {
-            println!("error: {}", e);
+            eprintln!("error: {}", e);
 
-            for e in e.iter().skip(1) {
-                println!("caused by: {}", e);
-            }
+            let mut cause = e.source();
 
-            if let Some(backtrace) = e.backtrace() {
-                println!("backtrace: {:?}", backtrace);
+            while let Some(e) = cause {
+                eprintln!("caused by: {}", e);
+
+                cause = e.source();
             }
 
             exit(1);

@@ -174,7 +174,6 @@ pub mod lnet_exports {
         pub peer_buffer_credits: i64,
         pub credits: i64,
     }
-
 }
 
 #[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]

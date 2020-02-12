@@ -29,10 +29,10 @@ fn human_to_bytes((x, y): (u64, Option<char>)) -> u64 {
     x * mult
 }
 
-fn rw_columns<I>() -> impl Parser<Input = I, Output = ()>
+fn rw_columns<I>() -> impl Parser<I, Output = ()>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
         string("read"),
@@ -45,10 +45,10 @@ where
         .map(|_| ())
 }
 
-fn header<I>() -> impl Parser<Input = I, Output = BrwStats>
+fn header<I>() -> impl Parser<I, Output = BrwStats>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     let keys = choice([
         attempt(string_to("pages per bulk r/w", "pages")),
@@ -67,10 +67,10 @@ where
     })
 }
 
-fn bucket<I>() -> impl Parser<Input = I, Output = BrwStatsBucket>
+fn bucket<I>() -> impl Parser<I, Output = BrwStatsBucket>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
         digits()
@@ -89,10 +89,10 @@ where
         .map(|(name, _, read, _, _, _, write, _, _, _)| BrwStatsBucket { name, read, write })
 }
 
-fn section<I>() -> impl Parser<Input = I, Output = BrwStats>
+fn section<I>() -> impl Parser<I, Output = BrwStats>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
         rw_columns().skip(newline()),
@@ -105,10 +105,10 @@ where
         })
 }
 
-pub fn brw_stats<I>() -> impl Parser<Input = I, Output = Vec<BrwStats>>
+pub fn brw_stats<I>() -> impl Parser<I, Output = Vec<BrwStats>>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (newline().with(snapshot_time()), spaces(), many1(section())).map(|(_, _, y)| y)
 }
@@ -116,8 +116,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use combine::stream::state::{SourcePosition, State};
-    use insta::assert_debug_snapshot_matches;
+    use insta::assert_debug_snapshot;
 
     #[test]
     fn test_human_to_bytes() {
@@ -132,33 +131,19 @@ mod tests {
 
     #[test]
     fn test_rw_columns() {
-        let x = State::new("read      |     write\n");
+        let x = "read      |     write\n";
 
-        let result = rw_columns().easy_parse(x);
+        let result = rw_columns().parse(x);
 
-        assert_eq!(
-            result,
-            Ok((
-                (),
-                State {
-                    input: "\n",
-                    positioner: SourcePosition {
-                        line: 1,
-                        column: 22
-                    }
-                }
-            ))
-        );
+        assert_eq!(result, Ok(((), "\n")));
     }
 
     #[test]
     fn test_header() {
-        let x = State::new(
-            r#"pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
-"#,
-        );
+        let x = r#"pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
+"#;
 
-        let result = header().easy_parse(x);
+        let result = header().parse(x);
 
         assert_eq!(
             result,
@@ -168,25 +153,17 @@ mod tests {
                     unit: "rpcs".to_string(),
                     buckets: vec![],
                 },
-                State {
-                    input: "\n",
-                    positioner: SourcePosition {
-                        line: 1,
-                        column: 60,
-                    },
-                }
+                "\n"
             ))
         );
     }
 
     #[test]
     fn test_bucket() {
-        let x = State::new(
-            r#"32:		         0   0   0   |    1  11  11
-"#,
-        );
+        let x = r#"32:		         0   0   0   |    1  11  11
+"#;
 
-        let result = bucket().easy_parse(x);
+        let result = bucket().parse(x);
 
         assert_eq!(
             result,
@@ -196,21 +173,14 @@ mod tests {
                     read: 0,
                     write: 1,
                 },
-                State {
-                    input: "\n",
-                    positioner: SourcePosition {
-                        line: 1,
-                        column: 41
-                    }
-                }
+                "\n",
             ))
         );
     }
 
     #[test]
     fn test_section() {
-        let x = State::new(
-            r#"read      |     write
+        let x = r#"read      |     write
 pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
 32:		         0   0   0   |    1  11  11
 64:		         0   0   0   |    0   0  11
@@ -218,10 +188,9 @@ pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
 256:		         0   0   0   |    0   0  11
 512:		         0   0   0   |    0   0  11
 1K:		         0   0   0   |    8  88 100
-"#,
-        );
+"#;
 
-        let result = section().easy_parse(x);
+        let result = section().parse(x);
 
         assert_eq!(
             result,
@@ -262,23 +231,18 @@ pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
                         },
                     ],
                 },
-                State {
-                    input: "",
-                    positioner: SourcePosition { line: 9, column: 1 },
-                }
+                ""
             ))
         );
     }
 
     #[test]
     fn test_empty_section() {
-        let x = State::new(
-            r#"read      |     write
+        let x = r#"read      |     write
 pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
-"#,
-        );
+"#;
 
-        let result = section().easy_parse(x);
+        let result = section().parse(x);
 
         assert_eq!(
             result,
@@ -288,18 +252,14 @@ pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
                     unit: "rpcs".to_string(),
                     buckets: vec![],
                 },
-                State {
-                    input: "",
-                    positioner: SourcePosition { line: 3, column: 1 },
-                }
+                "",
             ))
         );
     }
 
     #[test]
     fn test_empty_brw_stats() {
-        let x = State::new(
-            r#"
+        let x = r#"
 snapshot_time:         1534429278.185762481 (secs.nsecs)
 
                            read      |     write
@@ -322,10 +282,9 @@ I/O time (1/1000s)     ios   % cum % |  ios         % cum %
 
                            read      |     write
 disk I/O size          ios   % cum % |  ios         % cum %
-"#,
-        );
+"#;
 
-        let result = brw_stats().easy_parse(x);
+        let result = brw_stats().parse(x);
 
         assert_eq!(
             result,
@@ -367,21 +326,14 @@ disk I/O size          ios   % cum % |  ios         % cum %
                         buckets: vec![],
                     },
                 ],
-                State {
-                    input: "",
-                    positioner: SourcePosition {
-                        line: 24,
-                        column: 1,
-                    },
-                }
+                ""
             ))
         );
     }
 
     #[test]
     fn test_brw_stats() {
-        let x = State::new(
-            r#"
+        let x = r#"
 snapshot_time:         1534158712.738772898 (secs.nsecs)
 
                            read      |     write
@@ -438,11 +390,10 @@ disk I/O size          ios   % cum % |  ios         % cum %
 256K:		         0   0   0   |    0   0   3
 512K:		         0   0   0   |    0   0   3
 1M:		         0   0   0   |   32  96 100
-"#,
-        );
+"#;
 
-        let result: (Vec<_>, _) = brw_stats().easy_parse(x).unwrap();
+        let result: (Vec<_>, _) = brw_stats().parse(x).unwrap();
 
-        assert_debug_snapshot_matches!(result);
+        assert_debug_snapshot!(result);
     }
 }

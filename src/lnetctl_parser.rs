@@ -2,9 +2,12 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use crate::types::{
-    lnet_exports::{LNetExport, Net},
-    LNetStat, LNetStats, Param, Record,
+use crate::{
+    types::{
+        lnet_exports::{LNetExport, Net},
+        LNetStat, LNetStats, Param, Record,
+    },
+    LustreCollectorError,
 };
 use serde_yaml;
 
@@ -34,7 +37,7 @@ pub fn build_lnet_stats(x: &Net) -> Vec<Record> {
         .collect()
 }
 
-pub fn parse(x: &str) -> Result<Vec<Record>, serde_yaml::Error> {
+pub fn parse(x: &str) -> Result<Vec<Record>, LustreCollectorError> {
     let y: LNetExport = serde_yaml::from_str(x)?;
 
     Ok(y.net.iter().flat_map(build_lnet_stats).collect())
@@ -43,7 +46,7 @@ pub fn parse(x: &str) -> Result<Vec<Record>, serde_yaml::Error> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use insta::assert_debug_snapshot_matches;
+    use insta::assert_debug_snapshot;
 
     #[test]
     fn test_lnet_export_parse() {
@@ -304,6 +307,6 @@ global:
         )
         .unwrap();
 
-        assert_debug_snapshot_matches!(x);
+        assert_debug_snapshot!(x);
     }
 }

@@ -18,10 +18,10 @@ use serde_yaml;
 
 use crate::types::{JobStatOst, JobStatsOst};
 
-pub fn parse<I>() -> impl Parser<Input = I, Output = Option<Vec<JobStatOst>>>
+pub fn parse<I>() -> impl Parser<I, Output = Option<Vec<JobStatOst>>>
 where
-    I: Stream<Item = char>,
-    I::Error: ParseError<I::Item, I::Range, I::Position>,
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
         optional(newline()), // If Jobstats are present, the whole yaml blob will be on a newline
