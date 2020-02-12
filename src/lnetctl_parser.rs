@@ -40,13 +40,48 @@ pub fn build_lnet_stats(x: &Net) -> Vec<Record> {
 pub fn parse(x: &str) -> Result<Vec<Record>, LustreCollectorError> {
     let y: LNetExport = serde_yaml::from_str(x)?;
 
-    Ok(y.net.iter().flat_map(build_lnet_stats).collect())
+    Ok(y.net
+        .map(|x| x.iter().flat_map(build_lnet_stats).collect())
+        .unwrap_or_default())
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
     use insta::assert_debug_snapshot;
+
+    #[test]
+    fn test_lnet_down() {
+        let x = parse(
+            r#"show:
+    - net:
+          errno: -100
+          descr: "cannot get networks: Network is down"
+show:
+    - route:
+          errno: -100
+          descr: "cannot get routes: Network is down"
+show:
+    - routing:
+          errno: -100
+          descr: "cannot get routing information: Network is down"
+show:
+    - peer:
+          errno: -100
+          descr: "cannot get peer list: Network is down"
+show:
+    - global:
+          errno: -100
+          descr: "cannot get numa_range: Unknown error -100"
+global:
+    max_intf: 200
+    discovery: 1
+    drop_asym_route: 0"#,
+        )
+        .unwrap();
+
+        assert_debug_snapshot!(x);
+    }
 
     #[test]
     fn test_lnet_export_parse() {
