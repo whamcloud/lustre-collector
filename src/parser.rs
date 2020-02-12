@@ -25,3 +25,14 @@ where
         oss_parser::parse(),
     )))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use insta::assert_debug_snapshot;
+
+    #[test]
+    fn test_params() {
+        assert_debug_snapshot!(params());
+    }
+}
