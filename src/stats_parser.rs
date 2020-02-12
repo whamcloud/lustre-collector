@@ -5,7 +5,7 @@
 use combine::{
     between,
     error::ParseError,
-    many1,
+    many,
     parser::{
         char::{newline, spaces, string},
         choice::or,
@@ -107,7 +107,7 @@ where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
-    (newline().with(snapshot_time()), newline(), many1(stat())).map(|(_, _, xs)| xs)
+    (newline().with(snapshot_time()), newline(), many(stat())).map(|(_, _, xs)| xs)
 }
 
 #[cfg(test)]
@@ -203,6 +203,17 @@ ping                      1075 samples [reqs]
         let x = r#"
 snapshot_time             1566007540.707634939 secs.nsecs
 statfs                    16360 samples [reqs]
+"#;
+
+        let result = stats().parse(x).unwrap();
+
+        assert_debug_snapshot!(result);
+    }
+
+    #[test]
+    fn test_empty_mdstats() {
+        let x = r#"
+snapshot_time             1581546409.693472737 secs.nsecs
 "#;
 
         let result = stats().parse(x).unwrap();
