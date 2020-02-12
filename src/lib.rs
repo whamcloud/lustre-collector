@@ -15,7 +15,6 @@ mod top_level_parser;
 pub mod types;
 
 pub use crate::error::LustreCollectorError;
-use crate::types::Record;
 use combine::Parser;
 use std::{io, str};
 pub use types::*;

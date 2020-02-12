@@ -155,9 +155,9 @@ pub mod lnet_exports {
 
     #[derive(serde::Serialize, serde::Deserialize)]
     pub struct LNetExport {
-        pub net: Vec<Net>,
+        pub net: Option<Vec<Net>>,
         pub peer: Option<Vec<Peer>>,
-        pub global: Global,
+        pub global: Option<Global>,
     }
 
     #[derive(serde::Serialize, serde::Deserialize)]
