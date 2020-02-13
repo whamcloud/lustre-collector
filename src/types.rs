@@ -1,18 +1,44 @@
-// Copyright (c) 2019 DDN. All rights reserved.
+// Copyright (c) 2020 DDN. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
+
+use std::ops::Deref;
 
 #[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 /// The hostname cooresponding to these stats.
 pub struct Host(pub String);
 
+impl Deref for Host {
+    type Target = str;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
 #[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 /// The Lustre target cooresponding to these stats.
 pub struct Target(pub String);
 
+impl Deref for Target {
+    type Target = str;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
 #[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 /// The name of the stat.
 pub struct Param(pub String);
+
+impl Deref for Param {
+    type Target = str;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
 
 #[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct ReqsStat {
