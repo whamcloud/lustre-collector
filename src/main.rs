@@ -67,18 +67,18 @@ fn main() {
     let lnetctl_stats =
         str::from_utf8(&lnetctl_output.stdout).expect("while converting lnetctl stdout from utf8");
 
-    let lnet_record = parse_lnetctl_output(lnetctl_stats).expect("while parsing lnetctl stats");
+    let mut lnet_record = parse_lnetctl_output(lnetctl_stats).expect("while parsing lnetctl stats");
 
-    let lctl_record = handle.join().unwrap().unwrap();
+    let mut lctl_record = handle.join().unwrap().unwrap();
 
-    let record = vec![lctl_record, lnet_record];
+    lctl_record.append(&mut lnet_record);
 
     let r = match format {
         Format::Json => {
-            serde_json::to_string(&record).map_err(LustreCollectorError::SerdeJsonError)
+            serde_json::to_string(&lctl_record).map_err(LustreCollectorError::SerdeJsonError)
         }
         Format::Yaml => {
-            serde_yaml::to_string(&record).map_err(LustreCollectorError::SerdeYamlError)
+            serde_yaml::to_string(&lctl_record).map_err(LustreCollectorError::SerdeYamlError)
         }
     };
 

@@ -15,16 +15,18 @@ mod top_level_parser;
 pub mod types;
 
 pub use crate::error::LustreCollectorError;
-use combine::Parser;
+use combine::parser::EasyParser;
 use std::{io, str};
 pub use types::*;
 
 pub fn parse_lctl_output(lctl_output: &[u8]) -> Result<Vec<Record>, LustreCollectorError> {
-    let mut lctl_stats = str::from_utf8(lctl_output)?;
+    let lctl_stats = str::from_utf8(lctl_output)?;
 
-    let (lctl_record, state) = parser::parse().parse(&mut lctl_stats)?;
+    let (lctl_record, state) = parser::parse()
+        .easy_parse(lctl_stats)
+        .map_err(|err| err.map_position(|p| p.translate_position(lctl_stats)))?;
 
-    if state != &"" {
+    if state != "" {
         return Err(io::Error::new(
             io::ErrorKind::InvalidInput,
             format!("Content left in input buffer: {}", state),

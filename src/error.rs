@@ -11,6 +11,7 @@ pub enum LustreCollectorError {
     SerdeJsonError(serde_json::error::Error),
     SerdeYamlError(serde_yaml::Error),
     StringStreamError(StringStreamError),
+    CombineEasyError(combine::stream::easy::Errors<char, &'static str, usize>),
     Utf8Error(str::Utf8Error),
 }
 
@@ -21,6 +22,7 @@ impl std::fmt::Display for LustreCollectorError {
             LustreCollectorError::SerdeJsonError(ref err) => write!(f, "{}", err),
             LustreCollectorError::SerdeYamlError(ref err) => write!(f, "{}", err),
             LustreCollectorError::StringStreamError(ref err) => write!(f, "{}", err),
+            LustreCollectorError::CombineEasyError(ref err) => write!(f, "{}", err),
             LustreCollectorError::Utf8Error(ref err) => write!(f, "{}", err),
         }
     }
@@ -34,6 +36,7 @@ impl std::error::Error for LustreCollectorError {
             LustreCollectorError::SerdeYamlError(ref err) => Some(err),
             LustreCollectorError::StringStreamError(ref err) => Some(err),
             LustreCollectorError::Utf8Error(ref err) => Some(err),
+            LustreCollectorError::CombineEasyError(ref err) => Some(err),
         }
     }
 }
@@ -65,5 +68,11 @@ impl From<str::Utf8Error> for LustreCollectorError {
 impl From<StringStreamError> for LustreCollectorError {
     fn from(err: StringStreamError) -> Self {
         LustreCollectorError::StringStreamError(err)
+    }
+}
+
+impl From<combine::stream::easy::Errors<char, &str, usize>> for LustreCollectorError {
+    fn from(err: combine::stream::easy::Errors<char, &str, usize>) -> Self {
+        LustreCollectorError::CombineEasyError(err.map_range(|_| ""))
     }
 }
