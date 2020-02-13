@@ -259,7 +259,6 @@ pub struct BrwStats {
 }
 
 #[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
-#[serde(untagged)]
 pub enum HostStats {
     MemusedMax(HostStat<u64>),
     Memused(HostStat<u64>),
@@ -269,7 +268,6 @@ pub enum HostStats {
 
 /// The target stats currently collected
 #[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
-#[serde(untagged)]
 pub enum TargetStats {
     /// Operations per OST. Read and write data is particularly interesting
     JobStatsOst(TargetStat<Option<Vec<JobStatOst>>>),
@@ -309,7 +307,6 @@ pub enum TargetStats {
 }
 
 #[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
-#[serde(untagged)]
 pub enum LNetStats {
     SendCount(LNetStat<i64>),
     RecvCount(LNetStat<i64>),
@@ -317,7 +314,6 @@ pub enum LNetStats {
 }
 
 #[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
-#[serde(untagged)]
 pub enum Record {
     Host(HostStats),
     Target(TargetStats),
