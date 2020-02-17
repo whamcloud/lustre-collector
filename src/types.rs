@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use std::ops::Deref;
+use std::{fmt, ops::Deref};
 
 #[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 /// The hostname cooresponding to these stats.
@@ -225,6 +225,16 @@ pub enum TargetVariant {
     OST,
     MGT,
     MDT,
+}
+
+impl fmt::Display for TargetVariant {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TargetVariant::OST => write!(f, "OST"),
+            TargetVariant::MGT => write!(f, "MGT"),
+            TargetVariant::MDT => write!(f, "MDT"),
+        }
+    }
 }
 
 #[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]

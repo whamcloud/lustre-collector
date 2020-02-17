@@ -1,6 +1,6 @@
 [package]
 name = "lustre_collector"
-version = "0.2.7"
+version = "0.2.8"
 license = "MIT"
 description = "Scrapes Lustre stats and aggregates into JSON or YAML"
 authors = ["IML Team <iml@whamcloud.com>"]
