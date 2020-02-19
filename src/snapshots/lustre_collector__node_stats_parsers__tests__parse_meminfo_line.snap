@@ -4,13 +4,15 @@ expression: parse_meminfo_line().parse(x)
 ---
 Ok(
     (
-        MemTotal(
-            NodeStat {
-                param: Param(
-                    "mem_total",
-                ),
-                value: 5943788,
-            },
+        Node(
+            MemTotal(
+                NodeStat {
+                    param: Param(
+                        "mem_total",
+                    ),
+                    value: 5943788,
+                },
+            ),
         ),
         "\n",
     ),

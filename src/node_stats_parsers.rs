@@ -4,7 +4,7 @@
 
 use crate::{
     base_parsers::{digits, string_to, till_newline},
-    types::{NodeStat, Param},
+    types::{NodeStat, Param, Record},
     LustreCollectorError, NodeStats,
 };
 use combine::{
@@ -21,7 +21,7 @@ use combine::{
 };
 use std::io;
 
-pub fn parse_cpustats_output(output: &[u8]) -> Result<Vec<NodeStats>, LustreCollectorError> {
+pub fn parse_cpustats_output(output: &[u8]) -> Result<Vec<Record>, LustreCollectorError> {
     let output = std::str::from_utf8(output)?;
 
     let (stats, state) = parse_cpustats()
@@ -39,26 +39,26 @@ pub fn parse_cpustats_output(output: &[u8]) -> Result<Vec<NodeStats>, LustreColl
     Ok(stats)
 }
 
-fn parse_cpustats<I>() -> impl Parser<I, Output = Vec<NodeStats>>
+fn parse_cpustats<I>() -> impl Parser<I, Output = Vec<Record>>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (string("cpu").skip(spaces()), sep_end_by(digits(), spaces())).map(|(_, xs): (_, Vec<_>)| {
         vec![
-            NodeStats::CpuTotal(NodeStat {
+            Record::Node(NodeStats::CpuTotal(NodeStat {
                 param: Param("cpu_total".into()),
                 value: xs.iter().take(6).sum(),
-            }),
-            NodeStats::CpuUser(NodeStat {
+            })),
+            Record::Node(NodeStats::CpuUser(NodeStat {
                 param: Param("cpu_user".into()),
                 value: xs.iter().take(1).sum(),
-            }),
-            NodeStats::CpuIowait(NodeStat {
+            })),
+            Record::Node(NodeStats::CpuIowait(NodeStat {
                 param: Param("cpu_iowait".into()),
                 value: xs.get(4).cloned().unwrap_or_default(),
-            }),
-            NodeStats::CpuSystem(NodeStat {
+            })),
+            Record::Node(NodeStats::CpuSystem(NodeStat {
                 param: Param("cpu_system".into()),
                 value: xs
                     .get(2)
@@ -68,12 +68,12 @@ where
                         Some(x + y)
                     })
                     .unwrap_or_default(),
-            }),
+            })),
         ]
     })
 }
 
-pub fn parse_meminfo_output(output: &[u8]) -> Result<Vec<NodeStats>, LustreCollectorError> {
+pub fn parse_meminfo_output(output: &[u8]) -> Result<Vec<Record>, LustreCollectorError> {
     let output = std::str::from_utf8(output)?;
 
     let (mem_stats, state) = parse_meminfo()
@@ -91,7 +91,7 @@ pub fn parse_meminfo_output(output: &[u8]) -> Result<Vec<NodeStats>, LustreColle
     Ok(mem_stats)
 }
 
-fn parse_meminfo<I>() -> impl Parser<I, Output = Vec<NodeStats>>
+fn parse_meminfo<I>() -> impl Parser<I, Output = Vec<Record>>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -111,16 +111,32 @@ where
     .map(|xs: Vec<_>| xs.into_iter().filter_map(|x| x).collect())
 }
 
-fn parse_meminfo_line<I>() -> impl Parser<I, Output = NodeStats>
+fn parse_meminfo_line<I>() -> impl Parser<I, Output = Record>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     choice((
-        attempt(consume_line("MemTotal", "mem_total").map(NodeStats::MemTotal)),
-        attempt(consume_line("MemFree", "mem_free").map(NodeStats::MemFree)),
-        attempt(consume_line("SwapTotal", "swap_total").map(NodeStats::SwapTotal)),
-        attempt(consume_line("SwapFree", "swap_free").map(NodeStats::SwapFree)),
+        attempt(
+            consume_line("MemTotal", "mem_total")
+                .map(NodeStats::MemTotal)
+                .map(Record::Node),
+        ),
+        attempt(
+            consume_line("MemFree", "mem_free")
+                .map(NodeStats::MemFree)
+                .map(Record::Node),
+        ),
+        attempt(
+            consume_line("SwapTotal", "swap_total")
+                .map(NodeStats::SwapTotal)
+                .map(Record::Node),
+        ),
+        attempt(
+            consume_line("SwapFree", "swap_free")
+                .map(NodeStats::SwapFree)
+                .map(Record::Node),
+        ),
     ))
 }
 
