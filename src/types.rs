@@ -276,6 +276,25 @@ pub enum HostStats {
     HealthCheck(HostStat<String>),
 }
 
+/// A Stat specific to a node.
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct NodeStat<T> {
+    pub param: Param,
+    pub value: T,
+}
+/// Top level node stats (not directly Lustre related)
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
+pub enum NodeStats {
+    CpuUser(NodeStat<u64>),
+    CpuSystem(NodeStat<u64>),
+    CpuIowait(NodeStat<u64>),
+    CpuTotal(NodeStat<u64>),
+    MemTotal(NodeStat<u64>),
+    MemFree(NodeStat<u64>),
+    SwapTotal(NodeStat<u64>),
+    SwapFree(NodeStat<u64>),
+}
+
 /// The target stats currently collected
 #[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 pub enum TargetStats {
@@ -326,6 +345,7 @@ pub enum LNetStats {
 #[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 pub enum Record {
     Host(HostStats),
-    Target(TargetStats),
     LNetStat(LNetStats),
+    Node(NodeStats),
+    Target(TargetStats),
 }
