@@ -1,0 +1,43 @@
+---
+source: src/node_stats_parsers.rs
+expression: parse_cpustats().easy_parse(x)
+---
+Ok(
+    (
+        [
+            CpuTotal(
+                NodeStat {
+                    param: Param(
+                        "cpu_total",
+                    ),
+                    value: 140868629,
+                },
+            ),
+            CpuUser(
+                NodeStat {
+                    param: Param(
+                        "cpu_user",
+                    ),
+                    value: 370338,
+                },
+            ),
+            CpuIowait(
+                NodeStat {
+                    param: Param(
+                        "cpu_iowait",
+                    ),
+                    value: 6313,
+                },
+            ),
+            CpuSystem(
+                NodeStat {
+                    param: Param(
+                        "cpu_system",
+                    ),
+                    value: 481420,
+                },
+            ),
+        ],
+        "",
+    ),
+)

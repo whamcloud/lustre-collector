@@ -7,6 +7,7 @@ pub mod error;
 mod lnetctl_parser;
 mod mds;
 mod mgs;
+mod node_stats_parsers;
 mod oss;
 pub mod parser;
 mod snapshot_time;
@@ -16,6 +17,8 @@ pub mod types;
 
 pub use crate::error::LustreCollectorError;
 use combine::parser::EasyParser;
+pub use lnetctl_parser::parse as parse_lnetctl_output;
+pub use node_stats_parsers::{parse_cpustats_output, parse_meminfo_output};
 use std::{io, str};
 pub use types::*;
 
@@ -36,5 +39,3 @@ pub fn parse_lctl_output(lctl_output: &[u8]) -> Result<Vec<Record>, LustreCollec
 
     Ok(lctl_record)
 }
-
-pub use lnetctl_parser::parse as parse_lnetctl_output;

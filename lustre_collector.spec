@@ -1,5 +1,5 @@
 Name: lustre_collector
-Version: 0.2.8
+Version: 0.2.9
 # Release Start
 Release: 1%{?dist}
 # Release End
