@@ -2,7 +2,7 @@
 
 ![rust](https://github.com/whamcloud/lustre-collector/workflows/rust/badge.svg?branch=master)
 
-![Crates.io](https://img.shields.io/crates/v/lustre_collector) ![docs.rs](https://docs.rs/lustre_collector/badge.svg?version=0.2.9)
+![Crates.io](https://img.shields.io/crates/v/lustre_collector) ![docs.rs](https://docs.rs/lustre_collector/badge.svg?version=0.2.10)
 
 This repo provides a parsed representation of common Lustre statistics.
 
