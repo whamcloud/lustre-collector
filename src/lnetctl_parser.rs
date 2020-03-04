@@ -29,7 +29,7 @@ pub fn build_lnet_stats(x: &Net) -> Vec<Record> {
                 LNetStats::DropCount(LNetStat {
                     nid: y.nid.to_string(),
                     param: Param("drop_count".to_string()),
-                    value: y.statistics.recv_count,
+                    value: y.statistics.drop_count,
                 }),
             ]
         })
