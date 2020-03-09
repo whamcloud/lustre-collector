@@ -320,6 +320,7 @@ pub enum TargetStats {
     TotPending(TargetStat<u64>),
     ContendedLocks(TargetStat<u64>),
     ContentionSeconds(TargetStat<u64>),
+    ConnectedClients(TargetStat<u64>),
     CtimeAgeLimit(TargetStat<u64>),
     EarlyLockCancel(TargetStat<u64>),
     LockCount(TargetStat<u64>),
