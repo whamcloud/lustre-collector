@@ -1,6 +1,6 @@
 [package]
 name = "lustre_collector"
-version = "0.2.11"
+version = "0.2.12"
 license = "MIT"
 description = "Scrapes Lustre stats and aggregates into JSON or YAML"
 authors = ["IML Team <iml@whamcloud.com>"]
@@ -14,7 +14,7 @@ serde_yaml = "0.8"
 clap = "2.33"
 
 [dev-dependencies]
-insta = "0.13"
+insta = "0.15"
 
 [profile.release]
 lto = true

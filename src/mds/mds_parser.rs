@@ -166,7 +166,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use combine::many;
+    use combine::{many, parser::EasyParser};
     use insta::assert_debug_snapshot;
 
     #[test]
@@ -200,7 +200,7 @@ osd-ldiskfs.fs-MDT0002.kbytesfree=2893076
 osd-ldiskfs.fs-MDT0002.kbytestotal=2913312
 "#;
 
-        let result: (Vec<_>, _) = many(parse()).parse(x).unwrap();
+        let result: (Vec<_>, _) = many(parse()).easy_parse(x).unwrap();
 
         assert_debug_snapshot!(result)
     }

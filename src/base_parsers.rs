@@ -24,6 +24,14 @@ where
     token('.')
 }
 
+pub fn equals<I>() -> impl Parser<I, Output = char>
+where
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
+{
+    token('=')
+}
+
 pub fn word<I>() -> impl Parser<I, Output = String>
 where
     I: Stream<Token = char>,
@@ -73,6 +81,14 @@ where
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     take_until(period())
+}
+
+pub fn till_equals<I>() -> impl Parser<I, Output = String>
+where
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
+{
+    take_until(equals())
 }
 
 pub fn string_to<I>(x: &'static str, y: &'static str) -> impl Parser<I, Output = String>
