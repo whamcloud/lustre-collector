@@ -9,7 +9,6 @@ use crate::{
     },
     LustreCollectorError,
 };
-use serde_yaml;
 
 pub fn build_lnet_stats(x: &Net) -> Vec<Record> {
     x.local_nis
@@ -38,6 +37,12 @@ pub fn build_lnet_stats(x: &Net) -> Vec<Record> {
 }
 
 pub fn parse(x: &str) -> Result<Vec<Record>, LustreCollectorError> {
+    let x = x.trim();
+
+    if x.is_empty() {
+        return Ok(vec![]);
+    }
+
     let y: LNetExport = serde_yaml::from_str(x)?;
 
     Ok(y.net
@@ -49,6 +54,13 @@ pub fn parse(x: &str) -> Result<Vec<Record>, LustreCollectorError> {
 mod tests {
     use super::*;
     use insta::assert_debug_snapshot;
+
+    #[test]
+    fn test_empty_input() {
+        let xs = parse(" ").unwrap();
+
+        assert_eq!(xs, vec![]);
+    }
 
     #[test]
     fn test_lnet_down() {

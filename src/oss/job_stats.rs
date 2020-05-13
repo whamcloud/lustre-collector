@@ -2,6 +2,7 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
+use crate::types::{JobStatOst, JobStatsOst};
 use combine::{
     attempt,
     error::{ParseError, StreamError},
@@ -13,10 +14,6 @@ use combine::{
     stream::{Stream, StreamErrorFor},
     Parser,
 };
-
-use serde_yaml;
-
-use crate::types::{JobStatOst, JobStatsOst};
 
 pub fn parse<I>() -> impl Parser<I, Output = Option<Vec<JobStatOst>>>
 where

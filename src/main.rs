@@ -36,7 +36,7 @@ fn main() {
         .collect::<Vec<_>>();
 
     let matches = App::new("lustre_collector")
-        .version("0.2.12")
+        .version("0.2.13")
         .author("IML Team")
         .about("Grabs various Lustre statistics for display in JSON or YAML")
         .arg(
