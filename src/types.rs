@@ -323,6 +323,7 @@ pub enum TargetStats {
     ConnectedClients(TargetStat<u64>),
     CtimeAgeLimit(TargetStat<u64>),
     EarlyLockCancel(TargetStat<u64>),
+    FsNames(TargetStat<Vec<String>>),
     LockCount(TargetStat<u64>),
     LockTimeouts(TargetStat<u64>),
     LockUnusedCount(TargetStat<u64>),

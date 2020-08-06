@@ -3,13 +3,14 @@
 // license that can be found in the LICENSE file.
 
 use crate::{
-    base_parsers::{digits, param, period, target},
+    base_parsers::{digits, param, period, target, word},
     stats_parser::stats,
     types::{Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant},
 };
 use combine::{
     attempt, choice,
     error::ParseError,
+    many1,
     parser::char::{newline, string},
     stream::Stream,
     Parser,
@@ -28,6 +29,7 @@ pub fn params() -> Vec<String> {
         format!("mgs.*.mgs.{}", THREADS_MIN),
         format!("mgs.*.mgs.{}", THREADS_STARTED),
         format!("mgs.*.{}", NUM_EXPORTS),
+        "-N mgs.MGS.live.*".to_string(),
     ]
     .iter()
     .map(|x| x.to_owned())
@@ -41,6 +43,29 @@ enum MgsStat {
     ThreadsMax(u64),
     ThreadsStarted(u64),
     NumExports(u64),
+    FsNames(Vec<String>),
+}
+
+fn fsname<I>() -> impl Parser<I, Output = String>
+where
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
+{
+    (
+        attempt(string("mgs")).skip(period()),
+        target().skip(period()),
+        string("live").skip(period()),
+        word().skip(newline()),
+    )
+        .map(|(_, _, _, d)| d)
+}
+
+fn fsnames<I>() -> impl Parser<I, Output = Vec<String>>
+where
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
+{
+    many1(fsname())
 }
 
 /// Parses the name of a target
@@ -86,6 +111,24 @@ where
             )),
         )
             .map(|(_, (y, z))| (y, z)),
+        (
+            string("live").skip(period()),
+            word().skip(newline()),
+            fsnames().map(|xs| {
+                let xs: Vec<String> = xs
+                    .into_iter()
+                    .filter(|name| *name != "params".to_string())
+                    .collect();
+
+                xs
+            }),
+        )
+            .map(|(_, b, c)| {
+                (
+                    Param("fsnames".into()),
+                    MgsStat::FsNames([vec![b], c].concat()),
+                )
+            }),
     ))
 }
 
@@ -126,7 +169,52 @@ where
                 param,
                 value,
             }),
+            MgsStat::FsNames(value) => TargetStats::FsNames(TargetStat {
+                kind: TargetVariant::MGT,
+                target,
+                param,
+                value,
+            }),
         })
         .map(Record::Target)
         .message("while parsing mgs params")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use combine::{many, parser::EasyParser};
+    use insta::assert_debug_snapshot;
+
+    #[test]
+    fn test_params() {
+        let x = r#"mgs.MGS.mgs.stats=
+snapshot_time             1596728874.484750908 secs.nsecs
+req_waittime              31280 samples [usec] 11 2695 5020274 1032267156
+req_qdepth                31280 samples [reqs] 0 1 56 56
+req_active                31280 samples [reqs] 1 2 36625 47315
+req_timeout               31280 samples [sec] 1 10 31289 31379
+reqbuf_avail              85192 samples [bufs] 62 64 5364658 337866142
+ldlm_plain_enqueue        201 samples [reqs] 1 1 201 201
+mgs_connect               9 samples [usec] 52 5165 19362 66639088
+mgs_disconnect            4 samples [usec] 50 92 265 18709
+mgs_target_reg            90 samples [usec] 874 163383 1262544 91852108168
+mgs_config_read           41 samples [usec] 41 2203 26823 32448779
+obd_ping                  30339 samples [usec] 3 4398 1552005 134387261
+llog_origin_handle_open   153 samples [usec] 29 16443 25516 270992222
+llog_origin_handle_next_block 298 samples [usec] 24 31952 141030 2788155300
+llog_origin_handle_read_header 145 samples [usec] 25 44125 192095 4905765639
+mgs.MGS.mgs.threads_max=32
+mgs.MGS.mgs.threads_min=3
+mgs.MGS.mgs.threads_started=4
+mgs.MGS.num_exports=5
+mgs.MGS.live.fs
+mgs.MGS.live.fs2
+mgs.MGS.live.params
+"#;
+
+        let result: (Vec<_>, _) = many(parse()).easy_parse(x).unwrap();
+
+        assert_debug_snapshot!(result)
+    }
 }
