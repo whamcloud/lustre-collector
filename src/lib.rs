@@ -39,3 +39,21 @@ pub fn parse_lctl_output(lctl_output: &[u8]) -> Result<Vec<Record>, LustreCollec
 
     Ok(lctl_record)
 }
+
+pub fn parse_mgs_fs_output(mgs_fs_output: &[u8]) -> Result<Vec<Record>, LustreCollectorError> {
+    let mgs_fs = str::from_utf8(mgs_fs_output)?;
+
+    let (mgs_fs_record, state) = mgs::mgs_fs_parser::parse()
+        .easy_parse(mgs_fs)
+        .map_err(|err| err.map_position(|p| p.translate_position(mgs_fs)))?;
+
+    if state != "" {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            format!("Content left in input buffer: {}", state),
+        )
+        .into());
+    }
+
+    Ok(mgs_fs_record)
+}

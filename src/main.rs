@@ -5,7 +5,7 @@
 use clap::{arg_enum, value_t, App, Arg};
 use lustre_collector::{
     error::LustreCollectorError, mgs::mgs_fs_parser, parse_lctl_output, parse_lnetctl_output,
-    parser, types::Record,
+    parse_mgs_fs_output, parser, types::Record,
 };
 use std::{
     error::Error as _,
@@ -72,7 +72,7 @@ fn main() {
 
     let mgs_fs_handle = thread::spawn(move || -> Result<Vec<Record>, LustreCollectorError> {
         let lctl_output = get_lctl_mgs_fs_output()?;
-        let lctl_record = parse_lctl_output(&lctl_output)?;
+        let lctl_record = parse_mgs_fs_output(&lctl_output)?;
 
         Ok(lctl_record)
     });
