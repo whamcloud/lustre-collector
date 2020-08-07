@@ -91,7 +91,7 @@ where
                     .map(|(target, fs_name)| {
                         TargetStats::FsNames(TargetStat {
                             kind: TargetVariant::MGT,
-                            target: target,
+                            target,
                             param: param.clone(),
                             value: fs_name,
                         })
@@ -100,7 +100,7 @@ where
                     .collect::<Vec<_>>()
             }
         })
-        .message("while parsing mgs params")
+        .message("while parsing mgs fs params")
 }
 
 #[cfg(test)]

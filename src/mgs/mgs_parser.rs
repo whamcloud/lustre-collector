@@ -3,14 +3,13 @@
 // license that can be found in the LICENSE file.
 
 use crate::{
-    base_parsers::{digits, param, period, target, word},
+    base_parsers::{digits, param, period, target},
     stats_parser::stats,
     types::{Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant},
 };
 use combine::{
     attempt, choice,
     error::ParseError,
-    many1,
     parser::char::{newline, string},
     stream::Stream,
     Parser,

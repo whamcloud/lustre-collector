@@ -4,7 +4,8 @@
 
 use clap::{arg_enum, value_t, App, Arg};
 use lustre_collector::{
-    error::LustreCollectorError, mgs::mgs_fs_parser, parse_lctl_output, parse_lnetctl_output, parser, types::Record,
+    error::LustreCollectorError, mgs::mgs_fs_parser, parse_lctl_output, parse_lnetctl_output,
+    parser, types::Record,
 };
 use std::{
     error::Error as _,

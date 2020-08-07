@@ -4,7 +4,7 @@
 
 use crate::{
     mds::{client_count_parser, mds_parser},
-    mgs::mgs_parser,
+    mgs::{mgs_fs_parser, mgs_parser},
     oss::oss_parser,
     top_level_parser,
     types::Record,
@@ -29,6 +29,7 @@ where
         top_level_parser::parse().map(|x| vec![x]),
         client_count_parser::parse(),
         mgs_parser::parse().map(|x| vec![x]),
+        mgs_fs_parser::parse(),
         mds_parser::parse().map(|x| vec![x]),
         oss_parser::parse().map(|x| vec![x]),
     )))
