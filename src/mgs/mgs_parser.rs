@@ -35,10 +35,6 @@ pub fn params() -> Vec<String> {
     .collect::<Vec<_>>()
 }
 
-pub fn name_only_params() -> Vec<String> {
-    vec!["mgs.MGS.live.*".to_string()]
-}
-
 #[derive(Debug)]
 enum MgsStat {
     Stats(Vec<Stat>),
@@ -46,29 +42,6 @@ enum MgsStat {
     ThreadsMax(u64),
     ThreadsStarted(u64),
     NumExports(u64),
-    FsNames(Vec<String>),
-}
-
-fn fsname<I>() -> impl Parser<I, Output = String>
-where
-    I: Stream<Token = char>,
-    I::Error: ParseError<I::Token, I::Range, I::Position>,
-{
-    (
-        attempt(string("mgs")).skip(period()),
-        target().skip(period()),
-        string("live").skip(period()),
-        word().skip(newline()),
-    )
-        .map(|(_, _, _, d)| d)
-}
-
-fn fsnames<I>() -> impl Parser<I, Output = Vec<String>>
-where
-    I: Stream<Token = char>,
-    I::Error: ParseError<I::Token, I::Range, I::Position>,
-{
-    many1(fsname())
 }
 
 /// Parses the name of a target
@@ -114,21 +87,6 @@ where
             )),
         )
             .map(|(_, (y, z))| (y, z)),
-        (
-            string("live").skip(period()),
-            word().skip(newline()),
-            fsnames().map(|xs| {
-                let xs: Vec<String> = xs.into_iter().filter(|name| name != "params").collect();
-
-                xs
-            }),
-        )
-            .map(|(_, b, c)| {
-                (
-                    Param("fsnames".into()),
-                    MgsStat::FsNames([vec![b], c].concat()),
-                )
-            }),
     ))
 }
 
@@ -169,12 +127,6 @@ where
                 param,
                 value,
             }),
-            MgsStat::FsNames(value) => TargetStats::FsNames(TargetStat {
-                kind: TargetVariant::MGT,
-                target,
-                param,
-                value,
-            }),
         })
         .map(Record::Target)
         .message("while parsing mgs params")
@@ -208,9 +160,6 @@ mgs.MGS.mgs.threads_max=32
 mgs.MGS.mgs.threads_min=3
 mgs.MGS.mgs.threads_started=4
 mgs.MGS.num_exports=5
-mgs.MGS.live.fs
-mgs.MGS.live.fs2
-mgs.MGS.live.params
 "#;
 
         let result: (Vec<_>, _) = many(parse()).easy_parse(x).unwrap();

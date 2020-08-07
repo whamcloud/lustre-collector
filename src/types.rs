@@ -16,7 +16,7 @@ impl Deref for Host {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
 /// The Lustre target cooresponding to these stats.
 pub struct Target(pub String);
 
@@ -28,7 +28,7 @@ impl Deref for Target {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 /// The name of the stat.
 pub struct Param(pub String);
 
@@ -295,6 +295,9 @@ pub enum NodeStats {
     SwapFree(NodeStat<u64>),
 }
 
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct FsName(pub String);
+
 /// The target stats currently collected
 #[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 pub enum TargetStats {
@@ -323,7 +326,7 @@ pub enum TargetStats {
     ConnectedClients(TargetStat<u64>),
     CtimeAgeLimit(TargetStat<u64>),
     EarlyLockCancel(TargetStat<u64>),
-    FsNames(TargetStat<Vec<String>>),
+    FsNames(TargetStat<Vec<FsName>>),
     LockCount(TargetStat<u64>),
     LockTimeouts(TargetStat<u64>),
     LockUnusedCount(TargetStat<u64>),

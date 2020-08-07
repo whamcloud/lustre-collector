@@ -6,7 +6,7 @@ mod base_parsers;
 pub mod error;
 mod lnetctl_parser;
 mod mds;
-mod mgs;
+pub mod mgs;
 mod node_stats_parsers;
 mod oss;
 pub mod parser;
