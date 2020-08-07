@@ -29,11 +29,14 @@ pub fn params() -> Vec<String> {
         format!("mgs.*.mgs.{}", THREADS_MIN),
         format!("mgs.*.mgs.{}", THREADS_STARTED),
         format!("mgs.*.{}", NUM_EXPORTS),
-        "-N mgs.MGS.live.*".to_string(),
     ]
     .iter()
     .map(|x| x.to_owned())
     .collect::<Vec<_>>()
+}
+
+pub fn name_only_params() -> Vec<String> {
+    vec!["mgs.MGS.live.*".to_string()]
 }
 
 #[derive(Debug)]
@@ -115,10 +118,7 @@ where
             string("live").skip(period()),
             word().skip(newline()),
             fsnames().map(|xs| {
-                let xs: Vec<String> = xs
-                    .into_iter()
-                    .filter(|name| *name != "params".to_string())
-                    .collect();
+                let xs: Vec<String> = xs.into_iter().filter(|name| name != "params").collect();
 
                 xs
             }),

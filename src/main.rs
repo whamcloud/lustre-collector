@@ -29,6 +29,16 @@ fn get_lctl_output() -> Result<Vec<u8>, LustreCollectorError> {
     Ok(r.stdout)
 }
 
+fn get_lctl_name_only_output() -> Result<Vec<u8>, LustreCollectorError> {
+    let r = Command::new("lctl")
+        .arg("get_param")
+        .arg("-N")
+        .args(parser::name_only_params())
+        .output()?;
+
+    Ok(r.stdout)
+}
+
 fn main() {
     let variants = &Format::variants()
         .iter()
@@ -54,7 +64,12 @@ fn main() {
 
     let handle = thread::spawn(move || -> Result<Vec<Record>, LustreCollectorError> {
         let lctl_output = get_lctl_output()?;
-        let lctl_record = parse_lctl_output(&lctl_output)?;
+        let lctl_name_only_output = get_lctl_name_only_output()?;
+
+        let mut lctl_record = parse_lctl_output(&lctl_output)?;
+        let lctl_name_only_record = parse_lctl_output(&lctl_name_only_output)?;
+
+        lctl_record.extend(lctl_name_only_record);
 
         Ok(lctl_record)
     });

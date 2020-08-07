@@ -20,6 +20,10 @@ pub fn params() -> Vec<String> {
     a
 }
 
+pub fn name_only_params() -> Vec<String> {
+    mgs_parser::name_only_params()
+}
+
 pub fn parse<I>() -> impl Parser<I, Output = Vec<Record>>
 where
     I: Stream<Token = char>,
