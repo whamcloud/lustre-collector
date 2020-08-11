@@ -4,7 +4,7 @@
 
 use crate::{
     mds::{client_count_parser, mds_parser},
-    mgs::{mgs_fs_parser, mgs_parser},
+    mgs::mgs_parser,
     oss::oss_parser,
     top_level_parser,
     types::Record,
