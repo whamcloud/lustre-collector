@@ -75,14 +75,11 @@ where
                 let mgs_map: HashMap<Target, Vec<FsName>> =
                     xs.into_iter()
                         .fold(HashMap::new(), |mut acc, (target, fs_name)| {
-                            if let Some(fs_names) = acc.get(&target) {
-                                let names: Vec<FsName> =
-                                    [&fs_names[..], &vec![fs_name][..]].concat();
-                                acc.insert(target, names);
-                            } else {
-                                acc.insert(target, vec![fs_name]);
-                            }
-
+                            let fs_names = acc.entry(target.clone()).or_insert(vec![]);
+                            let names: Vec<FsName> =
+                                [&fs_names[..], &vec![fs_name][..]].concat();
+                            acc.insert(target, names);
+                            
                             acc
                         });
 

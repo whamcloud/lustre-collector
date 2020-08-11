@@ -29,7 +29,6 @@ where
         top_level_parser::parse().map(|x| vec![x]),
         client_count_parser::parse(),
         mgs_parser::parse().map(|x| vec![x]),
-        mgs_fs_parser::parse(),
         mds_parser::parse().map(|x| vec![x]),
         oss_parser::parse().map(|x| vec![x]),
     )))

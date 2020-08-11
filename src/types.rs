@@ -16,7 +16,7 @@ impl Deref for Host {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
 /// The Lustre target cooresponding to these stats.
 pub struct Target(pub String);
 
