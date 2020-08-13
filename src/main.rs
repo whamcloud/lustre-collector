@@ -4,7 +4,8 @@
 
 use clap::{arg_enum, value_t, App, Arg};
 use lustre_collector::{
-    error::LustreCollectorError, parse_lctl_output, parse_lnetctl_output, parser, types::Record,
+    error::LustreCollectorError, mgs::mgs_fs_parser, parse_lctl_output, parse_lnetctl_output,
+    parse_mgs_fs_output, parser, types::Record,
 };
 use std::{
     error::Error as _,
@@ -24,6 +25,16 @@ fn get_lctl_output() -> Result<Vec<u8>, LustreCollectorError> {
     let r = Command::new("lctl")
         .arg("get_param")
         .args(parser::params())
+        .output()?;
+
+    Ok(r.stdout)
+}
+
+fn get_lctl_mgs_fs_output() -> Result<Vec<u8>, LustreCollectorError> {
+    let r = Command::new("lctl")
+        .arg("get_param")
+        .arg("-N")
+        .args(mgs_fs_parser::params())
         .output()?;
 
     Ok(r.stdout)
@@ -59,6 +70,13 @@ fn main() {
         Ok(lctl_record)
     });
 
+    let mgs_fs_handle = thread::spawn(move || -> Result<Vec<Record>, LustreCollectorError> {
+        let lctl_output = get_lctl_mgs_fs_output()?;
+        let lctl_record = parse_mgs_fs_output(&lctl_output)?;
+
+        Ok(lctl_record)
+    });
+
     let lnetctl_output = Command::new("lnetctl")
         .arg("export")
         .output()
@@ -71,7 +89,10 @@ fn main() {
 
     let mut lctl_record = handle.join().unwrap().unwrap();
 
+    let mut mgs_fs_record = mgs_fs_handle.join().unwrap().unwrap();
+
     lctl_record.append(&mut lnet_record);
+    lctl_record.append(&mut mgs_fs_record);
 
     let r = match format {
         Format::Json => {
