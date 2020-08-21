@@ -47,7 +47,7 @@ fn main() {
         .collect::<Vec<_>>();
 
     let matches = App::new("lustre_collector")
-        .version("0.2.14")
+        .version("0.2.15")
         .author("IML Team")
         .about("Grabs various Lustre statistics for display in JSON or YAML")
         .arg(
@@ -89,7 +89,7 @@ fn main() {
 
     let mut lctl_record = handle.join().unwrap().unwrap();
 
-    let mut mgs_fs_record = mgs_fs_handle.join().unwrap().unwrap();
+    let mut mgs_fs_record = mgs_fs_handle.join().unwrap().unwrap_or_default();
 
     lctl_record.append(&mut lnet_record);
     lctl_record.append(&mut mgs_fs_record);
