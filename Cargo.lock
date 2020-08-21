@@ -151,7 +151,7 @@ checksum = "8dd5a6d5999d9907cda8ed67bbd137d3af8085216c2ac62de5be860bd41f304a"
 
 [[package]]
 name = "lustre_collector"
-version = "0.2.14"
+version = "0.2.15"
 dependencies = [
  "clap",
  "combine",
