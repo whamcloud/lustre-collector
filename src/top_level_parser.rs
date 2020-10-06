@@ -6,7 +6,9 @@ use crate::{
     base_parsers::{digits, param, words},
     types::{HostStat, HostStats, Param, Record},
 };
-use combine::{choice, error::ParseError, parser::char::newline, stream::Stream, Parser};
+use combine::{
+    choice, error::ParseError, optional, parser::char::newline, stream::Stream, token, Parser,
+};
 
 pub const MEMUSED_MAX: &str = "memused_max";
 pub const MEMUSED: &str = "memused";
@@ -34,7 +36,18 @@ where
     choice((
         (param(MEMUSED), digits().map(TopLevelStat::Memused)),
         (param(MEMUSED_MAX), digits().map(TopLevelStat::MemusedMax)),
-        (param(LNET_MEMUSED), digits().map(TopLevelStat::LnetMemused)),
+        (
+            param(LNET_MEMUSED),
+            (optional(token('-')), digits()).map(|(negative, x)| {
+                if negative.is_some() {
+                    // Counter can overflow and go negative.
+                    // Cast stat to 0 when this happens
+                    TopLevelStat::LnetMemused(0)
+                } else {
+                    TopLevelStat::LnetMemused(x)
+                }
+            }),
+        ),
         (param(HEALTH_CHECK), words().map(TopLevelStat::HealthCheck)),
     ))
     .skip(newline())
@@ -85,6 +98,38 @@ mod tests {
                 Record::Host(HostStats::MemusedMax(HostStat {
                     param: Param(MEMUSED_MAX.to_string()),
                     value: 77_991_501
+                })),
+                ""
+            ))
+        )
+    }
+
+    #[test]
+    fn test_lnet_memused() {
+        let result = parse().parse("lnet_memused=17448\n");
+
+        assert_eq!(
+            result,
+            Ok((
+                Record::Host(HostStats::LNetMemUsed(HostStat {
+                    param: Param(LNET_MEMUSED.to_string()),
+                    value: 17448
+                })),
+                ""
+            ))
+        )
+    }
+
+    #[test]
+    fn test_negative_lnet_memused() {
+        let result = parse().parse("lnet_memused=-1744897928\n");
+
+        assert_eq!(
+            result,
+            Ok((
+                Record::Host(HostStats::LNetMemUsed(HostStat {
+                    param: Param(LNET_MEMUSED.to_string()),
+                    value: 0
                 })),
                 ""
             ))
