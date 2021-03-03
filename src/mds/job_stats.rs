@@ -35,7 +35,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::types::{BytesStat};
+    use crate::types::BytesStat;
     use serde_yaml;
 
     #[test]

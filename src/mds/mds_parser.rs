@@ -4,9 +4,9 @@
 
 use crate::{
     base_parsers::{digits, param, period, target, till_period},
-    stats_parser::stats,
     mds::job_stats,
-    types::{Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant, JobStatMdt},
+    stats_parser::stats,
+    types::{JobStatMdt, Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant},
 };
 use combine::{
     attempt, choice,
@@ -52,7 +52,8 @@ where
             digits().skip(newline()).map(MdtStat::NumExports),
         ),
         (param(STATS), stats().map(MdtStat::Stats)).message("while parsing mdt_stat"),
-        (param(JOB_STATS), job_stats::parse().map(MdtStat::JobStats)).message("while parsing job_stats"),
+        (param(JOB_STATS), job_stats::parse().map(MdtStat::JobStats))
+            .message("while parsing job_stats"),
         (
             param(FILES_FREE),
             digits().skip(newline()).map(MdtStat::FilesFree),
