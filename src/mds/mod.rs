@@ -4,3 +4,4 @@
 
 pub mod client_count_parser;
 pub mod mds_parser;
+pub mod job_stats;

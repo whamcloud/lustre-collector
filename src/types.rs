@@ -78,6 +78,36 @@ pub struct JobStatOst {
     pub quotactl: ReqsStat,
 }
 
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct JobStatsMdt {
+    pub job_stats: Option<Vec<JobStatMdt>>,
+}
+
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct JobStatMdt {
+    pub job_id: String,
+    pub snapshot_time: i64,
+    pub open: BytesStat,
+    pub close: BytesStat,
+    pub mknod: BytesStat,
+    pub link: BytesStat,
+    pub unlink: BytesStat,
+    pub mkdir: BytesStat,
+    pub rmdir: BytesStat,
+    pub rename: BytesStat,
+    pub getattr: BytesStat,
+    pub setattr: BytesStat,
+    pub getxattr: BytesStat,
+    pub setxattr: BytesStat,
+    pub statfs: BytesStat,
+    pub sync: BytesStat,
+    pub samedir_rename: BytesStat,
+    pub crossdir_rename: BytesStat,
+    pub read_bytes: BytesStat,
+    pub write_bytes: BytesStat,
+    pub punch: BytesStat,
+}
+
 pub mod lnet_exports {
     use std::collections::HashMap;
 
@@ -305,6 +335,7 @@ pub enum TargetStats {
     JobStatsOst(TargetStat<Option<Vec<JobStatOst>>>),
     Stats(TargetStat<Vec<Stat>>),
     BrwStats(TargetStat<Vec<BrwStats>>),
+    JobStatsMdt(TargetStat<Option<Vec<JobStatMdt>>>),
     /// Available inodes
     FilesFree(TargetStat<u64>),
     /// Total inodes
