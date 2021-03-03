@@ -4,8 +4,9 @@
 
 use crate::{
     base_parsers::{digits, param, period, target, till_period},
+    mds::job_stats,
     stats_parser::stats,
-    types::{Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant},
+    types::{JobStatMdt, Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant},
 };
 use combine::{
     attempt, choice,
@@ -15,6 +16,7 @@ use combine::{
     Parser,
 };
 
+pub const JOB_STATS: &str = "job_stats";
 pub const STATS: &str = "md_stats";
 pub const NUM_EXPORTS: &str = "num_exports";
 pub const FILES_FREE: &str = "filesfree";
@@ -24,6 +26,7 @@ pub const KBYTES_FREE: &str = "kbytesfree";
 pub const KBYTES_TOTAL: &str = "kbytestotal";
 
 enum MdtStat {
+    JobStats(Option<Vec<JobStatMdt>>),
     Stats(Vec<Stat>),
     NumExports(u64),
     /// Available inodes
@@ -49,6 +52,8 @@ where
             digits().skip(newline()).map(MdtStat::NumExports),
         ),
         (param(STATS), stats().map(MdtStat::Stats)).message("while parsing mdt_stat"),
+        (param(JOB_STATS), job_stats::parse().map(MdtStat::JobStats))
+            .message("while parsing job_stats"),
         (
             param(FILES_FREE),
             digits().skip(newline()).map(MdtStat::FilesFree),
@@ -83,6 +88,7 @@ where
 
 pub fn params() -> Vec<String> {
     [
+        format!("mdt.*.{}", JOB_STATS),
         format!("mdt.*.{}", STATS),
         format!("mdt.*MDT*.{}", NUM_EXPORTS),
         format!("osd-*.*MDT*.{}", FILES_FREE),
@@ -116,6 +122,12 @@ where
 {
     (target_name(), mdt_stat())
         .map(|(target, (param, value))| match value {
+            MdtStat::JobStats(value) => TargetStats::JobStatsMdt(TargetStat {
+                kind: TargetVariant::MDT,
+                target,
+                param,
+                value,
+            }),
             MdtStat::Stats(value) => TargetStats::Stats(TargetStat {
                 kind: TargetVariant::MDT,
                 target,
