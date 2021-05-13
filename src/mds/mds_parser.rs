@@ -1,4 +1,4 @@
-// Copyright (c) 2019 DDN. All rights reserved.
+// Copyright (c) 2021 DDN. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
@@ -123,49 +123,49 @@ where
     (target_name(), mdt_stat())
         .map(|(target, (param, value))| match value {
             MdtStat::JobStats(value) => TargetStats::JobStatsMdt(TargetStat {
-                kind: TargetVariant::MDT,
+                kind: TargetVariant::Mdt,
                 target,
                 param,
                 value,
             }),
             MdtStat::Stats(value) => TargetStats::Stats(TargetStat {
-                kind: TargetVariant::MDT,
+                kind: TargetVariant::Mdt,
                 target,
                 param,
                 value,
             }),
             MdtStat::NumExports(value) => TargetStats::NumExports(TargetStat {
-                kind: TargetVariant::MDT,
+                kind: TargetVariant::Mdt,
                 target,
                 param,
                 value,
             }),
             MdtStat::FilesFree(value) => TargetStats::FilesFree(TargetStat {
-                kind: TargetVariant::MDT,
+                kind: TargetVariant::Mdt,
                 target,
                 param,
                 value,
             }),
             MdtStat::FilesTotal(value) => TargetStats::FilesTotal(TargetStat {
-                kind: TargetVariant::MDT,
+                kind: TargetVariant::Mdt,
                 target,
                 param,
                 value,
             }),
             MdtStat::BytesAvail(value) => TargetStats::BytesAvail(TargetStat {
-                kind: TargetVariant::MDT,
+                kind: TargetVariant::Mdt,
                 target,
                 param,
                 value,
             }),
             MdtStat::BytesFree(value) => TargetStats::BytesFree(TargetStat {
-                kind: TargetVariant::MDT,
+                kind: TargetVariant::Mdt,
                 target,
                 param,
                 value,
             }),
             MdtStat::BytesTotal(value) => TargetStats::BytesTotal(TargetStat {
-                kind: TargetVariant::MDT,
+                kind: TargetVariant::Mdt,
                 target,
                 param,
                 value,

@@ -1,4 +1,4 @@
-// Copyright (c) 2018 DDN. All rights reserved.
+// Copyright (c) 2021 DDN. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
@@ -97,31 +97,31 @@ where
     (target_name(), mgs_stat())
         .map(|(target, (param, value))| match value {
             MgsStat::Stats(value) => TargetStats::Stats(TargetStat {
-                kind: TargetVariant::MGT,
+                kind: TargetVariant::Mgt,
                 target,
                 param,
                 value,
             }),
             MgsStat::NumExports(value) => TargetStats::NumExports(TargetStat {
-                kind: TargetVariant::MGT,
+                kind: TargetVariant::Mgt,
                 target,
                 param,
                 value,
             }),
             MgsStat::ThreadsMin(value) => TargetStats::ThreadsMin(TargetStat {
-                kind: TargetVariant::MGT,
+                kind: TargetVariant::Mgt,
                 target,
                 param,
                 value,
             }),
             MgsStat::ThreadsMax(value) => TargetStats::ThreadsMax(TargetStat {
-                kind: TargetVariant::MGT,
+                kind: TargetVariant::Mgt,
                 target,
                 param,
                 value,
             }),
             MgsStat::ThreadsStarted(value) => TargetStats::ThreadsStarted(TargetStat {
-                kind: TargetVariant::MGT,
+                kind: TargetVariant::Mgt,
                 target,
                 param,
                 value,

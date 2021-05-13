@@ -1,4 +1,4 @@
-// Copyright (c) 2018 DDN. All rights reserved.
+// Copyright (c) 2021 DDN. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
@@ -165,79 +165,79 @@ where
     (target_name(), obdfilter_stat())
         .map(|(target, (param, value))| match value {
             ObdfilterStat::JobStats(value) => TargetStats::JobStatsOst(TargetStat {
-                kind: TargetVariant::OST,
+                kind: TargetVariant::Ost,
                 target,
                 param,
                 value,
             }),
             ObdfilterStat::Stats(value) => TargetStats::Stats(TargetStat {
-                kind: TargetVariant::OST,
+                kind: TargetVariant::Ost,
                 target,
                 param,
                 value,
             }),
             ObdfilterStat::BrwStats(value) => TargetStats::BrwStats(TargetStat {
-                kind: TargetVariant::OST,
+                kind: TargetVariant::Ost,
                 target,
                 param,
                 value,
             }),
             ObdfilterStat::FilesFree(value) => TargetStats::FilesFree(TargetStat {
-                kind: TargetVariant::OST,
+                kind: TargetVariant::Ost,
                 target,
                 param,
                 value,
             }),
             ObdfilterStat::FilesTotal(value) => TargetStats::FilesTotal(TargetStat {
-                kind: TargetVariant::OST,
+                kind: TargetVariant::Ost,
                 target,
                 param,
                 value,
             }),
             ObdfilterStat::FsType(value) => TargetStats::FsType(TargetStat {
-                kind: TargetVariant::OST,
+                kind: TargetVariant::Ost,
                 target,
                 param,
                 value,
             }),
             ObdfilterStat::BytesAvail(value) => TargetStats::BytesAvail(TargetStat {
-                kind: TargetVariant::OST,
+                kind: TargetVariant::Ost,
                 target,
                 param,
                 value,
             }),
             ObdfilterStat::BytesFree(value) => TargetStats::BytesFree(TargetStat {
-                kind: TargetVariant::OST,
+                kind: TargetVariant::Ost,
                 target,
                 param,
                 value,
             }),
             ObdfilterStat::BytesTotal(value) => TargetStats::BytesTotal(TargetStat {
-                kind: TargetVariant::OST,
+                kind: TargetVariant::Ost,
                 target,
                 param,
                 value,
             }),
             ObdfilterStat::NumExports(value) => TargetStats::NumExports(TargetStat {
-                kind: TargetVariant::OST,
+                kind: TargetVariant::Ost,
                 target,
                 param,
                 value,
             }),
             ObdfilterStat::TotDirty(value) => TargetStats::TotDirty(TargetStat {
-                kind: TargetVariant::OST,
+                kind: TargetVariant::Ost,
                 target,
                 param,
                 value,
             }),
             ObdfilterStat::TotGranted(value) => TargetStats::TotGranted(TargetStat {
-                kind: TargetVariant::OST,
+                kind: TargetVariant::Ost,
                 target,
                 param,
                 value,
             }),
             ObdfilterStat::TotPending(value) => TargetStats::TotPending(TargetStat {
-                kind: TargetVariant::OST,
+                kind: TargetVariant::Ost,
                 target,
                 param,
                 value,

@@ -1,4 +1,4 @@
-// Copyright (c) 2020 DDN. All rights reserved.
+// Copyright (c) 2021 DDN. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
@@ -39,7 +39,7 @@ where
         .map(|hm| {
             hm.into_iter()
                 .map(|(k, value)| TargetStat {
-                    kind: TargetVariant::MDT,
+                    kind: TargetVariant::Mdt,
                     target: Target(k),
                     param: Param("connected_clients".into()),
                     value,

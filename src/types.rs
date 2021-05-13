@@ -1,4 +1,4 @@
-// Copyright (c) 2020 DDN. All rights reserved.
+// Copyright (c) 2021 DDN. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
@@ -252,17 +252,17 @@ pub struct HostStat<T> {
 
 #[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 pub enum TargetVariant {
-    OST,
-    MGT,
-    MDT,
+    Ost,
+    Mgt,
+    Mdt,
 }
 
 impl fmt::Display for TargetVariant {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            TargetVariant::OST => write!(f, "OST"),
-            TargetVariant::MGT => write!(f, "MGT"),
-            TargetVariant::MDT => write!(f, "MDT"),
+            TargetVariant::Ost => write!(f, "OST"),
+            TargetVariant::Mgt => write!(f, "MGT"),
+            TargetVariant::Mdt => write!(f, "MDT"),
         }
     }
 }
@@ -296,6 +296,16 @@ pub struct BrwStats {
     pub name: String,
     pub unit: String,
     pub buckets: Vec<BrwStatsBucket>,
+}
+
+#[derive(PartialEq, Clone, Copy, Debug, serde::Serialize, serde::Deserialize)]
+pub enum RecoveryStatus {
+    Complete,
+    Inactive,
+    Waiting,
+    WaitingForClients,
+    Recovering,
+    Unknown,
 }
 
 #[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
@@ -369,6 +379,7 @@ pub enum TargetStats {
     ThreadsMin(TargetStat<u64>),
     ThreadsMax(TargetStat<u64>),
     ThreadsStarted(TargetStat<u64>),
+    RecoveryStatus(TargetStat<RecoveryStatus>),
 }
 
 #[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]

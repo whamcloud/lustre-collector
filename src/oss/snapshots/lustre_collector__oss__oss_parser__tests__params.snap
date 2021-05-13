@@ -1,13 +1,14 @@
 ---
 source: src/oss/oss_parser.rs
 expression: result
+
 ---
 (
     [
         Target(
             Stats(
                 TargetStat {
-                    kind: OST,
+                    kind: Ost,
                     param: Param(
                         "stats",
                     ),
@@ -127,7 +128,7 @@ expression: result
         Target(
             BrwStats(
                 TargetStat {
-                    kind: OST,
+                    kind: Ost,
                     param: Param(
                         "brw_stats",
                     ),
@@ -404,7 +405,7 @@ expression: result
         Target(
             FilesFree(
                 TargetStat {
-                    kind: OST,
+                    kind: Ost,
                     param: Param(
                         "filesfree",
                     ),
@@ -418,7 +419,7 @@ expression: result
         Target(
             FilesTotal(
                 TargetStat {
-                    kind: OST,
+                    kind: Ost,
                     param: Param(
                         "filestotal",
                     ),
@@ -432,7 +433,7 @@ expression: result
         Target(
             FsType(
                 TargetStat {
-                    kind: OST,
+                    kind: Ost,
                     param: Param(
                         "fstype",
                     ),
@@ -446,7 +447,7 @@ expression: result
         Target(
             BytesAvail(
                 TargetStat {
-                    kind: OST,
+                    kind: Ost,
                     param: Param(
                         "kbytesavail",
                     ),
@@ -460,7 +461,7 @@ expression: result
         Target(
             BytesFree(
                 TargetStat {
-                    kind: OST,
+                    kind: Ost,
                     param: Param(
                         "kbytesfree",
                     ),
@@ -474,7 +475,7 @@ expression: result
         Target(
             BytesTotal(
                 TargetStat {
-                    kind: OST,
+                    kind: Ost,
                     param: Param(
                         "kbytestotal",
                     ),
@@ -488,7 +489,7 @@ expression: result
         Target(
             NumExports(
                 TargetStat {
-                    kind: OST,
+                    kind: Ost,
                     param: Param(
                         "num_exports",
                     ),
@@ -502,7 +503,7 @@ expression: result
         Target(
             TotDirty(
                 TargetStat {
-                    kind: OST,
+                    kind: Ost,
                     param: Param(
                         "tot_dirty",
                     ),
@@ -516,7 +517,7 @@ expression: result
         Target(
             TotGranted(
                 TargetStat {
-                    kind: OST,
+                    kind: Ost,
                     param: Param(
                         "tot_granted",
                     ),
@@ -530,7 +531,7 @@ expression: result
         Target(
             TotPending(
                 TargetStat {
-                    kind: OST,
+                    kind: Ost,
                     param: Param(
                         "tot_pending",
                     ),

@@ -1,4 +1,4 @@
-// Copyright (c) 2020 DDN. All rights reserved.
+// Copyright (c) 2021 DDN. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
@@ -10,6 +10,7 @@ pub mod mgs;
 mod node_stats_parsers;
 mod oss;
 pub mod parser;
+pub mod recovery_status_parser;
 mod snapshot_time;
 mod stats_parser;
 mod top_level_parser;
@@ -23,7 +24,7 @@ use std::{io, str};
 pub use types::*;
 
 fn check_output(records: Vec<Record>, state: &str) -> Result<Vec<Record>, LustreCollectorError> {
-    if state != "" {
+    if !state.is_empty() {
         return Err(io::Error::new(
             io::ErrorKind::InvalidInput,
             format!("Content left in input buffer: {}", state),
@@ -52,4 +53,17 @@ pub fn parse_mgs_fs_output(mgs_fs_output: &[u8]) -> Result<Vec<Record>, LustreCo
         .map_err(|err| err.map_position(|p| p.translate_position(mgs_fs)))?;
 
     check_output(mgs_fs_record, state)
+}
+
+pub fn parse_recovery_status_output(
+    recovery_status_output: &[u8],
+) -> Result<Vec<Record>, LustreCollectorError> {
+    let recovery_status = str::from_utf8(recovery_status_output)?;
+    let recovery_status = recovery_status.trim();
+
+    let (recovery_statuses, state) = recovery_status_parser::parse()
+        .easy_parse(recovery_status)
+        .map_err(|err| err.map_position(|p| p.translate_position(recovery_status)))?;
+
+    check_output(recovery_statuses, state)
 }
