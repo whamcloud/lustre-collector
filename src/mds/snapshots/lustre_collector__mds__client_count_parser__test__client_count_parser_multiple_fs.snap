@@ -1,13 +1,14 @@
 ---
 source: src/mds/client_count_parser.rs
 expression: result
+
 ---
 (
     [
         Target(
             ConnectedClients(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "connected_clients",
                     ),
@@ -21,7 +22,7 @@ expression: result
         Target(
             ConnectedClients(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "connected_clients",
                     ),

@@ -1,11 +1,12 @@
-// Copyright (c) 2019 DDN. All rights reserved.
+// Copyright (c) 2021 DDN. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
 use clap::{arg_enum, value_t, App, Arg};
 use lustre_collector::{
     error::LustreCollectorError, mgs::mgs_fs_parser, parse_lctl_output, parse_lnetctl_output,
-    parse_mgs_fs_output, parser, types::Record,
+    parse_mgs_fs_output, parse_recovery_status_output, parser, recovery_status_parser,
+    types::Record,
 };
 use std::{
     error::Error as _,
@@ -40,6 +41,15 @@ fn get_lctl_mgs_fs_output() -> Result<Vec<u8>, LustreCollectorError> {
     Ok(r.stdout)
 }
 
+fn get_recovery_status_output() -> Result<Vec<u8>, LustreCollectorError> {
+    let r = Command::new("lctl")
+        .arg("get_param")
+        .args(recovery_status_parser::params())
+        .output()?;
+
+    Ok(r.stdout)
+}
+
 fn main() {
     let variants = &Format::variants()
         .iter()
@@ -47,7 +57,7 @@ fn main() {
         .collect::<Vec<_>>();
 
     let matches = App::new("lustre_collector")
-        .version("0.2.17")
+        .version("0.3.0")
         .author("IML Team")
         .about("Grabs various Lustre statistics for display in JSON or YAML")
         .arg(
@@ -77,6 +87,14 @@ fn main() {
         Ok(lctl_record)
     });
 
+    let recovery_status_handle =
+        thread::spawn(move || -> Result<Vec<Record>, LustreCollectorError> {
+            let recovery_status_output = get_recovery_status_output()?;
+            let recovery_statuses = parse_recovery_status_output(&recovery_status_output)?;
+
+            Ok(recovery_statuses)
+        });
+
     let lnetctl_output = Command::new("lnetctl")
         .arg("export")
         .output()
@@ -91,8 +109,11 @@ fn main() {
 
     let mut mgs_fs_record = mgs_fs_handle.join().unwrap().unwrap_or_default();
 
+    let mut recovery_status_records = recovery_status_handle.join().unwrap().unwrap_or_default();
+
     lctl_record.append(&mut lnet_record);
     lctl_record.append(&mut mgs_fs_record);
+    lctl_record.append(&mut recovery_status_records);
 
     let r = match format {
         Format::Json => {

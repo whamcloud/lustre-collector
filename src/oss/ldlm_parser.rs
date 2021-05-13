@@ -1,4 +1,4 @@
-// Copyright (c) 2018 DDN. All rights reserved.
+// Copyright (c) 2021 DDN. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
@@ -61,8 +61,8 @@ where
     (
         string("ldlm.namespaces."),
         choice((
-            string("mdt-").map(|_| TargetVariant::MDT),
-            string("filter-").map(|_| TargetVariant::OST),
+            string("mdt-").map(|_| TargetVariant::Mdt),
+            string("filter-").map(|_| TargetVariant::Ost),
         ))
         .and(target()),
     )

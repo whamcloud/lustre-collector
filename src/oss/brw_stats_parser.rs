@@ -1,4 +1,4 @@
-// Copyright (c) 2018 DDN. All rights reserved.
+// Copyright (c) 2021 DDN. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
@@ -23,7 +23,7 @@ fn human_to_bytes((x, y): (u64, Option<char>)) -> u64 {
         Some('K') | Some('k') => 2_u64.pow(10),
         Some('M') | Some('m') => 2_u64.pow(20),
         Some('G') | Some('g') => 2_u64.pow(30),
-        Some(x) => panic!(format!("Conversion to : {} not covered", x)),
+        Some(x) => panic!("Conversion to : {} not covered", x),
     };
 
     x * mult

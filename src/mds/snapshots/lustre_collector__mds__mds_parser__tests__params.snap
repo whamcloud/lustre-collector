@@ -1,13 +1,14 @@
 ---
 source: src/mds/mds_parser.rs
 expression: result
+
 ---
 (
     [
         Target(
             Stats(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "md_stats",
                     ),
@@ -31,7 +32,7 @@ expression: result
         Target(
             Stats(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "md_stats",
                     ),
@@ -55,7 +56,7 @@ expression: result
         Target(
             Stats(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "md_stats",
                     ),
@@ -79,7 +80,7 @@ expression: result
         Target(
             NumExports(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "num_exports",
                     ),
@@ -93,7 +94,7 @@ expression: result
         Target(
             NumExports(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "num_exports",
                     ),
@@ -107,7 +108,7 @@ expression: result
         Target(
             NumExports(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "num_exports",
                     ),
@@ -121,7 +122,7 @@ expression: result
         Target(
             FilesFree(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "filesfree",
                     ),
@@ -135,7 +136,7 @@ expression: result
         Target(
             FilesTotal(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "filestotal",
                     ),
@@ -149,7 +150,7 @@ expression: result
         Target(
             FilesFree(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "filesfree",
                     ),
@@ -163,7 +164,7 @@ expression: result
         Target(
             FilesTotal(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "filestotal",
                     ),
@@ -177,7 +178,7 @@ expression: result
         Target(
             FilesFree(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "filesfree",
                     ),
@@ -191,7 +192,7 @@ expression: result
         Target(
             FilesTotal(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "filestotal",
                     ),
@@ -205,7 +206,7 @@ expression: result
         Target(
             BytesAvail(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "kbytesavail",
                     ),
@@ -219,7 +220,7 @@ expression: result
         Target(
             BytesFree(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "kbytesfree",
                     ),
@@ -233,7 +234,7 @@ expression: result
         Target(
             BytesTotal(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "kbytestotal",
                     ),
@@ -247,7 +248,7 @@ expression: result
         Target(
             BytesAvail(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "kbytesavail",
                     ),
@@ -261,7 +262,7 @@ expression: result
         Target(
             BytesFree(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "kbytesfree",
                     ),
@@ -275,7 +276,7 @@ expression: result
         Target(
             BytesTotal(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "kbytestotal",
                     ),
@@ -289,7 +290,7 @@ expression: result
         Target(
             BytesAvail(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "kbytesavail",
                     ),
@@ -303,7 +304,7 @@ expression: result
         Target(
             BytesFree(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "kbytesfree",
                     ),
@@ -317,7 +318,7 @@ expression: result
         Target(
             BytesTotal(
                 TargetStat {
-                    kind: MDT,
+                    kind: Mdt,
                     param: Param(
                         "kbytestotal",
                     ),

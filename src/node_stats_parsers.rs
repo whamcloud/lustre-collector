@@ -1,4 +1,4 @@
-// Copyright (c) 2020 DDN. All rights reserved.
+// Copyright (c) 2021 DDN. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
@@ -28,7 +28,7 @@ pub fn parse_cpustats_output(output: &[u8]) -> Result<Vec<Record>, LustreCollect
         .easy_parse(output)
         .map_err(|err| err.map_position(|p| p.translate_position(output)))?;
 
-    if state != "" {
+    if !state.is_empty() {
         return Err(io::Error::new(
             io::ErrorKind::InvalidInput,
             format!("Content left in input buffer: {}", state),
@@ -80,7 +80,7 @@ pub fn parse_meminfo_output(output: &[u8]) -> Result<Vec<Record>, LustreCollecto
         .easy_parse(output)
         .map_err(|err| err.map_position(|p| p.translate_position(output)))?;
 
-    if state != "" {
+    if !state.is_empty() {
         return Err(io::Error::new(
             io::ErrorKind::InvalidInput,
             format!("Content left in input buffer: {}", state),
@@ -108,7 +108,7 @@ where
         )),
         newline(),
     )
-    .map(|xs: Vec<_>| xs.into_iter().filter_map(|x| x).collect())
+    .map(|xs: Vec<_>| xs.into_iter().flatten().collect())
 }
 
 fn parse_meminfo_line<I>() -> impl Parser<I, Output = Record>

@@ -1,7 +1,12 @@
-// Copyright (c) 2018 DDN. All rights reserved.
+// Copyright (c) 2021 DDN. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
+use crate::{
+    base_parsers::{digits, not_words, word},
+    snapshot_time::snapshot_time,
+    types::Stat,
+};
 use combine::{
     between,
     error::ParseError,
@@ -12,12 +17,6 @@ use combine::{
     },
     stream::Stream,
     token, Parser,
-};
-
-use crate::{
-    base_parsers::{digits, not_words, word},
-    snapshot_time::snapshot_time,
-    types::Stat,
 };
 
 fn name_count_units<I>() -> impl Parser<I, Output = (String, u64, String)>

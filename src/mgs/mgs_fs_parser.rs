@@ -1,4 +1,4 @@
-// Copyright (c) 2018 DDN. All rights reserved.
+// Copyright (c) 2021 DDN. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
@@ -86,7 +86,7 @@ where
                     .into_iter()
                     .map(|(target, fs_name)| {
                         TargetStats::FsNames(TargetStat {
-                            kind: TargetVariant::MGT,
+                            kind: TargetVariant::Mgt,
                             target,
                             param: param.clone(),
                             value: fs_name,
@@ -102,7 +102,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use combine::{many, parser::EasyParser};
+    use combine::parser::EasyParser;
 
     #[test]
     fn test_single_mounted_fs() {
@@ -110,12 +110,11 @@ mod tests {
 mgs.MGS.live.params
 "#;
 
-        let result: (Vec<_>, _) = many(parse()).easy_parse(x).unwrap();
-        let records = result.0.into_iter().flatten().collect::<Vec<Record>>();
+        let (records, _): (Vec<_>, _) = parse().easy_parse(x).unwrap();
 
         assert_eq!(
             vec![Record::Target(TargetStats::FsNames(TargetStat {
-                kind: TargetVariant::MGT,
+                kind: TargetVariant::Mgt,
                 param: Param("fsnames".into()),
                 target: Target("MGS".into()),
                 value: vec![FsName("fs".into())],
@@ -131,12 +130,11 @@ mgs.MGS.live.fs2
 mgs.MGS.live.params
 "#;
 
-        let result: (Vec<_>, _) = many(parse()).easy_parse(x).unwrap();
-        let records = result.0.into_iter().flatten().collect::<Vec<Record>>();
+        let (records, _): (Vec<_>, _) = parse().easy_parse(x).unwrap();
 
         assert_eq!(
             vec![Record::Target(TargetStats::FsNames(TargetStat {
-                kind: TargetVariant::MGT,
+                kind: TargetVariant::Mgt,
                 param: Param("fsnames".into()),
                 target: Target("MGS".into()),
                 value: vec![FsName("fs".into()), FsName("fs2".into())],
@@ -154,8 +152,8 @@ mgs.MGS.live.params
 mgs.MGS2.live.mgs2fs2
 "#;
 
-        let result: (Vec<_>, _) = many(parse()).easy_parse(x).unwrap();
-        let mut records = result.0.into_iter().flatten().collect::<Vec<Record>>();
+        let (mut records, _): (Vec<_>, _) = parse().easy_parse(x).unwrap();
+
         records.sort_by(|a, b| {
             let record_a = match a {
                 Record::Target(TargetStats::FsNames(x)) => x,
@@ -175,13 +173,13 @@ mgs.MGS2.live.mgs2fs2
         assert_eq!(
             vec![
                 Record::Target(TargetStats::FsNames(TargetStat {
-                    kind: TargetVariant::MGT,
+                    kind: TargetVariant::Mgt,
                     param: Param("fsnames".into()),
                     target: Target("MGS".into()),
                     value: vec![FsName("fs".into()), FsName("fs2".into())],
                 })),
                 Record::Target(TargetStats::FsNames(TargetStat {
-                    kind: TargetVariant::MGT,
+                    kind: TargetVariant::Mgt,
                     param: Param("fsnames".into()),
                     target: Target("MGS2".into()),
                     value: vec![FsName("mgs2fs1".into()), FsName("mgs2fs2".into())],

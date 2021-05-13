@@ -1,13 +1,14 @@
 ---
 source: src/mgs/mgs_parser.rs
 expression: result
+
 ---
 (
     [
         Target(
             Stats(
                 TargetStat {
-                    kind: MGT,
+                    kind: Mgt,
                     param: Param(
                         "stats",
                     ),
@@ -260,7 +261,7 @@ expression: result
         Target(
             ThreadsMax(
                 TargetStat {
-                    kind: MGT,
+                    kind: Mgt,
                     param: Param(
                         "threads_max",
                     ),
@@ -274,7 +275,7 @@ expression: result
         Target(
             ThreadsMin(
                 TargetStat {
-                    kind: MGT,
+                    kind: Mgt,
                     param: Param(
                         "threads_min",
                     ),
@@ -288,7 +289,7 @@ expression: result
         Target(
             ThreadsStarted(
                 TargetStat {
-                    kind: MGT,
+                    kind: Mgt,
                     param: Param(
                         "threads_started",
                     ),
@@ -302,7 +303,7 @@ expression: result
         Target(
             NumExports(
                 TargetStat {
-                    kind: MGT,
+                    kind: Mgt,
                     param: Param(
                         "num_exports",
                     ),
