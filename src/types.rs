@@ -124,8 +124,6 @@ pub mod lnet_exports {
         pub tunables: Tunables,
         #[serde(rename = "dev cpt")]
         pub dev_cpt: i64,
-        #[serde(rename = "tcp bonding")]
-        pub tcp_bonding: i64,
         #[serde(rename = "CPT")]
         pub cpt: String,
         pub interfaces: Option<HashMap<i64, String>>,
