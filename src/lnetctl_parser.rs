@@ -356,4 +356,470 @@ global:
 
         assert_debug_snapshot!(x);
     }
+
+    #[test]
+    fn test_lnet_export_parse_no_bonding() {
+        let x = parse(
+            r#"net:
+    - net type: lo
+      local NI(s):
+        - nid: 0@lo
+          status: up
+          statistics:
+              send_count: 9
+              recv_count: 8
+              drop_count: 1
+          sent_stats:
+              put: 9
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          received_stats:
+              put: 8
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          dropped_stats:
+              put: 1
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          health stats:
+              health value: 800
+              interrupts: 0
+              dropped: 0
+              aborted: 0
+              no route: 0
+              timeouts: 0
+              error: 0
+          tunables:
+              peer_timeout: 0
+              peer_credits: 0
+              peer_buffer_credits: 0
+              credits: 0
+          dev cpt: 0
+          CPT: "[0,1,2,3,4]"
+    - net type: tcp
+      local NI(s):
+        - nid: 10.36.4.130@tcp
+          status: up
+          statistics:
+              send_count: 0
+              recv_count: 0
+              drop_count: 0
+          sent_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          received_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          dropped_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          health stats:
+              health value: 1000
+              interrupts: 0
+              dropped: 0
+              aborted: 0
+              no route: 0
+              timeouts: 0
+              error: 0
+          tunables:
+              peer_timeout: 180
+              peer_credits: 8
+              peer_buffer_credits: 0
+              credits: 256
+          dev cpt: -1
+          CPT: "[0,1,2,3,4]"
+peer:
+    - primary nid: 172.16.252.131@o2ib
+      Multi-Rail: False
+      peer ni:
+        - nid: 172.16.252.131@o2ib
+          state: NA
+          max_ni_tx_credits: 0
+          available_tx_credits: 0
+          min_tx_credits: 0
+          tx_q_num_of_buf: 0
+          available_rtr_credits: 0
+          min_rtr_credits: 0
+          refcount: 2
+          statistics:
+              send_count: 0
+              recv_count: 0
+              drop_count: 0
+          sent_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          received_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          dropped_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          health stats:
+              health value: 1000
+              dropped: 0
+              timeout: 0
+              error: 0
+              network timeout: 0
+    - primary nid: 0@lo
+      Multi-Rail: False
+      peer ni:
+        - nid: 0@lo
+          state: NA
+          max_ni_tx_credits: 0
+          available_tx_credits: 0
+          min_tx_credits: 0
+          tx_q_num_of_buf: 0
+          available_rtr_credits: 0
+          min_rtr_credits: 0
+          refcount: 1
+          statistics:
+              send_count: 0
+              recv_count: 8
+              drop_count: 0
+          sent_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          received_stats:
+              put: 8
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          dropped_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          health stats:
+              health value: 1000
+              dropped: 0
+              timeout: 0
+              error: 0
+              network timeout: 0
+    - primary nid: 172.16.253.131@o2ib
+      Multi-Rail: False
+      peer ni:
+        - nid: 172.16.253.131@o2ib
+          state: NA
+          max_ni_tx_credits: 0
+          available_tx_credits: 0
+          min_tx_credits: 0
+          tx_q_num_of_buf: 0
+          available_rtr_credits: 0
+          min_rtr_credits: 0
+          refcount: 2
+          statistics:
+              send_count: 0
+              recv_count: 0
+              drop_count: 0
+          sent_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          received_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          dropped_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          health stats:
+              health value: 1000
+              dropped: 0
+              timeout: 0
+              error: 0
+              network timeout: 0
+    - primary nid: 172.16.252.133@o2ib
+      Multi-Rail: False
+      peer ni:
+        - nid: 172.16.252.133@o2ib
+          state: NA
+          max_ni_tx_credits: 0
+          available_tx_credits: 0
+          min_tx_credits: 0
+          tx_q_num_of_buf: 0
+          available_rtr_credits: 0
+          min_rtr_credits: 0
+          refcount: 2
+          statistics:
+              send_count: 0
+              recv_count: 0
+              drop_count: 0
+          sent_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          received_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          dropped_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          health stats:
+              health value: 1000
+              dropped: 0
+              timeout: 0
+              error: 0
+              network timeout: 0
+    - primary nid: 172.16.253.130@o2ib
+      Multi-Rail: False
+      peer ni:
+        - nid: 172.16.253.130@o2ib
+          state: NA
+          max_ni_tx_credits: 0
+          available_tx_credits: 0
+          min_tx_credits: 0
+          tx_q_num_of_buf: 0
+          available_rtr_credits: 0
+          min_rtr_credits: 0
+          refcount: 2
+          statistics:
+              send_count: 0
+              recv_count: 0
+              drop_count: 0
+          sent_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          received_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          dropped_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          health stats:
+              health value: 1000
+              dropped: 0
+              timeout: 0
+              error: 0
+              network timeout: 0
+    - primary nid: 172.16.253.132@o2ib
+      Multi-Rail: False
+      peer ni:
+        - nid: 172.16.253.132@o2ib
+          state: NA
+          max_ni_tx_credits: 0
+          available_tx_credits: 0
+          min_tx_credits: 0
+          tx_q_num_of_buf: 0
+          available_rtr_credits: 0
+          min_rtr_credits: 0
+          refcount: 2
+          statistics:
+              send_count: 0
+              recv_count: 0
+              drop_count: 0
+          sent_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          received_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          dropped_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          health stats:
+              health value: 1000
+              dropped: 0
+              timeout: 0
+              error: 0
+              network timeout: 0
+    - primary nid: 172.16.252.130@o2ib
+      Multi-Rail: False
+      peer ni:
+        - nid: 172.16.252.130@o2ib
+          state: NA
+          max_ni_tx_credits: 0
+          available_tx_credits: 0
+          min_tx_credits: 0
+          tx_q_num_of_buf: 0
+          available_rtr_credits: 0
+          min_rtr_credits: 0
+          refcount: 2
+          statistics:
+              send_count: 0
+              recv_count: 0
+              drop_count: 0
+          sent_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          received_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          dropped_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          health stats:
+              health value: 1000
+              dropped: 0
+              timeout: 0
+              error: 0
+              network timeout: 0
+    - primary nid: 172.16.253.133@o2ib
+      Multi-Rail: False
+      peer ni:
+        - nid: 172.16.253.133@o2ib
+          state: NA
+          max_ni_tx_credits: 0
+          available_tx_credits: 0
+          min_tx_credits: 0
+          tx_q_num_of_buf: 0
+          available_rtr_credits: 0
+          min_rtr_credits: 0
+          refcount: 2
+          statistics:
+              send_count: 0
+              recv_count: 0
+              drop_count: 0
+          sent_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          received_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          dropped_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          health stats:
+              health value: 1000
+              dropped: 0
+              timeout: 0
+              error: 0
+              network timeout: 0
+    - primary nid: 172.16.252.132@o2ib
+      Multi-Rail: False
+      peer ni:
+        - nid: 172.16.252.132@o2ib
+          state: NA
+          max_ni_tx_credits: 0
+          available_tx_credits: 0
+          min_tx_credits: 0
+          tx_q_num_of_buf: 0
+          available_rtr_credits: 0
+          min_rtr_credits: 0
+          refcount: 2
+          statistics:
+              send_count: 0
+              recv_count: 0
+              drop_count: 0
+          sent_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          received_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          dropped_stats:
+              put: 0
+              get: 0
+              reply: 0
+              ack: 0
+              hello: 0
+          health stats:
+              health value: 1000
+              dropped: 0
+              timeout: 0
+              error: 0
+              network timeout: 0
+global:
+    numa_range: 0
+    max_intf: 200
+    discovery: 1
+    drop_asym_route: 0
+    retry_count: 2
+    transaction_timeout: 50
+    health_sensitivity: 100
+    recovery_interval: 1
+    router_sensitivity: 100
+    lnd_timeout: 16
+    response_tracking: 3
+    recovery_limit: 0"#,
+        )
+        .unwrap();
+
+        assert_debug_snapshot!(x);
+    }
 }
