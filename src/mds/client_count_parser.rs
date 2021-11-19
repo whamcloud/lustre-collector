@@ -17,13 +17,13 @@ use combine::{
 };
 use std::{collections::BTreeMap, ops::Add};
 
-pub const EXPORTS: &str = "exports";
+pub(crate) const EXPORTS: &str = "exports";
 
-pub fn params() -> Vec<String> {
+pub(crate) fn params() -> Vec<String> {
     vec![format!("mdt.*.{}.*.uuid", EXPORTS)]
 }
 
-pub fn parse<I>() -> impl Parser<I, Output = Vec<Record>>
+pub(crate) fn parse<I>() -> impl Parser<I, Output = Vec<Record>>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -77,7 +77,7 @@ where
     )))
 }
 
-pub fn exports<I>() -> impl Parser<I, Output = ()>
+pub(crate) fn exports<I>() -> impl Parser<I, Output = ()>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -99,7 +99,7 @@ where
 }
 
 #[cfg(test)]
-pub mod test {
+mod test {
     use super::*;
     use combine::parser::EasyParser;
     use insta::assert_debug_snapshot;

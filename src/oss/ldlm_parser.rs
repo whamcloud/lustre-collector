@@ -15,20 +15,19 @@ use crate::{
     types::{Param, Record, Target, TargetStat, TargetStats, TargetVariant},
 };
 
-pub const CONTENDED_LOCKS: &str = "contended_locks";
-pub const CONTENTION_SECONDS: &str = "contention_seconds";
-pub const CTIME_AGE_LIMIT: &str = "ctime_age_limit";
-pub const EARLY_LOCK_CANCEL: &str = "early_lock_cancel";
-pub const LOCK_COUNT: &str = "lock_count";
-pub const LOCK_TIMEOUTS: &str = "lock_timeouts";
-pub const LOCK_UNUSED_COUNT: &str = "lock_unused_count";
-pub const LRU_MAX_AGE: &str = "lru_max_age";
-pub const LRU_SIZE: &str = "lru_size";
-pub const MAX_NOLOCK_BYTES: &str = "max_nolock_bytes";
-pub const MAX_PARALLEL_AST: &str = "max_parallel_ast";
-pub const RESOURCE_COUNT: &str = "resource_count";
-
-pub const LDLM_STATS: [&str; 12] = [
+pub(crate) const CONTENDED_LOCKS: &str = "contended_locks";
+pub(crate) const CONTENTION_SECONDS: &str = "contention_seconds";
+pub(crate) const CTIME_AGE_LIMIT: &str = "ctime_age_limit";
+pub(crate) const EARLY_LOCK_CANCEL: &str = "early_lock_cancel";
+pub(crate) const LOCK_COUNT: &str = "lock_count";
+pub(crate) const LOCK_TIMEOUTS: &str = "lock_timeouts";
+pub(crate) const LOCK_UNUSED_COUNT: &str = "lock_unused_count";
+pub(crate) const LRU_MAX_AGE: &str = "lru_max_age";
+pub(crate) const LRU_SIZE: &str = "lru_size";
+pub(crate) const MAX_NOLOCK_BYTES: &str = "max_nolock_bytes";
+pub(crate) const MAX_PARALLEL_AST: &str = "max_parallel_ast";
+pub(crate) const RESOURCE_COUNT: &str = "resource_count";
+pub(crate) const LDLM_STATS: [&str; 12] = [
     CONTENDED_LOCKS,
     CONTENTION_SECONDS,
     CTIME_AGE_LIMIT,
@@ -45,7 +44,7 @@ pub const LDLM_STATS: [&str; 12] = [
 
 /// Takes LDLM_STATS and produces a list of params for
 /// consumption in proper ltcl get_param format.
-pub fn ldlm_params() -> Vec<String> {
+pub(crate) fn ldlm_params() -> Vec<String> {
     LDLM_STATS
         .iter()
         .map(|x| format!("ldlm.namespaces.{{mdt-,filter-}}*.{}", x))
@@ -53,7 +52,7 @@ pub fn ldlm_params() -> Vec<String> {
 }
 
 /// Parses the name of the target
-pub fn ldlm_target<I>() -> impl Parser<I, Output = (TargetVariant, Target)>
+pub(crate) fn ldlm_target<I>() -> impl Parser<I, Output = (TargetVariant, Target)>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -78,7 +77,7 @@ where
         .message("while parsing lock_namespaces")
 }
 
-pub fn ldlm_stat<I>() -> impl Parser<I, Output = (Param, u64)>
+pub(crate) fn ldlm_stat<I>() -> impl Parser<I, Output = (Param, u64)>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -99,7 +98,7 @@ where
     ))
 }
 
-pub fn parse<I>() -> impl Parser<I, Output = Record>
+pub(crate) fn parse<I>() -> impl Parser<I, Output = Record>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,

@@ -138,7 +138,7 @@ mod tests {
     use insta::assert_debug_snapshot;
 
     #[test]
-    fn test_params() {
+    fn test_parse() {
         let x = r#"mgs.MGS.mgs.stats=
 snapshot_time             1596728874.484750908 secs.nsecs
 req_waittime              31280 samples [usec] 11 2695 5020274 1032267156

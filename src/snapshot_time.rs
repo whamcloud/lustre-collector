@@ -8,7 +8,7 @@ use combine::parser::char::{spaces, string};
 use combine::stream::Stream;
 use combine::{optional, token, Parser};
 
-pub fn snapshot_time<I>() -> impl Parser<I, Output = String>
+pub(crate) fn snapshot_time<I>() -> impl Parser<I, Output = String>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,

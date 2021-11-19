@@ -16,14 +16,14 @@ use combine::{
     Parser,
 };
 
-pub const JOB_STATS: &str = "job_stats";
-pub const STATS: &str = "md_stats";
-pub const NUM_EXPORTS: &str = "num_exports";
-pub const FILES_FREE: &str = "filesfree";
-pub const FILES_TOTAL: &str = "filestotal";
-pub const KBYTES_AVAIL: &str = "kbytesavail";
-pub const KBYTES_FREE: &str = "kbytesfree";
-pub const KBYTES_TOTAL: &str = "kbytestotal";
+pub(crate) const JOB_STATS: &str = "job_stats";
+pub(crate) const STATS: &str = "md_stats";
+pub(crate) const NUM_EXPORTS: &str = "num_exports";
+pub(crate) const FILES_FREE: &str = "filesfree";
+pub(crate) const FILES_TOTAL: &str = "filestotal";
+pub(crate) const KBYTES_AVAIL: &str = "kbytesavail";
+pub(crate) const KBYTES_FREE: &str = "kbytesfree";
+pub(crate) const KBYTES_TOTAL: &str = "kbytestotal";
 
 enum MdtStat {
     JobStats(Option<Vec<JobStatMdt>>),
@@ -86,7 +86,7 @@ where
     ))
 }
 
-pub fn params() -> Vec<String> {
+pub(crate) fn params() -> Vec<String> {
     [
         format!("mdt.*.{}", JOB_STATS),
         format!("mdt.*.{}", STATS),
@@ -115,7 +115,7 @@ where
         .message("while parsing target_name")
 }
 
-pub fn parse<I>() -> impl Parser<I, Output = Record>
+pub(crate) fn parse<I>() -> impl Parser<I, Output = Record>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,

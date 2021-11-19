@@ -101,7 +101,7 @@ where
         )
 }
 
-pub fn stats<I>() -> impl Parser<I, Output = Vec<Stat>>
+pub(crate) fn stats<I>() -> impl Parser<I, Output = Vec<Stat>>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,

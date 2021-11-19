@@ -162,7 +162,7 @@ mod tests {
     use combine::parser::EasyParser;
     use insta::assert_debug_snapshot;
 
-    const PROC_MEMINFO: &'static str = r#"MemTotal:        5943788 kB
+    const PROC_MEMINFO: &str = r#"MemTotal:        5943788 kB
 MemFree:         4420248 kB
 MemAvailable:    4707828 kB
 Buffers:            5196 kB

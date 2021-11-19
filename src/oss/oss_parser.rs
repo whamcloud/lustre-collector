@@ -8,14 +8,14 @@ use crate::{
 };
 use combine::{choice, error::ParseError, Parser, Stream};
 
-pub fn params() -> Vec<String> {
+pub(crate) fn params() -> Vec<String> {
     let mut a = obdfilter_parser::obd_params();
     a.extend(ldlm_parser::ldlm_params());
 
     a
 }
 
-pub fn parse<I>() -> impl Parser<I, Output = Record>
+pub(crate) fn parse<I>() -> impl Parser<I, Output = Record>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
