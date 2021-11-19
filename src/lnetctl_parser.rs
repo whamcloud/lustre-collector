@@ -10,7 +10,7 @@ use crate::{
     LustreCollectorError,
 };
 
-pub fn build_lnet_stats(x: &Net) -> Vec<Record> {
+pub(crate) fn build_lnet_stats(x: &Net) -> Vec<Record> {
     x.local_nis
         .iter()
         .flat_map(|y| {

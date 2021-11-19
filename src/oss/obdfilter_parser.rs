@@ -19,21 +19,21 @@ use combine::{
     Parser,
 };
 
-pub const JOBSTATS: &str = "job_stats";
-pub const STATS: &str = "stats";
-pub const BRW_STATS: &str = "brw_stats";
-pub const FILES_FREE: &str = "filesfree";
-pub const FILES_TOTAL: &str = "filestotal";
-pub const FS_TYPE: &str = "fstype";
-pub const KBYTES_AVAIL: &str = "kbytesavail";
-pub const KBYTES_FREE: &str = "kbytesfree";
-pub const KBYTES_TOTAL: &str = "kbytestotal";
-pub const NUM_EXPORTS: &str = "num_exports";
-pub const TOT_DIRTY: &str = "tot_dirty";
-pub const TOT_GRANTED: &str = "tot_granted";
-pub const TOT_PENDING: &str = "tot_pending";
+pub(crate) const JOBSTATS: &str = "job_stats";
+pub(crate) const STATS: &str = "stats";
+pub(crate) const BRW_STATS: &str = "brw_stats";
+pub(crate) const FILES_FREE: &str = "filesfree";
+pub(crate) const FILES_TOTAL: &str = "filestotal";
+pub(crate) const FS_TYPE: &str = "fstype";
+pub(crate) const KBYTES_AVAIL: &str = "kbytesavail";
+pub(crate) const KBYTES_FREE: &str = "kbytesfree";
+pub(crate) const KBYTES_TOTAL: &str = "kbytestotal";
+pub(crate) const NUM_EXPORTS: &str = "num_exports";
+pub(crate) const TOT_DIRTY: &str = "tot_dirty";
+pub(crate) const TOT_GRANTED: &str = "tot_granted";
+pub(crate) const TOT_PENDING: &str = "tot_pending";
 
-pub const OBD_STATS: [&str; 13] = [
+pub(crate) const OBD_STATS: [&str; 13] = [
     JOBSTATS,
     STATS,
     BRW_STATS,
@@ -51,7 +51,7 @@ pub const OBD_STATS: [&str; 13] = [
 
 /// Takes OBD_STATS and produces a list of params for
 /// consumption in proper ltcl get_param format.
-pub fn obd_params() -> Vec<String> {
+pub(crate) fn obd_params() -> Vec<String> {
     OBD_STATS
         .iter()
         .map(|x| format!("obdfilter.*OST*.{}", x))
@@ -157,7 +157,7 @@ where
     .message("while parsing obdfilter")
 }
 
-pub fn parse<I>() -> impl Parser<I, Output = Record>
+pub(crate) fn parse<I>() -> impl Parser<I, Output = Record>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,

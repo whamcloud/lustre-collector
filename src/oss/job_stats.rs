@@ -15,7 +15,7 @@ use combine::{
     Parser,
 };
 
-pub fn parse<I>() -> impl Parser<I, Output = Option<Vec<JobStatOst>>>
+pub(crate) fn parse<I>() -> impl Parser<I, Output = Option<Vec<JobStatOst>>>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -36,7 +36,6 @@ where
 mod tests {
     use super::*;
     use crate::types::{BytesStat, ReqsStat};
-    use serde_yaml;
 
     #[test]
     fn test_yaml_deserialize() {

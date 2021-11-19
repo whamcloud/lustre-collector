@@ -2,8 +2,8 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-pub mod brw_stats_parser;
-pub mod job_stats;
-pub mod ldlm_parser;
-pub mod obdfilter_parser;
-pub mod oss_parser;
+pub(crate) mod brw_stats_parser;
+pub(crate) mod job_stats;
+pub(crate) mod ldlm_parser;
+pub(crate) mod obdfilter_parser;
+pub(crate) mod oss_parser;

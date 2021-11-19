@@ -16,7 +16,7 @@ use combine::{
 
 use crate::types::{Param, Target};
 
-pub fn period<I>() -> impl Parser<I, Output = char>
+pub(crate) fn period<I>() -> impl Parser<I, Output = char>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -24,7 +24,7 @@ where
     token('.')
 }
 
-pub fn equals<I>() -> impl Parser<I, Output = char>
+pub(crate) fn equals<I>() -> impl Parser<I, Output = char>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -32,7 +32,7 @@ where
     token('=')
 }
 
-pub fn word<I>() -> impl Parser<I, Output = String>
+pub(crate) fn word<I>() -> impl Parser<I, Output = String>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -40,7 +40,7 @@ where
     many1(alpha_num().or(token('_')))
 }
 
-pub fn words<I>() -> impl Parser<I, Output = String>
+pub(crate) fn words<I>() -> impl Parser<I, Output = String>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -49,7 +49,7 @@ where
 }
 
 /// Parses a target name
-pub fn target<I>() -> impl Parser<I, Output = Target>
+pub(crate) fn target<I>() -> impl Parser<I, Output = Target>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -59,7 +59,7 @@ where
 
 /// Takes many consecutive digits and
 /// returns them as u64
-pub fn digits<I>() -> impl Parser<I, Output = u64>
+pub(crate) fn digits<I>() -> impl Parser<I, Output = u64>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -67,7 +67,7 @@ where
     many1(digit()).map(|x: String| x.parse::<u64>().unwrap())
 }
 
-pub fn till_newline<I>() -> impl Parser<I, Output = String>
+pub(crate) fn till_newline<I>() -> impl Parser<I, Output = String>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -75,7 +75,7 @@ where
     take_until(newline())
 }
 
-pub fn till_period<I>() -> impl Parser<I, Output = String>
+pub(crate) fn till_period<I>() -> impl Parser<I, Output = String>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -83,7 +83,7 @@ where
     take_until(period())
 }
 
-pub fn till_equals<I>() -> impl Parser<I, Output = String>
+pub(crate) fn till_equals<I>() -> impl Parser<I, Output = String>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -91,7 +91,7 @@ where
     take_until(equals())
 }
 
-pub fn string_to<I>(x: &'static str, y: &'static str) -> impl Parser<I, Output = String>
+pub(crate) fn string_to<I>(x: &'static str, y: &'static str) -> impl Parser<I, Output = String>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -99,7 +99,7 @@ where
     string(x).map(move |_| String::from(y))
 }
 
-pub fn not_words<I>(xs: &'static [&'static str]) -> impl Parser<I, Output = String>
+pub(crate) fn not_words<I>(xs: &'static [&'static str]) -> impl Parser<I, Output = String>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
@@ -115,7 +115,7 @@ where
     }))
 }
 
-pub fn param<I>(x: &'static str) -> impl Parser<I, Output = Param>
+pub(crate) fn param<I>(x: &'static str) -> impl Parser<I, Output = Param>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,

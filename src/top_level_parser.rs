@@ -10,14 +10,14 @@ use combine::{
     choice, error::ParseError, optional, parser::char::newline, stream::Stream, token, Parser,
 };
 
-pub const MEMUSED_MAX: &str = "memused_max";
-pub const MEMUSED: &str = "memused";
-pub const LNET_MEMUSED: &str = "lnet_memused";
-pub const HEALTH_CHECK: &str = "health_check";
+pub(crate) const MEMUSED_MAX: &str = "memused_max";
+pub(crate) const MEMUSED: &str = "memused";
+pub(crate) const LNET_MEMUSED: &str = "lnet_memused";
+pub(crate) const HEALTH_CHECK: &str = "health_check";
 
-pub const TOP_LEVEL_PARAMS: [&str; 4] = [MEMUSED, MEMUSED_MAX, LNET_MEMUSED, HEALTH_CHECK];
+pub(crate) const TOP_LEVEL_PARAMS: [&str; 4] = [MEMUSED, MEMUSED_MAX, LNET_MEMUSED, HEALTH_CHECK];
 
-pub fn top_level_params() -> Vec<String> {
+pub(crate) fn top_level_params() -> Vec<String> {
     TOP_LEVEL_PARAMS.iter().map(|x| (*x).to_string()).collect()
 }
 
@@ -53,7 +53,7 @@ where
     .skip(newline())
 }
 
-pub fn parse<I>() -> impl Parser<I, Output = Record>
+pub(crate) fn parse<I>() -> impl Parser<I, Output = Record>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
