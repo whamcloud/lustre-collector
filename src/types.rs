@@ -208,13 +208,6 @@ pub mod lnet_exports {
     }
 
     #[derive(serde::Serialize, serde::Deserialize)]
-    pub struct LNetExport {
-        pub net: Option<Vec<Net>>,
-        pub peer: Option<Vec<Peer>>,
-        pub global: Option<Global>,
-    }
-
-    #[derive(serde::Serialize, serde::Deserialize)]
     pub struct LNetStatistics {
         pub send_count: i64,
         pub recv_count: i64,
