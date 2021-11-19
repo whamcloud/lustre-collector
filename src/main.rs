@@ -57,7 +57,7 @@ fn main() {
         .collect::<Vec<_>>();
 
     let matches = App::new("lustre_collector")
-        .version("0.4.0")
+        .version("0.5.0")
         .author("IML Team")
         .about("Grabs various Lustre statistics for display in JSON or YAML")
         .arg(
@@ -96,7 +96,7 @@ fn main() {
         });
 
     let lnetctl_output = Command::new("lnetctl")
-        .arg("export")
+        .args(["net", "show", "-v", "4"])
         .output()
         .expect("failed to get lnetctl stats");
 
