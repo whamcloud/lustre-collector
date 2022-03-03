@@ -1,0 +1,152 @@
+osd-ldiskfs.MGS.brw_stats=
+snapshot_time:         1646320893.429016423 (secs.nsecs)
+
+                           read      |     write
+pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
+
+                           read      |     write
+discontiguous pages    rpcs  % cum % |  rpcs        % cum %
+
+                           read      |     write
+discontiguous blocks   rpcs  % cum % |  rpcs        % cum %
+
+                           read      |     write
+disk fragmented I/Os   ios   % cum % |  ios         % cum %
+
+                           read      |     write
+disk I/Os in flight    ios   % cum % |  ios         % cum %
+
+                           read      |     write
+I/O time (1/1000s)     ios   % cum % |  ios         % cum %
+
+                           read      |     write
+disk I/O size          ios   % cum % |  ios         % cum %
+osd-ldiskfs.ai400x-MDT0000.brw_stats=
+snapshot_time:         1646320893.429234640 (secs.nsecs)
+
+                           read      |     write
+pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
+
+                           read      |     write
+discontiguous pages    rpcs  % cum % |  rpcs        % cum %
+
+                           read      |     write
+discontiguous blocks   rpcs  % cum % |  rpcs        % cum %
+
+                           read      |     write
+disk fragmented I/Os   ios   % cum % |  ios         % cum %
+
+                           read      |     write
+disk I/Os in flight    ios   % cum % |  ios         % cum %
+
+                           read      |     write
+I/O time (1/1000s)     ios   % cum % |  ios         % cum %
+
+                           read      |     write
+disk I/O size          ios   % cum % |  ios         % cum %
+osd-ldiskfs.ai400x-OST0000.brw_stats=
+snapshot_time:         1646320893.429454252 (secs.nsecs)
+
+                           read      |     write
+pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
+256:                 46518 100 100   |    0   0   0
+
+                           read      |     write
+discontiguous pages    rpcs  % cum % |  rpcs        % cum %
+0:                   46518 100 100   |    0   0   0
+
+                           read      |     write
+discontiguous blocks   rpcs  % cum % |  rpcs        % cum %
+0:                   46518 100 100   |    0   0   0
+
+                           read      |     write
+disk fragmented I/Os   ios   % cum % |  ios         % cum %
+1:                   46517 100 100   |    0   0   0
+
+                           read      |     write
+disk I/Os in flight    ios   % cum % |  ios         % cum %
+1:                     671   1   1   |    0   0   0
+2:                    2438   5   6   |    0   0   0
+3:                    4693  10  16   |    0   0   0
+4:                    6349  13  30   |    0   0   0
+5:                    7016  15  45   |    0   0   0
+6:                    6914  14  60   |    0   0   0
+7:                    5828  12  72   |    0   0   0
+8:                    4567   9  82   |    0   0   0
+9:                    3196   6  89   |    0   0   0
+10:                   2105   4  94   |    0   0   0
+11:                   1282   2  96   |    0   0   0
+12:                    751   1  98   |    0   0   0
+13:                    369   0  99   |    0   0   0
+14:                    208   0  99   |    0   0   0
+15:                     80   0  99   |    0   0   0
+16:                     31   0  99   |    0   0   0
+17:                     15   0  99   |    0   0   0
+18:                      5   0 100   |    0   0   0
+
+                           read      |     write
+I/O time (1/1000s)     ios   % cum % |  ios         % cum %
+1:                   45627  98  98   |    0   0   0
+2:                     790   1  99   |    0   0   0
+4:                      62   0  99   |    0   0   0
+8:                      27   0  99   |    0   0   0
+16:                      4   0  99   |    0   0   0
+32:                      7   0 100   |    0   0   0
+
+                           read      |     write
+disk I/O size          ios   % cum % |  ios         % cum %
+1M:                  46518 100 100   |    0   0   0
+osd-ldiskfs.ai400x-OST0001.brw_stats=
+snapshot_time:         1646320893.430413893 (secs.nsecs)
+
+                           read      |     write
+pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
+256:                 51649 100 100   |    0   0   0
+
+                           read      |     write
+discontiguous pages    rpcs  % cum % |  rpcs        % cum %
+0:                   51649 100 100   |    0   0   0
+
+                           read      |     write
+discontiguous blocks   rpcs  % cum % |  rpcs        % cum %
+0:                   51649 100 100   |    0   0   0
+
+                           read      |     write
+disk fragmented I/Os   ios   % cum % |  ios         % cum %
+1:                   51645 100 100   |    0   0   0
+
+                           read      |     write
+disk I/Os in flight    ios   % cum % |  ios         % cum %
+1:                     585   1   1   |    0   0   0
+2:                    2066   4   5   |    0   0   0
+3:                    4023   7  12   |    0   0   0
+4:                    5973  11  24   |    0   0   0
+5:                    6846  13  37   |    0   0   0
+6:                    7084  13  51   |    0   0   0
+7:                    6626  12  64   |    0   0   0
+8:                    5742  11  75   |    0   0   0
+9:                    4528   8  84   |    0   0   0
+10:                   3264   6  90   |    0   0   0
+11:                   2165   4  94   |    0   0   0
+12:                   1321   2  97   |    0   0   0
+13:                    732   1  98   |    0   0   0
+14:                    349   0  99   |    0   0   0
+15:                    186   0  99   |    0   0   0
+16:                     83   0  99   |    0   0   0
+17:                     42   0  99   |    0   0   0
+18:                     23   0  99   |    0   0   0
+19:                     10   0  99   |    0   0   0
+20:                      1   0 100   |    0   0   0
+
+                           read      |     write
+I/O time (1/1000s)     ios   % cum % |  ios         % cum %
+1:                   50622  98  98   |    0   0   0
+2:                     911   1  99   |    0   0   0
+4:                      74   0  99   |    0   0   0
+8:                      28   0  99   |    0   0   0
+16:                      4   0  99   |    0   0   0
+32:                      6   0 100   |    0   0   0
+
+                           read      |     write
+disk I/O size          ios   % cum % |  ios         % cum %
+1M:                  51649 100 100   |    0   0   0
