@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use clap::{arg_enum, value_t, App, Arg};
+use clap::{Arg, ArgEnum};
 use lustre_collector::{
     error::LustreCollectorError, mgs::mgs_fs_parser, parse_lctl_output, parse_lnetctl_output,
     parse_mgs_fs_output, parse_recovery_status_output, parser, recovery_status_parser,
@@ -10,15 +10,36 @@ use lustre_collector::{
 };
 use std::{
     error::Error as _,
+    fmt,
     process::{exit, Command},
-    str, thread,
+    str::{self, FromStr},
+    thread,
 };
 
-arg_enum! {
-    #[derive(PartialEq, Debug)]
-    enum Format {
-        Json,
-        Yaml
+#[derive(ArgEnum, PartialEq, Debug, Clone, Copy)]
+enum Format {
+    Json,
+    Yaml,
+}
+
+impl FromStr for Format {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s.to_lowercase().trim() {
+            "json" => Ok(Format::Json),
+            "yaml" => Ok(Format::Yaml),
+            _ => Err(format!("Could not convert {s} to format type")),
+        }
+    }
+}
+
+impl fmt::Display for Format {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Json => write!(f, "json"),
+            Self::Yaml => write!(f, "yaml"),
+        }
     }
 }
 
@@ -51,27 +72,27 @@ fn get_recovery_status_output() -> Result<Vec<u8>, LustreCollectorError> {
 }
 
 fn main() {
-    let variants = &Format::variants()
+    let variants = Format::value_variants()
         .iter()
-        .map(|x| x.to_ascii_lowercase())
+        .map(|x| x.to_string())
         .collect::<Vec<_>>();
 
-    let matches = App::new("lustre_collector")
-        .version("0.5.0")
-        .author("IML Team")
+    let matches = clap::Command::new("lustre_collector")
+        .version(clap::crate_version!())
+        .author("Whamcloud")
         .about("Grabs various Lustre statistics for display in JSON or YAML")
         .arg(
-            Arg::with_name("format")
-                .short("f")
+            Arg::new("format")
+                .short('f')
                 .long("format")
-                .possible_values(&variants.iter().map(|x| x.as_str()).collect::<Vec<_>>()[..])
+                .possible_values(&variants.iter().map(|x| x.as_str()).collect::<Vec<_>>())
                 .default_value(&variants[0])
                 .help("Sets the output formatting")
                 .takes_value(true),
         )
         .get_matches();
 
-    let format = value_t!(matches, "format", Format).unwrap_or_else(|e| e.exit());
+    let format = matches.value_of_t_or_exit("format");
 
     let handle = thread::spawn(move || -> Result<Vec<Record>, LustreCollectorError> {
         let lctl_output = get_lctl_output()?;
