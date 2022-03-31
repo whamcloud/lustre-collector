@@ -2,6 +2,7 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
+use crate::LustreCollectorError;
 use std::{fmt, ops::Deref};
 
 #[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
@@ -273,6 +274,29 @@ pub struct LNetStat<T> {
     pub nid: String,
     pub param: Param,
     pub value: T,
+}
+
+impl TryFrom<&Target> for TargetVariant {
+    type Error = LustreCollectorError;
+
+    fn try_from(x: &Target) -> Result<Self, Self::Error> {
+        let x = x.deref().to_lowercase();
+        let x = x.trim();
+
+        if x == "mgs" {
+            return Ok(TargetVariant::Mgt);
+        }
+
+        let target_name = x.rsplit_once('-').map(|(_, x)| x);
+
+        match target_name {
+            Some(x) if x.starts_with("ost") => Ok(TargetVariant::Ost),
+            Some(x) if x.starts_with("mdt") => Ok(TargetVariant::Mdt),
+            None | Some(_) => Err(LustreCollectorError::ConversionError(format!(
+                "Could not convert {x} to target variant"
+            ))),
+        }
+    }
 }
 
 #[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]

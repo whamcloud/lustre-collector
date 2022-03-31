@@ -5,6 +5,7 @@
 use crate::{
     mds::{client_count_parser, mds_parser},
     mgs::mgs_parser,
+    osd_parser,
     oss::oss_parser,
     top_level_parser,
     types::Record,
@@ -12,12 +13,15 @@ use crate::{
 use combine::{choice, error::ParseError, many, Parser, Stream};
 
 pub fn params() -> Vec<String> {
-    let mut a = top_level_parser::top_level_params();
-    a.extend(client_count_parser::params());
-    a.extend(mgs_parser::params());
-    a.extend(oss_parser::params());
-    a.extend(mds_parser::params());
-    a
+    top_level_parser::top_level_params()
+        .into_iter()
+        .chain(client_count_parser::params())
+        .chain(osd_parser::params())
+        .chain(client_count_parser::params())
+        .chain(mgs_parser::params())
+        .chain(oss_parser::params())
+        .chain(mds_parser::params())
+        .collect()
 }
 
 pub fn parse<I>() -> impl Parser<I, Output = Vec<Record>>
@@ -28,6 +32,7 @@ where
     many(choice((
         top_level_parser::parse().map(|x| vec![x]),
         client_count_parser::parse(),
+        osd_parser::parse().map(|x| vec![x]),
         mgs_parser::parse().map(|x| vec![x]),
         mds_parser::parse().map(|x| vec![x]),
         oss_parser::parse().map(|x| vec![x]),
