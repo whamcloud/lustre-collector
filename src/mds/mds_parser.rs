@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 use crate::{
-    base_parsers::{digits, param, period, target, till_period},
+    base_parsers::{digits, param, period, target},
     mds::job_stats,
     stats_parser::stats,
     types::{JobStatMdt, Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant},
@@ -91,11 +91,6 @@ pub(crate) fn params() -> Vec<String> {
         format!("mdt.*.{}", JOB_STATS),
         format!("mdt.*.{}", STATS),
         format!("mdt.*MDT*.{}", NUM_EXPORTS),
-        format!("osd-*.*MDT*.{}", FILES_FREE),
-        format!("osd-*.*MDT*.{}", FILES_TOTAL),
-        format!("osd-*.*MDT*.{}", KBYTES_AVAIL),
-        format!("osd-*.*MDT*.{}", KBYTES_FREE),
-        format!("osd-*.*MDT*.{}", KBYTES_TOTAL),
     ]
     .iter()
     .map(|x| x.to_owned())
@@ -108,7 +103,7 @@ where
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
-        attempt(choice((string("mdt"), string("osd-").skip(till_period())))).skip(period()),
+        attempt(string("mdt")).skip(period()),
         target().skip(period()),
     )
         .map(|(_, x)| x)
@@ -195,21 +190,6 @@ statfs                    20805 samples [reqs]
 mdt.fs-MDT0000.num_exports=16
 mdt.fs-MDT0001.num_exports=13
 mdt.fs-MDT0002.num_exports=13
-osd-ldiskfs.fs-MDT0000.filesfree=2095841
-osd-ldiskfs.fs-MDT0000.filestotal=2097152
-osd-ldiskfs.fs-MDT0001.filesfree=2096876
-osd-ldiskfs.fs-MDT0001.filestotal=2097152
-osd-ldiskfs.fs-MDT0002.filesfree=2096876
-osd-ldiskfs.fs-MDT0002.filestotal=2097152
-osd-ldiskfs.fs-MDT0000.kbytesavail=2584536
-osd-ldiskfs.fs-MDT0000.kbytesfree=2845104
-osd-ldiskfs.fs-MDT0000.kbytestotal=2913312
-osd-ldiskfs.fs-MDT0001.kbytesavail=2632508
-osd-ldiskfs.fs-MDT0001.kbytesfree=2893076
-osd-ldiskfs.fs-MDT0001.kbytestotal=2913312
-osd-ldiskfs.fs-MDT0002.kbytesavail=2632508
-osd-ldiskfs.fs-MDT0002.kbytesfree=2893076
-osd-ldiskfs.fs-MDT0002.kbytestotal=2913312
 "#;
 
         let result: (Vec<_>, _) = many(parse()).easy_parse(x).unwrap();

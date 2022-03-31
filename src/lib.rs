@@ -3,11 +3,13 @@
 // license that can be found in the LICENSE file.
 
 mod base_parsers;
+pub(crate) mod brw_stats_parser;
 pub mod error;
 mod lnetctl_parser;
 mod mds;
 pub mod mgs;
 mod node_stats_parsers;
+mod osd_parser;
 mod oss;
 pub mod parser;
 pub mod recovery_status_parser;

@@ -3,13 +3,10 @@
 // license that can be found in the LICENSE file.
 
 use crate::{
-    base_parsers::{digits, param, period, target, till_newline},
-    oss::brw_stats_parser::brw_stats,
+    base_parsers::{digits, param, period, target},
     oss::job_stats,
     stats_parser::stats,
-    types::{
-        BrwStats, JobStatOst, Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant,
-    },
+    types::{JobStatOst, Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant},
 };
 use combine::{
     choice,
@@ -21,28 +18,15 @@ use combine::{
 
 pub(crate) const JOBSTATS: &str = "job_stats";
 pub(crate) const STATS: &str = "stats";
-pub(crate) const BRW_STATS: &str = "brw_stats";
-pub(crate) const FILES_FREE: &str = "filesfree";
-pub(crate) const FILES_TOTAL: &str = "filestotal";
-pub(crate) const FS_TYPE: &str = "fstype";
-pub(crate) const KBYTES_AVAIL: &str = "kbytesavail";
-pub(crate) const KBYTES_FREE: &str = "kbytesfree";
-pub(crate) const KBYTES_TOTAL: &str = "kbytestotal";
+
 pub(crate) const NUM_EXPORTS: &str = "num_exports";
 pub(crate) const TOT_DIRTY: &str = "tot_dirty";
 pub(crate) const TOT_GRANTED: &str = "tot_granted";
 pub(crate) const TOT_PENDING: &str = "tot_pending";
 
-pub(crate) const OBD_STATS: [&str; 13] = [
+pub(crate) const OBD_STATS: [&str; 6] = [
     JOBSTATS,
     STATS,
-    BRW_STATS,
-    FILES_FREE,
-    FILES_TOTAL,
-    FS_TYPE,
-    KBYTES_AVAIL,
-    KBYTES_FREE,
-    KBYTES_TOTAL,
     NUM_EXPORTS,
     TOT_DIRTY,
     TOT_GRANTED,
@@ -54,7 +38,7 @@ pub(crate) const OBD_STATS: [&str; 13] = [
 pub(crate) fn obd_params() -> Vec<String> {
     OBD_STATS
         .iter()
-        .map(|x| format!("obdfilter.*OST*.{}", x))
+        .map(|x| format!("obdfilter.*OST*.{x}"))
         .collect()
 }
 
@@ -73,19 +57,6 @@ where
 enum ObdfilterStat {
     JobStats(Option<Vec<JobStatOst>>),
     Stats(Vec<Stat>),
-    BrwStats(Vec<BrwStats>),
-    /// Available inodes
-    FilesFree(u64),
-    /// Total inodes
-    FilesTotal(u64),
-    /// Type of target
-    FsType(String),
-    /// Available disk space
-    BytesAvail(u64),
-    /// Free disk space
-    BytesFree(u64),
-    /// Total disk space
-    BytesTotal(u64),
     NumExports(u64),
     TotDirty(u64),
     TotGranted(u64),
@@ -103,40 +74,6 @@ where
             job_stats::parse().map(ObdfilterStat::JobStats),
         ),
         (param(STATS), stats().map(ObdfilterStat::Stats)),
-        (param(BRW_STATS), brw_stats().map(ObdfilterStat::BrwStats)),
-        (
-            param(FILES_FREE),
-            digits().skip(newline()).map(ObdfilterStat::FilesFree),
-        ),
-        (
-            param(FILES_TOTAL),
-            digits().skip(newline()).map(ObdfilterStat::FilesTotal),
-        ),
-        (
-            param(FS_TYPE),
-            till_newline().skip(newline()).map(ObdfilterStat::FsType),
-        ),
-        (
-            param(KBYTES_AVAIL),
-            digits()
-                .skip(newline())
-                .map(|x| x * 1024)
-                .map(ObdfilterStat::BytesAvail),
-        ),
-        (
-            param(KBYTES_FREE),
-            digits()
-                .skip(newline())
-                .map(|x| x * 1024)
-                .map(ObdfilterStat::BytesFree),
-        ),
-        (
-            param(KBYTES_TOTAL),
-            digits()
-                .skip(newline())
-                .map(|x| x * 1024)
-                .map(ObdfilterStat::BytesTotal),
-        ),
         (
             param(NUM_EXPORTS),
             digits().skip(newline()).map(ObdfilterStat::NumExports),
@@ -171,48 +108,6 @@ where
                 value,
             }),
             ObdfilterStat::Stats(value) => TargetStats::Stats(TargetStat {
-                kind: TargetVariant::Ost,
-                target,
-                param,
-                value,
-            }),
-            ObdfilterStat::BrwStats(value) => TargetStats::BrwStats(TargetStat {
-                kind: TargetVariant::Ost,
-                target,
-                param,
-                value,
-            }),
-            ObdfilterStat::FilesFree(value) => TargetStats::FilesFree(TargetStat {
-                kind: TargetVariant::Ost,
-                target,
-                param,
-                value,
-            }),
-            ObdfilterStat::FilesTotal(value) => TargetStats::FilesTotal(TargetStat {
-                kind: TargetVariant::Ost,
-                target,
-                param,
-                value,
-            }),
-            ObdfilterStat::FsType(value) => TargetStats::FsType(TargetStat {
-                kind: TargetVariant::Ost,
-                target,
-                param,
-                value,
-            }),
-            ObdfilterStat::BytesAvail(value) => TargetStats::BytesAvail(TargetStat {
-                kind: TargetVariant::Ost,
-                target,
-                param,
-                value,
-            }),
-            ObdfilterStat::BytesFree(value) => TargetStats::BytesFree(TargetStat {
-                kind: TargetVariant::Ost,
-                target,
-                param,
-                value,
-            }),
-            ObdfilterStat::BytesTotal(value) => TargetStats::BytesTotal(TargetStat {
                 kind: TargetVariant::Ost,
                 target,
                 param,
