@@ -77,8 +77,8 @@ fn main() {
         .map(|x| x.to_string())
         .collect::<Vec<_>>();
 
-    let matches = clap::Command::new("lustre_collector")
-        .version(clap::crate_version!())
+    let matches = clap::Command::new(env!("CARGO_PKG_NAME"))
+        .version(env!("CARGO_PKG_VERSION"))
         .author("Whamcloud")
         .about("Grabs various Lustre statistics for display in JSON or YAML")
         .arg(
