@@ -259,6 +259,18 @@ impl fmt::Display for TargetVariant {
     }
 }
 
+impl Deref for TargetVariant {
+    type Target = str;
+
+    fn deref(&self) -> &Self::Target {
+        match *self {
+            TargetVariant::Ost => "OST",
+            TargetVariant::Mgt => "MGT",
+            TargetVariant::Mdt => "MDT",
+        }
+    }
+}
+
 #[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
 /// Stats specific to a target.
 pub struct TargetStat<T> {
