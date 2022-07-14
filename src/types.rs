@@ -216,6 +216,34 @@ pub mod lnet_exports {
     }
 
     #[derive(serde::Serialize, serde::Deserialize)]
+    pub struct LNetStatsStatistics {
+        pub msgs_alloc: i64,
+        pub msgs_max: i64,
+        pub rst_alloc: i64,
+        pub errors: i64,
+        pub send_count: i64,
+        pub resend_count: i64,
+        pub response_timeout_count: i64,
+        pub local_interrupt_count: i64,
+        pub local_dropped_count: i64,
+        pub local_aborted_count: i64,
+        pub local_no_route_count: i64,
+        pub local_timeout_count: i64,
+        pub local_error_count: i64,
+        pub remote_dropped_count: i64,
+        pub remote_error_count: i64,
+        pub remote_timeout_count: i64,
+        pub network_timeout_count: i64,
+        pub recv_count: i64,
+        pub route_count: i64,
+        pub drop_count: i64,
+        pub send_length: i64,
+        pub recv_length: i64,
+        pub route_length: i64,
+        pub drop_length: i64,
+    }
+
+    #[derive(serde::Serialize, serde::Deserialize)]
     pub struct Tunables {
         pub peer_timeout: i64,
         pub peer_credits: i64,
@@ -284,6 +312,13 @@ pub struct TargetStat<T> {
 /// Stats specific to a LNet Nid.
 pub struct LNetStat<T> {
     pub nid: String,
+    pub param: Param,
+    pub value: T,
+}
+
+#[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]
+/// Stats global across LNet Nids.
+pub struct LNetStatGlobal<T> {
     pub param: Param,
     pub value: T,
 }
@@ -414,6 +449,9 @@ pub enum LNetStats {
     SendCount(LNetStat<i64>),
     RecvCount(LNetStat<i64>),
     DropCount(LNetStat<i64>),
+    SendLength(LNetStatGlobal<i64>),
+    RecvLength(LNetStatGlobal<i64>),
+    DropLength(LNetStatGlobal<i64>),
 }
 
 #[derive(PartialEq, Debug, serde::Serialize, serde::Deserialize)]

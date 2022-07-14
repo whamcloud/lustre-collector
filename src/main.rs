@@ -5,8 +5,8 @@
 use clap::{Arg, ArgEnum};
 use lustre_collector::{
     error::LustreCollectorError, mgs::mgs_fs_parser, parse_lctl_output, parse_lnetctl_output,
-    parse_mgs_fs_output, parse_recovery_status_output, parser, recovery_status_parser,
-    types::Record,
+    parse_lnetctl_stats, parse_mgs_fs_output, parse_recovery_status_output, parser,
+    recovery_status_parser, types::Record,
 };
 use std::{
     error::Error as _,
@@ -71,6 +71,12 @@ fn get_recovery_status_output() -> Result<Vec<u8>, LustreCollectorError> {
     Ok(r.stdout)
 }
 
+fn get_lnetctl_stats_output() -> Result<Vec<u8>, LustreCollectorError> {
+    let r = Command::new("lnetctl").arg("stats").arg("show").output()?;
+
+    Ok(r.stdout)
+}
+
 fn main() {
     let variants = Format::value_variants()
         .iter()
@@ -108,6 +114,14 @@ fn main() {
         Ok(lctl_record)
     });
 
+    let lnetctl_stats_handle =
+        thread::spawn(move || -> Result<Vec<Record>, LustreCollectorError> {
+            let lnetctl_stats_output = get_lnetctl_stats_output()?;
+            let lnetctl_stats_record = parse_lnetctl_stats(str::from_utf8(&lnetctl_stats_output)?)?;
+
+            Ok(lnetctl_stats_record)
+        });
+
     let recovery_status_handle =
         thread::spawn(move || -> Result<Vec<Record>, LustreCollectorError> {
             let recovery_status_output = get_recovery_status_output()?;
@@ -116,15 +130,16 @@ fn main() {
             Ok(recovery_statuses)
         });
 
-    let lnetctl_output = Command::new("lnetctl")
+    let lnetctl_net_show_output = Command::new("lnetctl")
         .args(["net", "show", "-v", "4"])
         .output()
         .expect("failed to get lnetctl stats");
 
-    let lnetctl_stats =
-        str::from_utf8(&lnetctl_output.stdout).expect("while converting lnetctl stdout from utf8");
+    let lnetctl_net_show_stats = str::from_utf8(&lnetctl_net_show_output.stdout)
+        .expect("while converting 'lnetctl net show -v 4' stdout from utf8");
 
-    let mut lnet_record = parse_lnetctl_output(lnetctl_stats).expect("while parsing lnetctl stats");
+    let mut lnet_record = parse_lnetctl_output(lnetctl_net_show_stats)
+        .expect("while parsing 'lnetctl net show -v 4' stats");
 
     let mut lctl_record = handle.join().unwrap().unwrap();
 
@@ -132,9 +147,12 @@ fn main() {
 
     let mut recovery_status_records = recovery_status_handle.join().unwrap().unwrap_or_default();
 
+    let mut lnetctl_stats_record = lnetctl_stats_handle.join().unwrap().unwrap_or_default();
+
     lctl_record.append(&mut lnet_record);
     lctl_record.append(&mut mgs_fs_record);
     lctl_record.append(&mut recovery_status_records);
+    lctl_record.append(&mut lnetctl_stats_record);
 
     let r = match format {
         Format::Json => {

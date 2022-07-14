@@ -3,8 +3,9 @@
 // license that can be found in the LICENSE file.
 
 use crate::{
+    lnet_exports::LNetStatsStatistics,
     types::{lnet_exports::Net, LNetStat, LNetStats, Param, Record},
-    LustreCollectorError,
+    LNetStatGlobal, LustreCollectorError,
 };
 
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -49,6 +50,42 @@ pub fn parse(x: &str) -> Result<Vec<Record>, LustreCollectorError> {
 
     Ok(y.net
         .map(|x| x.iter().flat_map(build_lnet_stats).collect())
+        .unwrap_or_default())
+}
+
+#[derive(serde::Serialize, serde::Deserialize)]
+struct LnetStats {
+    statistics: Option<LNetStatsStatistics>,
+}
+
+pub(crate) fn build_lnetctl_stats(x: &LNetStatsStatistics) -> Vec<Record> {
+    vec![
+        Record::LNetStat(LNetStats::SendLength(LNetStatGlobal {
+            param: Param("send_length".to_string()),
+            value: x.send_length,
+        })),
+        Record::LNetStat(LNetStats::RecvLength(LNetStatGlobal {
+            param: Param("recv_length".to_string()),
+            value: x.recv_length,
+        })),
+        Record::LNetStat(LNetStats::DropLength(LNetStatGlobal {
+            param: Param("drop_length".to_string()),
+            value: x.drop_length,
+        })),
+    ]
+}
+
+pub fn parse_lnetctl_stats(x: &str) -> Result<Vec<Record>, LustreCollectorError> {
+    let x = x.trim();
+
+    if x.is_empty() {
+        return Ok(vec![]);
+    }
+
+    let y: LnetStats = serde_yaml::from_str(x)?;
+
+    Ok(y.statistics
+        .map(|x| build_lnetctl_stats(&x))
         .unwrap_or_default())
 }
 
@@ -417,6 +454,40 @@ mod tests {
               credits: 256
           dev cpt: -1
           CPT: "[0,1,2,3,4]"
+"#,
+        )
+        .unwrap();
+
+        assert_debug_snapshot!(x);
+    }
+    #[test]
+    fn test_lnet_stats_parse() {
+        let x = parse_lnetctl_stats(
+            r#"statistics:
+            msgs_alloc: 0
+            msgs_max: 2578
+            rst_alloc: 20
+            errors: 0
+            send_count: 171344551
+            resend_count: 0
+            response_timeout_count: 0
+            local_interrupt_count: 0
+            local_dropped_count: 0
+            local_aborted_count: 0
+            local_no_route_count: 0
+            local_timeout_count: 0
+            local_error_count: 0
+            remote_dropped_count: 4
+            remote_error_count: 0
+            remote_timeout_count: 0
+            network_timeout_count: 0
+            recv_count: 171609513
+            route_count: 0
+            drop_count: 1185
+            send_length: 62502714567608
+            recv_length: 17084716480056
+            route_length: 0
+            drop_length: 568792
 "#,
         )
         .unwrap();
