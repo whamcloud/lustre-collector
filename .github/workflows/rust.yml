@@ -63,23 +63,3 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --locked -- -D warnings
-
-  check_rpm_build:
-    name: Check RPM build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v1
-
-      - name: Build rpm
-        uses: ./.github/actions/copr-rust
-        env:
-          SPEC: lustre_collector.spec
-          LOCAL_ONLY: true
-          WORKSPACE: ${{ github.workspace }}
-          RUSTUP_TOOLCHAIN: stable-x86_64-unknown-linux-gnu
-      - name: Archive rpm
-        uses: actions/upload-artifact@v1
-        with:
-          name: rpm
-          path: _topdir/RPMS/x86_64
