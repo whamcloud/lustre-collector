@@ -8,15 +8,10 @@ This repo provides a parsed representation of common Lustre statistics.
 
 It is provided as a standalone binary that can be called to retrieve stats in the desired output (Currently either JSON | YAML).
 
-## Installation (RHEL)
+## Installation
 
-In order to install the most current `lustre_collector` package, do the following:
-
-```sh
-yum install yum-plugin-copr
-yum copr enable managerforlustre/manager-for-lustre-devel
-yum install lustre_collector
-```
+A `lustre_collector` musl binary is provided with the latest release. It can be downloaded and run
+directly on an x86_64 linux machine.
 
 ## Usage
 
