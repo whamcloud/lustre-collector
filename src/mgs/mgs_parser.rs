@@ -23,11 +23,11 @@ pub const NUM_EXPORTS: &str = "num_exports";
 
 pub fn params() -> Vec<String> {
     [
-        format!("mgs.*.mgs.{}", STATS),
-        format!("mgs.*.mgs.{}", THREADS_MAX),
-        format!("mgs.*.mgs.{}", THREADS_MIN),
-        format!("mgs.*.mgs.{}", THREADS_STARTED),
-        format!("mgs.*.{}", NUM_EXPORTS),
+        format!("mgs.*.mgs.{STATS}"),
+        format!("mgs.*.mgs.{THREADS_MAX}"),
+        format!("mgs.*.mgs.{THREADS_MIN}"),
+        format!("mgs.*.mgs.{THREADS_STARTED}"),
+        format!("mgs.*.{NUM_EXPORTS}"),
     ]
     .iter()
     .map(|x| x.to_owned())
