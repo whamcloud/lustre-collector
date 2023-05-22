@@ -4,14 +4,14 @@
 
 use combine::{
     attempt,
-    error::ParseError,
+    error::{Format, ParseError},
     many1, one_of,
     parser::{
         char::{alpha_num, digit, newline, string},
         repeat::take_until,
     },
     stream::Stream,
-    token, unexpected, value, Parser,
+    token, unexpected, unexpected_any, value, Parser,
 };
 
 use crate::types::{Param, Target};
@@ -64,7 +64,10 @@ where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
-    many1(digit()).map(|x: String| x.parse::<u64>().unwrap())
+    many1(digit()).then(|x: String| match x.parse::<u64>() {
+        Ok(n) => value(n).left(),
+        Err(e) => unexpected_any(Format(e)).right(),
+    })
 }
 
 pub(crate) fn till_newline<I>() -> impl Parser<I, Output = String>

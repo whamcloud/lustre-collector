@@ -2,21 +2,20 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use clap::{Arg, ArgEnum};
+use clap::{value_parser, Arg, ValueEnum};
 use lustre_collector::{
     error::LustreCollectorError, mgs::mgs_fs_parser, parse_lctl_output, parse_lnetctl_output,
     parse_lnetctl_stats, parse_mgs_fs_output, parse_recovery_status_output, parser,
     recovery_status_parser, types::Record,
 };
 use std::{
-    error::Error as _,
-    fmt,
-    process::{exit, Command},
+    fmt, panic,
+    process::{Command, ExitCode},
     str::{self, FromStr},
     thread,
 };
 
-#[derive(ArgEnum, PartialEq, Debug, Clone, Copy)]
+#[derive(ValueEnum, PartialEq, Debug, Clone, Copy)]
 enum Format {
     Json,
     Yaml,
@@ -77,12 +76,18 @@ fn get_lnetctl_stats_output() -> Result<Vec<u8>, LustreCollectorError> {
     Ok(r.stdout)
 }
 
-fn main() {
-    let variants = Format::value_variants()
-        .iter()
-        .map(|x| x.to_string())
-        .collect::<Vec<_>>();
+fn main() -> ExitCode {
+    match run() {
+        Ok(()) => ExitCode::SUCCESS,
+        Err(e) => {
+            eprintln!("{e}");
 
+            ExitCode::FAILURE
+        }
+    }
+}
+
+fn run() -> Result<(), LustreCollectorError> {
     let matches = clap::Command::new(env!("CARGO_PKG_NAME"))
         .version(env!("CARGO_PKG_VERSION"))
         .author("Whamcloud")
@@ -91,14 +96,15 @@ fn main() {
             Arg::new("format")
                 .short('f')
                 .long("format")
-                .possible_values(&variants.iter().map(|x| x.as_str()).collect::<Vec<_>>())
-                .default_value(&variants[0])
-                .help("Sets the output formatting")
-                .takes_value(true),
+                .value_parser(value_parser!(Format))
+                .default_value("json")
+                .help("Sets the output formatting"),
         )
         .get_matches();
 
-    let format = matches.value_of_t_or_exit("format");
+    let format = matches
+        .get_one::<Format>("format")
+        .expect("Required argument `format` missing");
 
     let handle = thread::spawn(move || -> Result<Vec<Record>, LustreCollectorError> {
         let lctl_output = get_lctl_output()?;
@@ -141,42 +147,37 @@ fn main() {
     let mut lnet_record = parse_lnetctl_output(lnetctl_net_show_stats)
         .expect("while parsing 'lnetctl net show -v 4' stats");
 
-    let mut lctl_record = handle.join().unwrap().unwrap();
+    let mut lctl_record = match handle.join() {
+        Ok(r) => r?,
+        Err(e) => panic::resume_unwind(e),
+    };
 
-    let mut mgs_fs_record = mgs_fs_handle.join().unwrap().unwrap_or_default();
+    let mut mgs_fs_record = match mgs_fs_handle.join() {
+        Ok(r) => r.unwrap_or_default(),
+        Err(e) => panic::resume_unwind(e),
+    };
 
-    let mut recovery_status_records = recovery_status_handle.join().unwrap().unwrap_or_default();
+    let mut recovery_status_records = match recovery_status_handle.join() {
+        Ok(r) => r.unwrap_or_default(),
+        Err(e) => panic::resume_unwind(e),
+    };
 
-    let mut lnetctl_stats_record = lnetctl_stats_handle.join().unwrap().unwrap_or_default();
+    let mut lnetctl_stats_record = match lnetctl_stats_handle.join() {
+        Ok(r) => r.unwrap_or_default(),
+        Err(e) => panic::resume_unwind(e),
+    };
 
     lctl_record.append(&mut lnet_record);
     lctl_record.append(&mut mgs_fs_record);
     lctl_record.append(&mut recovery_status_records);
     lctl_record.append(&mut lnetctl_stats_record);
 
-    let r = match format {
-        Format::Json => {
-            serde_json::to_string(&lctl_record).map_err(LustreCollectorError::SerdeJsonError)
-        }
-        Format::Yaml => {
-            serde_yaml::to_string(&lctl_record).map_err(LustreCollectorError::SerdeYamlError)
-        }
+    let x = match format {
+        Format::Json => serde_json::to_string(&lctl_record)?,
+        Format::Yaml => serde_yaml::to_string(&lctl_record)?,
     };
 
-    match r {
-        Ok(x) => println!("{}", x),
-        Err(ref e) => {
-            eprintln!("error: {}", e);
+    println!("{x}");
 
-            let mut cause = e.source();
-
-            while let Some(e) = cause {
-                eprintln!("caused by: {}", e);
-
-                cause = e.source();
-            }
-
-            exit(1);
-        }
-    }
+    Ok(())
 }
