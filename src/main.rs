@@ -14,6 +14,7 @@ use std::{
     str::{self, FromStr},
     thread,
 };
+use tracing::debug;
 
 #[derive(ValueEnum, PartialEq, Debug, Clone, Copy)]
 enum Format {
@@ -43,9 +44,13 @@ impl fmt::Display for Format {
 }
 
 fn get_lctl_output() -> Result<Vec<u8>, LustreCollectorError> {
+    let lctl_params = parser::params();
+
+    debug!(lctl_params = lctl_params.join(" "));
+
     let r = Command::new("lctl")
         .arg("get_param")
-        .args(parser::params())
+        .args(lctl_params)
         .output()?;
 
     Ok(r.stdout)
@@ -88,6 +93,8 @@ fn main() -> ExitCode {
 }
 
 fn run() -> Result<(), LustreCollectorError> {
+    tracing_subscriber::fmt::init();
+
     let matches = clap::Command::new(env!("CARGO_PKG_NAME"))
         .version(env!("CARGO_PKG_VERSION"))
         .author("Whamcloud")
@@ -108,6 +115,7 @@ fn run() -> Result<(), LustreCollectorError> {
 
     let handle = thread::spawn(move || -> Result<Vec<Record>, LustreCollectorError> {
         let lctl_output = get_lctl_output()?;
+
         let lctl_record = parse_lctl_output(&lctl_output)?;
 
         Ok(lctl_record)

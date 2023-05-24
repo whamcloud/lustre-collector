@@ -13,8 +13,8 @@ mod osd_parser;
 mod oss;
 pub mod parser;
 pub mod recovery_status_parser;
-mod snapshot_time;
 mod stats_parser;
+mod time;
 mod top_level_parser;
 pub mod types;
 

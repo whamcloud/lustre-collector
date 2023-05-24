@@ -4,7 +4,7 @@
 
 use crate::{
     base_parsers::{digits, string_to, till_newline, word},
-    snapshot_time::snapshot_time,
+    time::time_triple,
     types::{BrwStats, BrwStatsBucket},
 };
 
@@ -110,7 +110,7 @@ where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
-    (newline().with(snapshot_time()), spaces(), many1(section())).map(|(_, _, y)| y)
+    (newline().with(time_triple()), spaces(), many1(section())).map(|(_, _, y)| y)
 }
 
 #[cfg(test)]
@@ -393,6 +393,15 @@ disk I/O size          ios   % cum % |  ios         % cum %
 "#;
 
         let result: (Vec<_>, _) = brw_stats().parse(x).unwrap();
+
+        assert_debug_snapshot!(result);
+    }
+
+    #[test]
+    fn test_brw_stats_with_start_and_elapsed_time() {
+        let x = include_str!("../fixtures/brw_stats.txt");
+
+        let result = brw_stats().parse(x).unwrap();
 
         assert_debug_snapshot!(result);
     }

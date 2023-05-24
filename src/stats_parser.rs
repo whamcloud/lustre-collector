@@ -4,7 +4,7 @@
 
 use crate::{
     base_parsers::{digits, not_words, word},
-    snapshot_time::snapshot_time,
+    time::time_triple,
     types::Stat,
 };
 use combine::{
@@ -106,7 +106,7 @@ where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
-    (newline().with(snapshot_time()), newline(), many(stat())).map(|(_, _, xs)| xs)
+    (newline().with(time_triple()), many(stat())).map(|(_, xs)| xs)
 }
 
 #[cfg(test)]

@@ -87,6 +87,7 @@ where
         )
             .map(|(_, (y, z))| (y, z)),
     ))
+    .message("while parsing mgs stats")
 }
 
 pub fn parse<I>() -> impl Parser<I, Output = Record>
