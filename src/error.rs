@@ -22,6 +22,8 @@ pub enum LustreCollectorError {
     Utf8Error(#[from] str::Utf8Error),
     #[error("{0}")]
     ConversionError(String),
+    #[error("Cannot convert timestamp {0} to a u64 of milliseconds")]
+    InvalidTime(String),
 }
 
 impl From<combine::stream::easy::Errors<char, &str, usize>> for LustreCollectorError {
