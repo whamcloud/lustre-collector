@@ -105,6 +105,12 @@ impl TryFrom<String> for UnsignedLustreTimestamp {
     }
 }
 
+impl fmt::Display for UnsignedLustreTimestamp {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct JobStatOst {
     pub job_id: String,
