@@ -35,7 +35,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::types::BytesStat;
+    use crate::{types::BytesStat, UnsignedLustreTimestamp};
 
     #[test]
     fn test_yaml_deserialize() {
@@ -65,7 +65,9 @@ mod tests {
         let expected = JobStatsMdt {
             job_stats: Some(vec![JobStatMdt {
                 job_id: "touch.0".to_string(),
-                snapshot_time: 1_614_767_417,
+                snapshot_time: UnsignedLustreTimestamp(1_614_767_417),
+                start_time: None,
+                elapsed_time: None,
                 open: BytesStat {
                     samples: 1,
                     unit: "usecs".to_string(),

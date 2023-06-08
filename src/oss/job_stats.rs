@@ -35,7 +35,10 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::types::{BytesStat, ReqsStat};
+    use crate::{
+        types::{BytesStat, ReqsStat},
+        UnsignedLustreTimestamp,
+    };
 
     #[test]
     fn test_yaml_deserialize() {
@@ -58,7 +61,9 @@ mod tests {
         let expected = JobStatsOst {
             job_stats: Some(vec![JobStatOst {
                 job_id: "cp.0".to_string(),
-                snapshot_time: 1_537_070_542,
+                snapshot_time: UnsignedLustreTimestamp(1_537_070_542),
+                start_time: None,
+                elapsed_time: None,
                 read_bytes: BytesStat {
                     samples: 256,
                     unit: "bytes".to_string(),
@@ -117,5 +122,31 @@ mod tests {
         };
 
         assert_eq!(serde_yaml::from_str::<JobStatsOst>(x).unwrap(), expected)
+    }
+
+    #[test]
+    fn with_time_triple() {
+        let x = r#"job_stats:
+- job_id:          lfs.0.
+  snapshot_time:   1686153914.643122579 secs.nsecs
+  start_time:      1686153914.643119181 secs.nsecs
+  elapsed_time:    0.000003398 secs.nsecs
+  read_bytes:      { samples:           0, unit: bytes, min:        0, max:        0, sum:                0, sumsq:                  0, hist: {  } }
+  write_bytes:     { samples:           0, unit: bytes, min:        0, max:        0, sum:                0, sumsq:                  0, hist: {  } }
+  read:            { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
+  write:           { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
+  getattr:         { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
+  setattr:         { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
+  punch:           { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
+  sync:            { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
+  destroy:         { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
+  create:          { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
+  statfs:          { samples:           1, unit: usecs, min:        1, max:        1, sum:                1, sumsq:                  1 }
+  get_info:        { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
+  set_info:        { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
+  quotactl:        { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
+  prealloc:        { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }"#;
+
+        insta::assert_debug_snapshot!(serde_yaml::from_str::<JobStatsOst>(x).unwrap());
     }
 }

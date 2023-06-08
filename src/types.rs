@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 use crate::LustreCollectorError;
-use std::{fmt, ops::Deref};
+use std::{fmt, ops::Deref, time::Duration};
 
 #[derive(Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 /// The hostname cooresponding to these stats.
@@ -61,10 +61,62 @@ pub struct JobStatsOst {
     pub job_stats: Option<Vec<JobStatOst>>,
 }
 
+/// Used to represent an unsigned timestamp in Lustre.
+///
+/// Only use this field whne you are sure that the timestamp is unsigned.
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[serde(try_from = "String")]
+pub struct UnsignedLustreTimestamp(pub i64);
+
+impl TryFrom<String> for UnsignedLustreTimestamp {
+    type Error = LustreCollectorError;
+
+    fn try_from(s: String) -> Result<Self, Self::Error> {
+        if let Ok(i) = s.parse::<i64>() {
+            return Ok(Self(i));
+        }
+
+        let (time, _) = s
+            .split_once(' ')
+            .ok_or_else(|| LustreCollectorError::InvalidTime(s.to_string()))?;
+
+        let (secs, ns) = time
+            .split_once('.')
+            .ok_or_else(|| LustreCollectorError::InvalidTime(s.to_string()))?;
+
+        let secs = secs
+            .parse::<u64>()
+            .map_err(|_| LustreCollectorError::InvalidTime(s.to_string()))?;
+
+        let ns = ns
+            .parse::<u32>()
+            .map_err(|_| LustreCollectorError::InvalidTime(s.to_string()))?;
+
+        let d = Duration::new(secs, ns);
+
+        let millis = u64::from(d.subsec_millis());
+
+        let sec_millis = d.as_secs() * 1_000;
+
+        let millis = i64::try_from(sec_millis + millis)
+            .map_err(|_| LustreCollectorError::InvalidTime(s.to_string()))?;
+
+        Ok(Self(millis))
+    }
+}
+
+impl fmt::Display for UnsignedLustreTimestamp {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct JobStatOst {
     pub job_id: String,
-    pub snapshot_time: i64,
+    pub snapshot_time: UnsignedLustreTimestamp,
+    pub start_time: Option<UnsignedLustreTimestamp>,
+    pub elapsed_time: Option<String>,
     pub read_bytes: BytesStat,
     pub write_bytes: BytesStat,
     pub getattr: ReqsStat,
@@ -87,7 +139,9 @@ pub struct JobStatsMdt {
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct JobStatMdt {
     pub job_id: String,
-    pub snapshot_time: i64,
+    pub snapshot_time: UnsignedLustreTimestamp,
+    pub start_time: Option<UnsignedLustreTimestamp>,
+    pub elapsed_time: Option<String>,
     pub open: BytesStat,
     pub close: BytesStat,
     pub mknod: BytesStat,
