@@ -509,9 +509,16 @@ pub enum LNetStats {
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub enum LustreServiceStats {
+    LdlmCanceld(Vec<Stat>),
+    LdlmCbd(Vec<Stat>),
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub enum Record {
     Host(HostStats),
     LNetStat(LNetStats),
+    LustreService(LustreServiceStats),
     Node(NodeStats),
     Target(TargetStats),
 }

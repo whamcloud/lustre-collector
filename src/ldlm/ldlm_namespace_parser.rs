@@ -2,17 +2,17 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
+use crate::{
+    base_parsers::{digits, param, period, target},
+    ldlm::LDLM,
+    types::{Param, Record, Target, TargetStat, TargetStats, TargetVariant},
+};
 use combine::{
-    choice,
+    attempt, choice,
     error::{ParseError, StreamError},
     parser::char::{newline, string},
     stream::{Stream, StreamErrorFor},
     Parser,
-};
-
-use crate::{
-    base_parsers::{digits, param, period, target},
-    types::{Param, Record, Target, TargetStat, TargetStats, TargetVariant},
 };
 
 pub(crate) const CONTENDED_LOCKS: &str = "contended_locks";
@@ -42,12 +42,14 @@ pub(crate) const LDLM_STATS: [&str; 12] = [
     RESOURCE_COUNT,
 ];
 
+pub(crate) const NAMESPACES: &str = "namespaces";
+
 /// Takes LDLM_STATS and produces a list of params for
 /// consumption in proper ltcl get_param format.
-pub(crate) fn ldlm_params() -> Vec<String> {
+pub(crate) fn params() -> Vec<String> {
     LDLM_STATS
         .iter()
-        .map(|x| format!("ldlm.namespaces.{{mdt-,filter-}}*.{}", x))
+        .map(|x| format!("{LDLM}.{NAMESPACES}.{{mdt-,filter-}}*.{x}"))
         .collect()
 }
 
@@ -58,7 +60,7 @@ where
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
-        string("ldlm.namespaces."),
+        attempt((string(NAMESPACES), period())),
         choice((
             string("mdt-").map(|_| TargetVariant::Mdt),
             string("filter-").map(|_| TargetVariant::Ost),
@@ -182,7 +184,7 @@ where
             )),
         })
         .map(Record::Target)
-        .message("while parsing ldlm")
+        .message("while parsing ldlm.namepsaces")
 }
 
 #[cfg(test)]
@@ -192,7 +194,7 @@ mod tests {
     #[test]
     fn test_ldlm_params() {
         assert_eq!(
-            ldlm_params(),
+            params(),
             vec![
                 "ldlm.namespaces.{mdt-,filter-}*.contended_locks".to_string(),
                 "ldlm.namespaces.{mdt-,filter-}*.contention_seconds".to_string(),
