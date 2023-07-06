@@ -2,17 +2,11 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use crate::{
-    oss::{ldlm_parser, obdfilter_parser},
-    types::Record,
-};
-use combine::{choice, error::ParseError, Parser, Stream};
+use crate::{oss::obdfilter_parser, types::Record};
+use combine::{error::ParseError, Parser, Stream};
 
 pub(crate) fn params() -> Vec<String> {
-    let mut a = obdfilter_parser::obd_params();
-    a.extend(ldlm_parser::ldlm_params());
-
-    a
+    obdfilter_parser::obd_params()
 }
 
 pub(crate) fn parse<I>() -> impl Parser<I, Output = Record>
@@ -20,7 +14,7 @@ where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
-    choice((obdfilter_parser::parse(), ldlm_parser::parse()))
+    obdfilter_parser::parse()
 }
 
 #[cfg(test)]

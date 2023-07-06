@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 use crate::{
+    ldlm,
     mds::{client_count_parser, mds_parser},
     mgs::mgs_parser,
     osd_parser,
@@ -21,6 +22,7 @@ pub fn params() -> Vec<String> {
         .chain(mgs_parser::params())
         .chain(oss_parser::params())
         .chain(mds_parser::params())
+        .chain(ldlm::params())
         .collect()
 }
 
@@ -36,6 +38,7 @@ where
         mgs_parser::parse().map(|x| vec![x]),
         mds_parser::parse().map(|x| vec![x]),
         oss_parser::parse().map(|x| vec![x]),
+        ldlm::parse().map(|x| vec![x]),
     )))
     .map(|xs: Vec<_>| xs.into_iter().flatten().collect())
 }
@@ -129,6 +132,18 @@ osd-ldiskfs.fs2-MDT0000.kbytesfree=1793460
 osd-ldiskfs.fs-MDT0000.kbytestotal=1819968
 osd-ldiskfs.fs2-MDT0000.kbytestotal=1819968
 "#;
+
+        let result = parse()
+            .easy_parse(x)
+            .map_err(|err| err.map_position(|p| p.translate_position(x)))
+            .unwrap();
+
+        assert_debug_snapshot!(result);
+    }
+
+    #[test]
+    fn test_node_output() {
+        let x = include_str!("./fixtures/valid/valid.txt");
 
         let result = parse()
             .easy_parse(x)
