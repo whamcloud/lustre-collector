@@ -61,6 +61,12 @@ pub struct JobStatsOst {
     pub job_stats: Option<Vec<JobStatOst>>,
 }
 
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct ExportStats {
+    pub nid: String,
+    pub stats: Vec<Stat>,
+}
+
 /// Used to represent an unsigned timestamp in Lustre.
 ///
 /// Only use this field when you are sure that the timestamp is unsigned.
@@ -530,6 +536,7 @@ pub enum TargetStats {
     RecoveryCompletedClients(TargetStat<u64>),
     RecoveryEvictedClients(TargetStat<u64>),
     Llite(LliteStat),
+    ExportStats(TargetStat<Vec<ExportStats>>),
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]

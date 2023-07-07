@@ -3,10 +3,13 @@
 // license that can be found in the LICENSE file.
 
 use crate::{
-    base_parsers::{digits, param, period, target},
+    base_parsers::{digits, param, param_period, period, target},
+    exports_parser::exports_stats,
     mds::job_stats,
+    oss::obdfilter_parser::{EXPORTS, EXPORTS_PARAMS},
     stats_parser::stats,
     types::{JobStatMdt, Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant},
+    ExportStats,
 };
 use combine::{
     attempt, choice,
@@ -39,6 +42,7 @@ enum MdtStat {
     KBytesFree(u64),
     /// Total disk space
     KBytesTotal(u64),
+    ExportStats(Vec<ExportStats>),
 }
 
 fn mdt_stat<I>() -> impl Parser<I, Output = (Param, MdtStat)>
@@ -74,6 +78,10 @@ where
             param(KBYTES_TOTAL),
             digits().skip(newline()).map(MdtStat::KBytesTotal),
         ),
+        (
+            param_period(EXPORTS),
+            exports_stats().map(MdtStat::ExportStats),
+        ),
     ))
 }
 
@@ -82,6 +90,7 @@ pub(crate) fn params() -> Vec<String> {
         format!("mdt.*.{}", JOB_STATS),
         format!("mdt.*.{}", STATS),
         format!("mdt.*MDT*.{}", NUM_EXPORTS),
+        format!("mdt.*MDT*.{}", EXPORTS_PARAMS),
     ]
     .iter()
     .map(|x| x.to_owned())
@@ -151,6 +160,12 @@ where
                 value,
             }),
             MdtStat::KBytesTotal(value) => TargetStats::KBytesTotal(TargetStat {
+                kind: TargetVariant::Mdt,
+                target,
+                param,
+                value,
+            }),
+            MdtStat::ExportStats(value) => TargetStats::ExportStats(TargetStat {
                 kind: TargetVariant::Mdt,
                 target,
                 param,
