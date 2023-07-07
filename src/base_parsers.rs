@@ -78,14 +78,6 @@ where
     take_until(period())
 }
 
-pub(crate) fn till_equals<I>() -> impl Parser<I, Output = String>
-where
-    I: Stream<Token = char>,
-    I::Error: ParseError<I::Token, I::Range, I::Position>,
-{
-    take_until(equals())
-}
-
 pub(crate) fn string_to<I>(x: &'static str, y: &'static str) -> impl Parser<I, Output = String>
 where
     I: Stream<Token = char>,
@@ -116,6 +108,16 @@ where
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     attempt(string(x).skip(equals()))
+        .map(|x| Param(x.to_string()))
+        .message("while getting param")
+}
+
+pub(crate) fn param_period<I>(x: &'static str) -> impl Parser<I, Output = Param>
+where
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
+{
+    attempt(string(x).skip(token('.')))
         .map(|x| Param(x.to_string()))
         .message("while getting param")
 }

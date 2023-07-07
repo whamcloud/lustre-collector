@@ -159,29 +159,6 @@ I/O time (1/1000s)     ios   % cum % |  ios         % cum %
 
                            read      |     write
 disk I/O size          ios   % cum % |  ios         % cum %
-mdt.ai400-MDT0000.exports.0@lo.uuid=
-52cb8dca-ba5c-4725-9cff-41cd0d45e3e7
-ai400-MDT0000-lwp-OST0000_UUID
-ai400-MDT0000-lwp-OST0001_UUID
-ai400-MDT0000-lwp-MDT0000_UUID
-mdt.ai400-MDT0000.exports.172.16.0.85@o2ib.uuid=
-cf8d4a32-132f-48ea-9159-044a7823ca67
-ai400-MDT0000-lwp-OST0005_UUID
-ai400-MDT0000-lwp-OST0004_UUID
-ai400-MDT0000-lwp-MDT0002_UUID
-ai400-MDT0002-mdtlov_UUID
-mdt.ai400-MDT0000.exports.172.16.0.87@o2ib.uuid=
-bea2448e-43cc-46da-84cd-21d8d403d44a
-ai400-MDT0000-lwp-MDT0001_UUID
-ai400-MDT0000-lwp-OST0003_UUID
-ai400-MDT0000-lwp-OST0002_UUID
-ai400-MDT0001-mdtlov_UUID
-mdt.ai400-MDT0000.exports.172.16.0.89@o2ib.uuid=
-115d6045-2534-4ca1-a637-0b1544ead16f
-ai400-MDT0000-lwp-OST0006_UUID
-ai400-MDT0000-lwp-MDT0003_UUID
-ai400-MDT0000-lwp-OST0007_UUID
-ai400-MDT0003-mdtlov_UUID
 obdfilter.ai400-OST0000.job_stats=job_stats:
 obdfilter.ai400-OST0001.job_stats=job_stats:
 obdfilter.ai400-OST0000.stats=
@@ -208,6 +185,62 @@ obdfilter.ai400-OST0000.tot_granted=1887764159
 obdfilter.ai400-OST0001.tot_granted=278208
 obdfilter.ai400-OST0000.tot_pending=0
 obdfilter.ai400-OST0001.tot_pending=0
+obdfilter.ai400x2-OST0000.exports.0@lo.stats=
+snapshot_time             1687448377.140066624 secs.nsecs
+create                    10 samples [usecs] 44 4724 8911 25377661
+statfs                    5842 samples [usecs] 0 32132 77736 1248293008
+get_info                  1 samples [usecs] 3541 3541 3541 12538681
+obdfilter.ai400x2-OST0000.exports.172.16.240.130@o2ib.stats=
+snapshot_time             1687448377.140115041 secs.nsecs
+create                    2 samples [usecs] 1 389 390 151322
+statfs                    5841 samples [usecs] 0 62 13812 69042
+get_info                  1 samples [usecs] 622 622 622 386884
+obdfilter.ai400x2-OST0000.exports.172.16.240.131@o2ib.stats=
+snapshot_time             1687448377.140142119 secs.nsecs
+create                    2 samples [usecs] 2 255 257 65029
+statfs                    5841 samples [usecs] 0 34 10078 33920
+get_info                  1 samples [usecs] 629 629 629 395641
+obdfilter.ai400x2-OST0000.exports.172.16.240.132@o2ib.stats=
+snapshot_time             1687448377.140170939 secs.nsecs
+create                    2 samples [usecs] 1 228 229 51985
+statfs                    5841 samples [usecs] 0 40 10622 35572
+get_info                  1 samples [usecs] 567 567 567 321489
+obdfilter.ai400x2-OST0000.exports.172.16.67.87@o2ib.stats=
+snapshot_time             1687448377.140194771 secs.nsecs
+read_bytes                107577035 samples [bytes] 4096 1048576 81479562702848 8320232521438593024
+write_bytes               29075888 samples [bytes] 4096 1048576 24761003618304 6804030488517279744
+read                      107577035 samples [usecs] 12 83702 199439280448 599777200106672
+write                     29075888 samples [usecs] 1 58976 11063054274 11687540810422
+punch                     256 samples [usecs] 12 4872 11892 26649796
+sync                      256 samples [usecs] 0 8117 213794 439664352
+obdfilter.ai400x2-OST0001.exports.0@lo.stats=
+snapshot_time             1687448377.140228326 secs.nsecs
+create                    10 samples [usecs] 46 4253 8459 21219179
+statfs                    5842 samples [usecs] 0 15452 43854 238950292
+get_info                  1 samples [usecs] 3583 3583 3583 12837889
+obdfilter.ai400x2-OST0001.exports.172.16.240.130@o2ib.stats=
+snapshot_time             1687448377.140267031 secs.nsecs
+create                    2 samples [usecs] 0 244 244 59536
+statfs                    5841 samples [usecs] 0 53 12887 56549
+get_info                  1 samples [usecs] 837 837 837 700569
+obdfilter.ai400x2-OST0001.exports.172.16.240.131@o2ib.stats=
+snapshot_time             1687448377.140291963 secs.nsecs
+create                    2 samples [usecs] 1 253 254 64010
+statfs                    5841 samples [usecs] 0 35 9813 34577
+get_info                  1 samples [usecs] 560 560 560 313600
+obdfilter.ai400x2-OST0001.exports.172.16.240.132@o2ib.stats=
+snapshot_time             1687448377.140315446 secs.nsecs
+create                    2 samples [usecs] 1 241 242 58082
+statfs                    5841 samples [usecs] 0 67 10736 40894
+get_info                  1 samples [usecs] 533 533 533 284089
+obdfilter.ai400x2-OST0001.exports.172.16.67.87@o2ib.stats=
+snapshot_time             1687448377.140341383 secs.nsecs
+read_bytes                134061108 samples [bytes] 4096 1048576 100430434398208 9589617164080381952
+write_bytes               35563179 samples [bytes] 4096 1048576 31043924631552 13380320504942952448
+read                      134061108 samples [usecs] 11 85796 212314090599 612123348028333
+write                     35563179 samples [usecs] 1 70953 12502225306 12332383204112
+punch                     256 samples [usecs] 12 207 5489 158987
+sync                      256 samples [usecs] 0 8733 220742 490874780
 ost.OSS.ost.stats=
 snapshot_time             1689060419.303756478 secs.nsecs
 req_waittime              219 samples [usec] 11 753 6162 771804
@@ -272,6 +305,28 @@ getattr                   23 samples [usecs] 2 192 629 52487
 getxattr                  2 samples [usecs] 18 29 47 1165
 statfs                    44863 samples [usecs] 0 43 323074 3055172
 mdt.ai400-MDT0000.num_exports=19
+mdt.testfs-MDT0000.exports.0@lo.stats=
+snapshot_time             1687448322.813894158 secs.nsecs
+mdt.testfs-MDT0000.exports.1.2.3.130@o2ib.stats=
+snapshot_time             1687448322.813921821 secs.nsecs
+statfs                    5830 samples [usecs] 2 144 63916 927644
+mdt.testfs-MDT0000.exports.1.2.3.131@o2ib.stats=
+snapshot_time             1687448322.813936409 secs.nsecs
+statfs                    5830 samples [usecs] 0 67 25272 159582
+mdt.testfs-MDT0000.exports.1.2.3.132@o2ib.stats=
+snapshot_time             1687448322.813948436 secs.nsecs
+statfs                    5830 samples [usecs] 0 233 30686 277350
+mdt.testfs-MDT0000.exports.1.2.3.87@o2ib.stats=
+snapshot_time             1687448322.813962980 secs.nsecs
+open                      2049 samples [usecs] 39 1239 191256 27343170
+close                     171273 samples [usecs] 6 609 3971940 128888350
+mknod                     2048 samples [usecs] 35 1231 176023 24464321
+mkdir                     1 samples [usecs] 431 431 431 185761
+getattr                   273635 samples [usecs] 1 986 957611 12472685
+setattr                   2049 samples [usecs] 16 100 74209 2940713
+getxattr                  69111 samples [usecs] 6 154 933062 13781230
+statfs                    6 samples [usecs] 0 33 79 1951
+sync                      2048 samples [usecs] 2 477 19019 918471
 ldlm.namespaces.mdt-ai400-MDT0000_UUID.contended_locks=32
 ldlm.namespaces.filter-ai400-OST0000_UUID.contended_locks=32
 ldlm.namespaces.filter-ai400-OST0001_UUID.contended_locks=32

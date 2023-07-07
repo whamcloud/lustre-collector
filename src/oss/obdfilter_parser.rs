@@ -3,10 +3,12 @@
 // license that can be found in the LICENSE file.
 
 use crate::{
-    base_parsers::{digits, param, period, target},
+    base_parsers::{digits, param, param_period, period, target},
+    exports_parser::exports_stats,
     oss::job_stats,
     stats_parser::stats,
     types::{JobStatOst, Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant},
+    ExportStats,
 };
 use combine::{
     choice,
@@ -24,13 +26,17 @@ pub(crate) const TOT_DIRTY: &str = "tot_dirty";
 pub(crate) const TOT_GRANTED: &str = "tot_granted";
 pub(crate) const TOT_PENDING: &str = "tot_pending";
 
-pub(crate) const OBD_STATS: [&str; 6] = [
+pub(crate) const EXPORTS: &str = "exports";
+pub(crate) const EXPORTS_PARAMS: &str = "exports.*.stats";
+
+pub(crate) const OBD_STATS: [&str; 7] = [
     JOBSTATS,
     STATS,
     NUM_EXPORTS,
     TOT_DIRTY,
     TOT_GRANTED,
     TOT_PENDING,
+    EXPORTS_PARAMS,
 ];
 
 /// Takes OBD_STATS and produces a list of params for
@@ -57,6 +63,7 @@ where
 enum ObdfilterStat {
     JobStats(Option<Vec<JobStatOst>>),
     Stats(Vec<Stat>),
+    ExportStats(Vec<ExportStats>),
     NumExports(u64),
     TotDirty(u64),
     TotGranted(u64),
@@ -89,6 +96,10 @@ where
         (
             param(TOT_PENDING),
             digits().skip(newline()).map(ObdfilterStat::TotPending),
+        ),
+        (
+            param_period(EXPORTS),
+            exports_stats().map(ObdfilterStat::ExportStats),
         ),
     ))
     .message("while parsing obdfilter")
@@ -132,6 +143,12 @@ where
                 value,
             }),
             ObdfilterStat::TotPending(value) => TargetStats::TotPending(TargetStat {
+                kind: TargetVariant::Ost,
+                target,
+                param,
+                value,
+            }),
+            ObdfilterStat::ExportStats(value) => TargetStats::ExportStats(TargetStat {
                 kind: TargetVariant::Ost,
                 target,
                 param,
