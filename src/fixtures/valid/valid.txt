@@ -328,3 +328,60 @@ req_active                1 samples [reqs] 1 1 1 1
 req_timeout               1 samples [secs] 15 15 15 225
 reqbuf_avail              3 samples [bufs] 1 1 3 3
 ldlm_bl_callback          1 samples [usecs] 16 16 16 256
+qmt.testfs-QMT0000.dt-0x0.glb-grp=
+global_pool0_dt_grp
+- id:      0
+  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
+qmt.testfs-QMT0000.dt-0x0.glb-prj=
+global_pool0_dt_prj
+- id:      0
+  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
+- id:      1337
+  limits:  { hard:               309200, soft:               307200, granted:              1025032, time:           1687277628 }
+qmt.testfs-QMT0000.dt-0x0.glb-usr=
+global_pool0_dt_usr
+- id:      0
+  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
+qmt.testfs-QMT0000.dt-ddn_ssd.glb-grp=
+global_index_copy:
+- id:      0
+  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
+qmt.testfs-QMT0000.dt-ddn_ssd.glb-prj=
+global_index_copy:
+- id:      0
+  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
+- id:      1337
+  limits:  { hard:                    0, soft:                    0, granted:              1024004, time:      281474976710656 }
+qmt.testfs-QMT0000.dt-ddn_ssd.glb-usr=
+global_index_copy:
+- id:      0
+  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
+qmt.testfs-QMT0000.dt-pool_1.glb-grp=
+global_index_copy:
+- id:      0
+  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
+qmt.testfs-QMT0000.dt-pool_1.glb-prj=
+global_index_copy:
+- id:      0
+  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
+- id:      1337
+  limits:  { hard:                    0, soft:                    0, granted:              1024004, time:      281474976710656 }
+qmt.testfs-QMT0000.dt-pool_1.glb-usr=
+global_index_copy:
+- id:      0
+  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
+qmt.testfs-QMT0000.md-0x0.glb-grp=
+global_pool0_md_grp
+- id:      0
+  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
+qmt.testfs-QMT0000.md-0x0.glb-prj=
+global_pool0_md_prj
+- id:      0
+  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
+- id:      1337
+  limits:  { hard:                11000, soft:                10000, granted:                 1024, time:                    0 }
+qmt.testfs-QMT0000.md-0x0.glb-usr=
+global_pool0_md_usr
+- id:      0
+  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
+ldlm.namespaces.filter-ai400-OST0001_UUID.resource_count=0

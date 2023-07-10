@@ -378,6 +378,15 @@ pub struct OssStat {
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+/// Stats specific to a quota target.
+pub struct TargetQuotaStat<T> {
+    pub pool: String,
+    pub param: Param,
+    pub target: Target,
+    pub value: T,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 /// Stats specific to a LNet Nid.
 pub struct LNetStat<T> {
     pub nid: String,
@@ -521,6 +530,7 @@ pub enum TargetStats {
     RecoveryConnectedClients(TargetStat<u64>),
     RecoveryCompletedClients(TargetStat<u64>),
     RecoveryEvictedClients(TargetStat<u64>),
+    QuotaStats(TargetQuotaStat<QuotaStats>),
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
@@ -546,4 +556,31 @@ pub enum Record {
     LustreService(LustreServiceStats),
     Node(NodeStats),
     Target(TargetStats),
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct QuotaStatLimits {
+    pub hard: u64,
+    pub soft: u64,
+    pub granted: u64,
+    pub time: u64,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct QuotaStat {
+    pub id: u64,
+    pub limits: QuotaStatLimits,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct QuotaStats {
+    pub kind: QuotaKind,
+    pub stats: Vec<QuotaStat>,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub enum QuotaKind {
+    Usr,
+    Grp,
+    Prj,
 }
