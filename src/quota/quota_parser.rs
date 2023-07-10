@@ -9,7 +9,7 @@ use crate::{
     QuotaKind, QuotaStat, QuotaStatOsd, QuotaStats, TargetQuotaStat,
 };
 use combine::{
-    attempt, choice,
+    attempt, choice, eof,
     error::{ParseError, StreamError},
     many, one_of, optional,
     parser::{
@@ -51,9 +51,10 @@ where
         optional(newline()), // If quota stats are present, the whole yaml blob will be on a newline
         many::<Vec<_>, _, _>(alpha_num().or(one_of("_-:".chars()))), // But yaml header might not be properly formatted, ignore it
         newline(),
-        take_until(attempt((newline(), alpha_num()))),
+        take_until(attempt((newline(), alpha_num()).map(drop).or(eof()))),
     )
-        .skip(newline())
+        .skip(optional(newline()))
+        .skip(optional(eof()))
         .and_then(|(_, _, _, x): (_, _, _, String)| {
             serde_yaml::from_str::<Vec<QuotaStat>>(&x).map_err(StreamErrorFor::<I>::other)
         })
@@ -68,9 +69,10 @@ where
         optional(newline()), // If quota stats are present, the whole yaml blob will be on a newline
         many::<Vec<_>, _, _>(alpha_num().or(one_of("_-:".chars()))), // But yaml header might not be properly formatted, ignore it
         newline(),
-        take_until(attempt((newline(), alpha_num()))),
+        take_until(attempt((newline(), alpha_num()).map(drop).or(eof()))),
     )
-        .skip(newline())
+        .skip(optional(newline()))
+        .skip(optional(eof()))
         .and_then(|(_, _, _, x): (_, _, _, String)| {
             serde_yaml::from_str::<Vec<QuotaStatOsd>>(&x).map_err(StreamErrorFor::<I>::other)
         })

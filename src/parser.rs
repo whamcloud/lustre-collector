@@ -20,8 +20,8 @@ pub fn params() -> Vec<String> {
         .chain(mgs_parser::params())
         .chain(oss::params())
         .chain(mds_parser::params())
-        .chain(ldlm::params())
         .chain(quota::params())
+        .chain(ldlm::params())
         .collect()
 }
 
@@ -37,8 +37,8 @@ where
         mgs_parser::parse().map(|x| vec![x]),
         mds_parser::parse().map(|x| vec![x]),
         oss::parse().map(|x| vec![x]),
-        ldlm::parse().map(|x| vec![x]),
         quota::parse().map(|x| vec![x]),
+        ldlm::parse().map(|x| vec![x]),
     )))
     .map(|xs: Vec<_>| xs.into_iter().flatten().collect())
 }

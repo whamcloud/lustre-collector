@@ -39,9 +39,9 @@ pub(crate) fn params() -> Vec<String> {
         format!("osd-*.*.{KBYTES_FREE}"),
         format!("osd-*.*.{KBYTES_TOTAL}"),
         format!("osd-*.*.{BRW_STATS}"),
-        format!("osd-*.{QUOTA_ACCT_GRP}"),
-        format!("osd-*.{QUOTA_ACCT_USR}"),
-        format!("osd-*.{QUOTA_ACCT_PRJ}"),
+        format!("osd-*.*.{QUOTA_ACCT_GRP}"),
+        format!("osd-*.*.{QUOTA_ACCT_USR}"),
+        format!("osd-*.*.{QUOTA_ACCT_PRJ}"),
     ]
 }
 
