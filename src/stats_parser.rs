@@ -6,7 +6,7 @@ use crate::{
     base_parsers::{digits, not_words, word},
     ldlm::LDLM,
     oss::oss_parser::OST,
-    qmt::QMT,
+    quota::QMT,
     time::time_triple,
     types::Stat,
 };

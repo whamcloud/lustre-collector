@@ -531,6 +531,7 @@ pub enum TargetStats {
     RecoveryCompletedClients(TargetStat<u64>),
     RecoveryEvictedClients(TargetStat<u64>),
     QuotaStats(TargetQuotaStat<QuotaStats>),
+    QuotaStatsOsd(TargetStat<QuotaStatsOsd>),
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
@@ -567,15 +568,33 @@ pub struct QuotaStatLimits {
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct QuotaStatUsage {
+    pub inodes: u64,
+    pub kbytes: u64,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct QuotaStat {
     pub id: u64,
     pub limits: QuotaStatLimits,
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct QuotaStatOsd {
+    pub id: u64,
+    pub usage: QuotaStatUsage,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct QuotaStats {
     pub kind: QuotaKind,
     pub stats: Vec<QuotaStat>,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct QuotaStatsOsd {
+    pub kind: QuotaKind,
+    pub stats: Vec<QuotaStatOsd>,
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]

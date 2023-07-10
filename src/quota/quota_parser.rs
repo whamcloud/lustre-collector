@@ -4,9 +4,9 @@
 
 use crate::{
     base_parsers::{param, period, target},
-    qmt::QMT,
+    quota::QMT,
     types::{Param, Record, Target, TargetStats},
-    QuotaKind, QuotaStat, QuotaStats, TargetQuotaStat,
+    QuotaKind, QuotaStat, QuotaStatOsd, QuotaStats, TargetQuotaStat,
 };
 use combine::{
     attempt, choice,
@@ -56,6 +56,23 @@ where
         .skip(newline())
         .and_then(|(_, _, _, x): (_, _, _, String)| {
             serde_yaml::from_str::<Vec<QuotaStat>>(&x).map_err(StreamErrorFor::<I>::other)
+        })
+}
+
+pub(crate) fn quota_stats_osd<I>() -> impl Parser<I, Output = Vec<QuotaStatOsd>>
+where
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
+{
+    (
+        optional(newline()), // If quota stats are present, the whole yaml blob will be on a newline
+        many::<Vec<_>, _, _>(alpha_num().or(one_of("_-:".chars()))), // But yaml header might not be properly formatted, ignore it
+        newline(),
+        take_until(attempt((newline(), alpha_num()))),
+    )
+        .skip(newline())
+        .and_then(|(_, _, _, x): (_, _, _, String)| {
+            serde_yaml::from_str::<Vec<QuotaStatOsd>>(&x).map_err(StreamErrorFor::<I>::other)
         })
 }
 

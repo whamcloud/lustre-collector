@@ -2990,6 +2990,163 @@ expression: result
             ),
         ),
         Target(
+            QuotaStatsOsd(
+                TargetStat {
+                    kind: Mdt,
+                    param: Param(
+                        "quota_slave.acct_group",
+                    ),
+                    target: Target(
+                        "testfs-MDT0000",
+                    ),
+                    value: QuotaStatsOsd {
+                        kind: Grp,
+                        stats: [
+                            QuotaStatOsd {
+                                id: 0,
+                                usage: QuotaStatUsage {
+                                    inodes: 396,
+                                    kbytes: 529400,
+                                },
+                            },
+                        ],
+                    },
+                },
+            ),
+        ),
+        Target(
+            QuotaStatsOsd(
+                TargetStat {
+                    kind: Mdt,
+                    param: Param(
+                        "quota_slave.acct_project",
+                    ),
+                    target: Target(
+                        "testfs-MDT0000",
+                    ),
+                    value: QuotaStatsOsd {
+                        kind: Prj,
+                        stats: [
+                            QuotaStatOsd {
+                                id: 0,
+                                usage: QuotaStatUsage {
+                                    inodes: 393,
+                                    kbytes: 529396,
+                                },
+                            },
+                            QuotaStatOsd {
+                                id: 1337,
+                                usage: QuotaStatUsage {
+                                    inodes: 3,
+                                    kbytes: 4,
+                                },
+                            },
+                        ],
+                    },
+                },
+            ),
+        ),
+        Target(
+            QuotaStatsOsd(
+                TargetStat {
+                    kind: Mdt,
+                    param: Param(
+                        "quota_slave.acct_user",
+                    ),
+                    target: Target(
+                        "testfs-MDT0000",
+                    ),
+                    value: QuotaStatsOsd {
+                        kind: Usr,
+                        stats: [
+                            QuotaStatOsd {
+                                id: 0,
+                                usage: QuotaStatUsage {
+                                    inodes: 396,
+                                    kbytes: 529400,
+                                },
+                            },
+                        ],
+                    },
+                },
+            ),
+        ),
+        Target(
+            QuotaStatsOsd(
+                TargetStat {
+                    kind: Mdt,
+                    param: Param(
+                        "quota_slave.acct_group",
+                    ),
+                    target: Target(
+                        "testfs-MDT0001",
+                    ),
+                    value: QuotaStatsOsd {
+                        kind: Grp,
+                        stats: [
+                            QuotaStatOsd {
+                                id: 0,
+                                usage: QuotaStatUsage {
+                                    inodes: 265,
+                                    kbytes: 356672,
+                                },
+                            },
+                        ],
+                    },
+                },
+            ),
+        ),
+        Target(
+            QuotaStatsOsd(
+                TargetStat {
+                    kind: Mdt,
+                    param: Param(
+                        "quota_slave.acct_project",
+                    ),
+                    target: Target(
+                        "testfs-MDT0001",
+                    ),
+                    value: QuotaStatsOsd {
+                        kind: Prj,
+                        stats: [
+                            QuotaStatOsd {
+                                id: 0,
+                                usage: QuotaStatUsage {
+                                    inodes: 265,
+                                    kbytes: 356672,
+                                },
+                            },
+                        ],
+                    },
+                },
+            ),
+        ),
+        Target(
+            QuotaStatsOsd(
+                TargetStat {
+                    kind: Mdt,
+                    param: Param(
+                        "quota_slave.acct_user",
+                    ),
+                    target: Target(
+                        "testfs-MDT0001",
+                    ),
+                    value: QuotaStatsOsd {
+                        kind: Usr,
+                        stats: [
+                            QuotaStatOsd {
+                                id: 0,
+                                usage: QuotaStatUsage {
+                                    inodes: 265,
+                                    kbytes: 356672,
+                                },
+                            },
+                        ],
+                    },
+                },
+            ),
+        ),
+        Target(
             ResourceCount(
                 TargetStat {
                     kind: Ost,

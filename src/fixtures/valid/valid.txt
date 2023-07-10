@@ -384,4 +384,30 @@ qmt.testfs-QMT0000.md-0x0.glb-usr=
 global_pool0_md_usr
 - id:      0
   limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
+osd-ldiskfs.testfs-MDT0000.quota_slave.acct_group=
+grp_accounting:
+- id:      0
+  usage:   { inodes:                  396, kbytes:               529400 }
+osd-ldiskfs.testfs-MDT0000.quota_slave.acct_project=
+prj_accounting:
+- id:      0
+  usage:   { inodes:                  393, kbytes:               529396 }
+- id:      1337
+  usage:   { inodes:                    3, kbytes:                    4 }
+osd-ldiskfs.testfs-MDT0000.quota_slave.acct_user=
+usr_accounting:
+- id:      0
+  usage:   { inodes:                  396, kbytes:               529400 }
+osd-ldiskfs.testfs-MDT0001.quota_slave.acct_group=
+grp_accounting:
+- id:      0
+  usage:   { inodes:                  265, kbytes:               356672 }
+osd-ldiskfs.testfs-MDT0001.quota_slave.acct_project=
+prj_accounting:
+- id:      0
+  usage:   { inodes:                  265, kbytes:               356672 }
+osd-ldiskfs.testfs-MDT0001.quota_slave.acct_user=
+usr_accounting:
+- id:      0
+  usage:   { inodes:                  265, kbytes:               356672 }
 ldlm.namespaces.filter-ai400-OST0001_UUID.resource_count=0
