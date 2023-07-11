@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 use combine::{
-    attempt,
+    attempt, eof,
     error::{Format, ParseError},
     many1, one_of,
     parser::{
@@ -92,6 +92,14 @@ where
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     take_until(equals())
+}
+
+pub(crate) fn till_eof<I>() -> impl Parser<I, Output = String>
+where
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
+{
+    take_until(eof())
 }
 
 pub(crate) fn string_to<I>(x: &'static str, y: &'static str) -> impl Parser<I, Output = String>

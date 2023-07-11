@@ -3,11 +3,11 @@
 // license that can be found in the LICENSE file.
 
 use crate::{
-    base_parsers::{param, period, target},
+    base_parsers::{digits, param, period, target, till_eof, till_newline},
     types::{Param, Record, RecoveryStatus, Target, TargetStat, TargetStats, TargetVariant},
 };
 use combine::{
-    attempt, eof, many, optional,
+    attempt, choice, eof, many, optional,
     parser::{
         char::{newline, spaces, string},
         repeat::{skip_until, take_until},
@@ -71,23 +71,107 @@ where
         })
 }
 
-fn target_status<I>() -> impl Parser<I, Output = Record>
+fn clients_line<I>(x: &'static str) -> impl Parser<I, Output = u64>
+where
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
+{
+    (
+        attempt(string(x).skip(optional(token(':')))),
+        spaces(),
+        digits(),
+        optional((token('/'), digits())),
+        optional(newline().map(drop).or(eof())),
+    )
+        .map(|(_, _, x, _, _): (_, _, u64, _, _)| x)
+}
+
+#[derive(Debug)]
+enum RecoveryStat {
+    Status(RecoveryStatus),
+    Completed(u64),
+    Connected(u64),
+    Evicted(u64),
+}
+
+fn target_recovery_stats<I>() -> impl Parser<I, Output = Vec<RecoveryStat>>
+where
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
+{
+    many(choice((
+        status_line()
+            .skip(optional(newline()))
+            .map(RecoveryStat::Status)
+            .map(Some),
+        clients_line("completed_clients")
+            .skip(optional(newline()))
+            .map(RecoveryStat::Completed)
+            .map(Some),
+        clients_line("connected_clients")
+            .skip(optional(newline()))
+            .map(RecoveryStat::Connected)
+            .map(Some),
+        clients_line("evicted_clients")
+            .skip(optional(newline()))
+            .map(RecoveryStat::Evicted)
+            .map(Some),
+        attempt((
+            target(),
+            token(':'),
+            till_newline().skip(newline()).or(till_eof().skip(eof())),
+        ))
+        .map(|_| None),
+    )))
+    .map(|xs: Vec<_>| xs.into_iter().flatten().collect())
+}
+
+fn target_status<I>() -> impl Parser<I, Output = Vec<TargetStats>>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
         target_info().skip(optional(newline())),
-        status_line().skip(optional(newline())),
+        target_recovery_stats(),
     )
-        .map(|((kind, target, param), value)| TargetStat {
-            kind,
-            param,
-            target,
-            value,
+        .map(|((kind, target, param), values)| {
+            values
+                .iter()
+                .map(|value| match value {
+                    RecoveryStat::Status(value) => TargetStats::RecoveryStatus(TargetStat {
+                        kind,
+                        param: param.clone(),
+                        target: target.clone(),
+                        value: *value,
+                    }),
+                    RecoveryStat::Completed(value) => {
+                        TargetStats::RecoveryCompletedClients(TargetStat {
+                            kind,
+                            param: param.clone(),
+                            target: target.clone(),
+                            value: *value,
+                        })
+                    }
+                    RecoveryStat::Connected(value) => {
+                        TargetStats::RecoveryConnectedClients(TargetStat {
+                            kind,
+                            param: param.clone(),
+                            target: target.clone(),
+                            value: *value,
+                        })
+                    }
+                    RecoveryStat::Evicted(value) => {
+                        TargetStats::RecoveryEvictedClients(TargetStat {
+                            kind,
+                            param: param.clone(),
+                            target: target.clone(),
+                            value: *value,
+                        })
+                    }
+                })
+                .collect()
         })
-        .map(TargetStats::RecoveryStatus)
-        .map(Record::Target)
 }
 
 pub fn parse<I>() -> impl Parser<I, Output = Vec<Record>>
@@ -100,8 +184,9 @@ where
             target_status(),
             skip_until(attempt(ost_or_mdt().map(drop)).or(eof())),
         )
-            .map(|(x, _)| x),
+            .map(|(x, _)| x.into_iter().map(Record::Target).collect()),
     )
+    .map(|x: Vec<Vec<Record>>| x.into_iter().flatten().collect())
 }
 
 #[cfg(test)]

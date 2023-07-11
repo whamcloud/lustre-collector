@@ -324,7 +324,7 @@ pub struct HostStat<T> {
     pub value: T,
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize, Clone, Copy)]
 pub enum TargetVariant {
     Ost,
     Mgt,
@@ -504,6 +504,9 @@ pub enum TargetStats {
     ThreadsStarted(TargetStat<u64>),
     RecoveryStatus(TargetStat<RecoveryStatus>),
     Oss(OssStat),
+    RecoveryConnectedClients(TargetStat<u64>),
+    RecoveryCompletedClients(TargetStat<u64>),
+    RecoveryEvictedClients(TargetStat<u64>),
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
