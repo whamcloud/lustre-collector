@@ -2,14 +2,67 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use crate::{oss::obdfilter_parser, oss::ost_parser, types::Record};
-use combine::{attempt, error::ParseError, Parser, Stream};
+use crate::{
+    base_parsers::{param, period, target},
+    stats_parser::stats,
+    types::{Param, Record, Stat, Target, TargetStat, TargetStats, TargetVariant},
+};
+use combine::{attempt, choice, error::ParseError, parser::char::string, stream::Stream, Parser};
 
+pub(crate) const OST: &str = "ost";
+
+pub(crate) const OST_IO: &str = "ost_io";
+pub(crate) const OST_CREATE: &str = "ost_create";
+pub(crate) const OST_OUT: &str = "ost_out";
+pub(crate) const OST_SEQ: &str = "ost_seq";
+
+pub(crate) const OST_STATS: [&str; 5] = [OST, OST_IO, OST_CREATE, OST_OUT, OST_SEQ];
+
+/// Takes OBD_STATS and produces a list of params for
+/// consumption in proper ltcl get_param format.
 pub(crate) fn params() -> Vec<String> {
-    obdfilter_parser::obd_params()
-        .into_iter()
-        .chain(ost_parser::params())
+    OST_STATS
+        .iter()
+        .map(|x| format!("ost.OSS.{x}.stats"))
         .collect()
+}
+
+/// Parses the name of a target
+fn target_name<I>() -> impl Parser<I, Output = Target>
+where
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
+{
+    (string("ost").skip(period()), target().skip(period()))
+        .map(|(_, x)| x)
+        .message("while parsing target_name")
+}
+
+/// Parses the name of a target
+fn param_non_final<I>(x: &'static str) -> impl Parser<I, Output = Param>
+where
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
+{
+    attempt(string(x).skip(period()))
+        .map(|x| Param(x.to_string()))
+        .message("while getting param non")
+}
+
+fn ost_stat<I>() -> impl Parser<I, Output = (Param, Vec<Stat>)>
+where
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
+{
+    choice((
+        (param_non_final(OST), param("stats"), stats()),
+        (param_non_final(OST_IO), param("stats"), stats()),
+        (param_non_final(OST_CREATE), param("stats"), stats()),
+        (param_non_final(OST_OUT), param("stats"), stats()),
+        (param_non_final(OST_SEQ), param("stats"), stats()),
+    ))
+    .map(|(x, _, y)| (x, y))
+    .message("while parsing ost stat")
 }
 
 pub(crate) fn parse<I>() -> impl Parser<I, Output = Record>
@@ -17,35 +70,28 @@ where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
-    attempt(obdfilter_parser::parse()).or(attempt(ost_parser::parse()))
+    (target_name(), ost_stat())
+        .map(|(target, (param, value))| {
+            TargetStats::OstStat(TargetStat {
+                kind: TargetVariant::Ost,
+                target,
+                param,
+                value,
+            })
+        })
+        .map(Record::Target)
+        .message("while parsing ost")
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use combine::many;
+    use combine::{many, parser::EasyParser};
     use insta::assert_debug_snapshot;
 
     #[test]
     fn test_params() {
-        let x = r#"obdfilter.fs-OST0000.stats=
-snapshot_time             1535148988.363769785 secs.nsecs
-write_bytes               9 samples [bytes] 98303 4194304 33554431
-create                    4 samples [reqs]
-statfs                    42297 samples [reqs]
-get_info                  2 samples [reqs]
-connect                   6 samples [reqs]
-reconnect                 1 samples [reqs]
-disconnect                4 samples [reqs]
-statfs                    46806 samples [reqs]
-preprw                    9 samples [reqs]
-commitrw                  9 samples [reqs]
-ping                      8229 samples [reqs]
-obdfilter.fs-OST0000.num_exports=2
-obdfilter.fs-OST0000.tot_dirty=0
-obdfilter.fs-OST0000.tot_granted=8666816
-obdfilter.fs-OST0000.tot_pending=0
-ost.OSS.ost.stats=
+        let x = r#"ost.OSS.ost.stats=
 snapshot_time             1688128253.497763049 secs.nsecs
 req_waittime              18419628 samples [usec] 2 40983 305482965 25043535105
 req_qdepth                18419628 samples [reqs] 0 34 99937 130635
@@ -74,7 +120,7 @@ ost_write                 951033049 samples [usec] 59 1247713 2749050524782 1000
 ost_punch                 1515 samples [usec] 16 4883 63967 29511205
 "#;
 
-        let result: (Vec<_>, _) = many(parse()).parse(x).unwrap();
+        let result: (Vec<_>, _) = many(parse()).easy_parse(x).unwrap();
 
         assert_debug_snapshot!(result)
     }

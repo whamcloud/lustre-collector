@@ -5,3 +5,4 @@
 pub(crate) mod job_stats;
 pub(crate) mod obdfilter_parser;
 pub(crate) mod oss_parser;
+pub(crate) mod ost_parser;

@@ -496,6 +496,7 @@ pub enum TargetStats {
     ThreadsMax(TargetStat<u64>),
     ThreadsStarted(TargetStat<u64>),
     RecoveryStatus(TargetStat<RecoveryStatus>),
+    OstStat(TargetStat<Vec<Stat>>),
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
