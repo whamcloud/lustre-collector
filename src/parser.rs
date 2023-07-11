@@ -4,7 +4,7 @@
 
 use crate::{
     ldlm,
-    mds::{client_count_parser, mds_parser},
+    mds::{self, client_count_parser},
     mgs::mgs_parser,
     osd_parser, oss, top_level_parser,
     types::Record,
@@ -19,7 +19,7 @@ pub fn params() -> Vec<String> {
         .chain(client_count_parser::params())
         .chain(mgs_parser::params())
         .chain(oss::params())
-        .chain(mds_parser::params())
+        .chain(mds::params())
         .chain(ldlm::params())
         .collect()
 }
@@ -34,8 +34,8 @@ where
         client_count_parser::parse(),
         osd_parser::parse().map(|x| vec![x]),
         mgs_parser::parse().map(|x| vec![x]),
-        mds_parser::parse().map(|x| vec![x]),
         oss::parse().map(|x| vec![x]),
+        mds::parse().map(|x| vec![x]),
         ldlm::parse().map(|x| vec![x]),
     )))
     .map(|xs: Vec<_>| xs.into_iter().flatten().collect())
