@@ -1,16 +1,134 @@
 ---
-source: src/mds/mds_parser.rs
+source: src/mds/md_parser.rs
 expression: result
 ---
 (
     [
         Target(
-            Mds(
-                MdsStat {
+            Stats(
+                TargetStat {
+                    kind: Mdt,
+                    param: Param(
+                        "md_stats",
+                    ),
+                    target: Target(
+                        "fs-MDT0000",
+                    ),
+                    value: [
+                        Stat {
+                            name: "statfs",
+                            units: "reqs",
+                            samples: 20318,
+                            min: None,
+                            max: None,
+                            sum: None,
+                            sumsquare: None,
+                        },
+                    ],
+                },
+            ),
+        ),
+        Target(
+            Stats(
+                TargetStat {
+                    kind: Mdt,
+                    param: Param(
+                        "md_stats",
+                    ),
+                    target: Target(
+                        "fs-MDT0001",
+                    ),
+                    value: [
+                        Stat {
+                            name: "statfs",
+                            units: "reqs",
+                            samples: 20805,
+                            min: None,
+                            max: None,
+                            sum: None,
+                            sumsquare: None,
+                        },
+                    ],
+                },
+            ),
+        ),
+        Target(
+            Stats(
+                TargetStat {
+                    kind: Mdt,
+                    param: Param(
+                        "md_stats",
+                    ),
+                    target: Target(
+                        "fs-MDT0002",
+                    ),
+                    value: [
+                        Stat {
+                            name: "statfs",
+                            units: "reqs",
+                            samples: 20805,
+                            min: None,
+                            max: None,
+                            sum: None,
+                            sumsquare: None,
+                        },
+                    ],
+                },
+            ),
+        ),
+        Target(
+            NumExports(
+                TargetStat {
+                    kind: Mdt,
+                    param: Param(
+                        "num_exports",
+                    ),
+                    target: Target(
+                        "fs-MDT0000",
+                    ),
+                    value: 16,
+                },
+            ),
+        ),
+        Target(
+            NumExports(
+                TargetStat {
+                    kind: Mdt,
+                    param: Param(
+                        "num_exports",
+                    ),
+                    target: Target(
+                        "fs-MDT0001",
+                    ),
+                    value: 13,
+                },
+            ),
+        ),
+        Target(
+            NumExports(
+                TargetStat {
+                    kind: Mdt,
+                    param: Param(
+                        "num_exports",
+                    ),
+                    target: Target(
+                        "fs-MDT0002",
+                    ),
+                    value: 13,
+                },
+            ),
+        ),
+        Target(
+            Stats(
+                TargetStat {
+                    kind: Mdt,
                     param: Param(
                         "mdt",
                     ),
-                    stats: [
+                    target: Target(
+                        "MDS",
+                    ),
+                    value: [
                         Stat {
                             name: "req_waittime",
                             units: "usec",
@@ -271,12 +389,16 @@ expression: result
             ),
         ),
         Target(
-            Mds(
-                MdsStat {
+            Stats(
+                TargetStat {
+                    kind: Mdt,
                     param: Param(
                         "mdt_fld",
                     ),
-                    stats: [
+                    target: Target(
+                        "MDS",
+                    ),
+                    value: [
                         Stat {
                             name: "req_waittime",
                             units: "usec",
@@ -401,22 +523,30 @@ expression: result
             ),
         ),
         Target(
-            Mds(
-                MdsStat {
+            Stats(
+                TargetStat {
+                    kind: Mdt,
                     param: Param(
                         "mdt_io",
                     ),
-                    stats: [],
+                    target: Target(
+                        "MDS",
+                    ),
+                    value: [],
                 },
             ),
         ),
         Target(
-            Mds(
-                MdsStat {
+            Stats(
+                TargetStat {
+                    kind: Mdt,
                     param: Param(
                         "mdt_out",
                     ),
-                    stats: [
+                    target: Target(
+                        "MDS",
+                    ),
+                    value: [
                         Stat {
                             name: "req_waittime",
                             units: "usec",
@@ -541,12 +671,16 @@ expression: result
             ),
         ),
         Target(
-            Mds(
-                MdsStat {
+            Stats(
+                TargetStat {
+                    kind: Mdt,
                     param: Param(
                         "mdt_readpage",
                     ),
-                    stats: [
+                    target: Target(
+                        "MDS",
+                    ),
+                    value: [
                         Stat {
                             name: "req_waittime",
                             units: "usec",
@@ -671,12 +805,16 @@ expression: result
             ),
         ),
         Target(
-            Mds(
-                MdsStat {
+            Stats(
+                TargetStat {
+                    kind: Mdt,
                     param: Param(
                         "mdt_seqm",
                     ),
-                    stats: [
+                    target: Target(
+                        "MDS",
+                    ),
+                    value: [
                         Stat {
                             name: "req_waittime",
                             units: "usec",
@@ -784,12 +922,16 @@ expression: result
             ),
         ),
         Target(
-            Mds(
-                MdsStat {
+            Stats(
+                TargetStat {
+                    kind: Mdt,
                     param: Param(
                         "mdt_seqs",
                     ),
-                    stats: [
+                    target: Target(
+                        "MDS",
+                    ),
+                    value: [
                         Stat {
                             name: "req_waittime",
                             units: "usec",
@@ -897,12 +1039,16 @@ expression: result
             ),
         ),
         Target(
-            Mds(
-                MdsStat {
+            Stats(
+                TargetStat {
+                    kind: Mdt,
                     param: Param(
                         "mdt_setattr",
                     ),
-                    stats: [],
+                    target: Target(
+                        "MDS",
+                    ),
+                    value: [],
                 },
             ),
         ),

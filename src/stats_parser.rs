@@ -6,6 +6,7 @@ use crate::{
     base_parsers::{digits, not_words, word},
     ldlm::LDLM,
     llite::LLITE,
+    mds::mds_parser::MDS,
     oss::oss_parser::OST,
     time::time_triple,
     types::Stat,
@@ -28,7 +29,7 @@ where
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
-        not_words(&["obdfilter", "mgs", "mdt", LDLM, OST, LLITE]).skip(spaces()),
+        not_words(&["obdfilter", "mgs", "mdt", LDLM, OST, LLITE, MDS]).skip(spaces()),
         digits(),
         spaces().with(string("samples")),
         spaces().with(between(token('['), token(']'), word())),

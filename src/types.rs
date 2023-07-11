@@ -392,6 +392,13 @@ pub struct LliteStat {
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+/// Stats from parsing `mds.MDS.<PARAM>.stats`
+pub struct MdsStat {
+    pub param: Param,
+    pub stats: Vec<Stat>,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 /// Stats specific to a LNet Nid.
 pub struct LNetStat<T> {
     pub nid: String,
@@ -537,6 +544,7 @@ pub enum TargetStats {
     RecoveryEvictedClients(TargetStat<u64>),
     Llite(LliteStat),
     ExportStats(TargetStat<Vec<ExportStats>>),
+    Mds(MdsStat),
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
