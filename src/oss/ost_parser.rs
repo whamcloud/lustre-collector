@@ -1,4 +1,4 @@
-// Copyright (c) 2021 DDN. All rights reserved.
+// Copyright (c) 2023 DDN. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
@@ -10,7 +10,6 @@ use crate::{
 use combine::{attempt, choice, error::ParseError, parser::char::string, stream::Stream, Parser};
 
 pub(crate) const OST: &str = "ost";
-
 pub(crate) const OST_IO: &str = "ost_io";
 pub(crate) const OST_CREATE: &str = "ost_create";
 pub(crate) const OST_OUT: &str = "ost_out";
@@ -18,7 +17,7 @@ pub(crate) const OST_SEQ: &str = "ost_seq";
 
 pub(crate) const OST_STATS: [&str; 5] = [OST, OST_IO, OST_CREATE, OST_OUT, OST_SEQ];
 
-/// Takes OBD_STATS and produces a list of params for
+/// Takes OSD_STATS and produces a list of params for
 /// consumption in proper ltcl get_param format.
 pub(crate) fn params() -> Vec<String> {
     OST_STATS
@@ -27,18 +26,18 @@ pub(crate) fn params() -> Vec<String> {
         .collect()
 }
 
-/// Parses the name of a target
+/// Parses the name of a target coming from 'ost' endpoint
 fn target_name<I>() -> impl Parser<I, Output = Target>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
-    (string("ost").skip(period()), target().skip(period()))
+    (string(OST).skip(period()), target().skip(period()))
         .map(|(_, x)| x)
         .message("while parsing target_name")
 }
 
-/// Parses the name of a target
+/// Parses the name of a non final param (that ends with a '.' rather than a '=')
 fn param_non_final<I>(x: &'static str) -> impl Parser<I, Output = Param>
 where
     I: Stream<Token = char>,
@@ -46,7 +45,7 @@ where
 {
     attempt(string(x).skip(period()))
         .map(|x| Param(x.to_string()))
-        .message("while getting param non")
+        .message("while getting non final param")
 }
 
 fn ost_stat<I>() -> impl Parser<I, Output = (Param, Vec<Stat>)>
@@ -72,7 +71,7 @@ where
 {
     (target_name(), ost_stat())
         .map(|(target, (param, value))| {
-            TargetStats::OstStat(TargetStat {
+            TargetStats::Stats(TargetStat {
                 kind: TargetVariant::Ost,
                 target,
                 param,

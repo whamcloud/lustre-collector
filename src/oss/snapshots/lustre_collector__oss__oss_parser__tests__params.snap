@@ -181,7 +181,7 @@ expression: result
             ),
         ),
         Target(
-            OstStat(
+            Stats(
                 TargetStat {
                     kind: Ost,
                     param: Param(
@@ -451,7 +451,7 @@ expression: result
             ),
         ),
         Target(
-            OstStat(
+            Stats(
                 TargetStat {
                     kind: Ost,
                     param: Param(
