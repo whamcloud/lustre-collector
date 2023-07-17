@@ -363,6 +363,13 @@ pub struct TargetStat<T> {
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+/// Stats from parsing `ost.OSS.<PARAM>.stats`
+pub struct OssStat {
+    pub param: Param,
+    pub stats: Vec<Stat>,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 /// Stats specific to a LNet Nid.
 pub struct LNetStat<T> {
     pub nid: String,
@@ -496,6 +503,7 @@ pub enum TargetStats {
     ThreadsMax(TargetStat<u64>),
     ThreadsStarted(TargetStat<u64>),
     RecoveryStatus(TargetStat<RecoveryStatus>),
+    Oss(OssStat),
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]

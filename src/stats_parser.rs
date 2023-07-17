@@ -5,7 +5,7 @@
 use crate::{
     base_parsers::{digits, not_words, word},
     ldlm::LDLM,
-    oss::ost_parser::OST,
+    oss::oss_parser::OST,
     time::time_triple,
     types::Stat,
 };

@@ -1,20 +1,16 @@
 ---
-source: src/oss/ost_parser.rs
+source: src/oss/oss_parser.rs
 expression: result
 ---
 (
     [
         Target(
-            Stats(
-                TargetStat {
-                    kind: Ost,
+            Oss(
+                OssStat {
                     param: Param(
                         "ost",
                     ),
-                    target: Target(
-                        "OSS",
-                    ),
-                    value: [
+                    stats: [
                         Stat {
                             name: "req_waittime",
                             units: "usec",
@@ -275,16 +271,12 @@ expression: result
             ),
         ),
         Target(
-            Stats(
-                TargetStat {
-                    kind: Ost,
+            Oss(
+                OssStat {
                     param: Param(
                         "ost_io",
                     ),
-                    target: Target(
-                        "OSS",
-                    ),
-                    value: [
+                    stats: [
                         Stat {
                             name: "req_waittime",
                             units: "usec",
