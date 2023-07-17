@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 use crate::{
-    base_parsers::{digits, param, period, target, till_eof, till_newline},
+    base_parsers::{digits, param, period, target, till_newline},
     types::{Param, Record, RecoveryStatus, Target, TargetStat, TargetStats, TargetVariant},
 };
 use combine::{
@@ -116,12 +116,8 @@ where
             .skip(optional(newline()))
             .map(RecoveryStat::Evicted)
             .map(Some),
-        attempt((
-            target(),
-            token(':'),
-            till_newline().skip(newline()).or(till_eof().skip(eof())),
-        ))
-        .map(|_| None),
+        // This will ignore line/field we don't care
+        attempt((target(), token(':'), till_newline().skip(newline()))).map(|_| None),
     )))
     .map(|xs: Vec<_>| xs.into_iter().flatten().collect())
 }
