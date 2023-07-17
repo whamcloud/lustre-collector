@@ -123,7 +123,7 @@ where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
-    attempt(string(x).skip(token('=')))
+    attempt(string(x).skip(equals()))
         .map(|x| Param(x.to_string()))
         .message("while getting param")
 }

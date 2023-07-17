@@ -993,6 +993,775 @@ expression: result
             ),
         ),
         Target(
+            Oss(
+                OssStat {
+                    param: Param(
+                        "ost",
+                    ),
+                    stats: [
+                        Stat {
+                            name: "req_waittime",
+                            units: "usec",
+                            samples: 219,
+                            min: Some(
+                                11,
+                            ),
+                            max: Some(
+                                753,
+                            ),
+                            sum: Some(
+                                6162,
+                            ),
+                            sumsquare: Some(
+                                771804,
+                            ),
+                        },
+                        Stat {
+                            name: "req_qdepth",
+                            units: "reqs",
+                            samples: 219,
+                            min: Some(
+                                0,
+                            ),
+                            max: Some(
+                                0,
+                            ),
+                            sum: Some(
+                                0,
+                            ),
+                            sumsquare: Some(
+                                0,
+                            ),
+                        },
+                        Stat {
+                            name: "req_active",
+                            units: "reqs",
+                            samples: 219,
+                            min: Some(
+                                1,
+                            ),
+                            max: Some(
+                                2,
+                            ),
+                            sum: Some(
+                                230,
+                            ),
+                            sumsquare: Some(
+                                252,
+                            ),
+                        },
+                        Stat {
+                            name: "req_timeout",
+                            units: "sec",
+                            samples: 219,
+                            min: Some(
+                                1,
+                            ),
+                            max: Some(
+                                15,
+                            ),
+                            sum: Some(
+                                2235,
+                            ),
+                            sumsquare: Some(
+                                30585,
+                            ),
+                        },
+                        Stat {
+                            name: "reqbuf_avail",
+                            units: "bufs",
+                            samples: 501,
+                            min: Some(
+                                63,
+                            ),
+                            max: Some(
+                                64,
+                            ),
+                            sum: Some(
+                                32058,
+                            ),
+                            sumsquare: Some(
+                                2051334,
+                            ),
+                        },
+                        Stat {
+                            name: "ldlm_glimpse_enqueue",
+                            units: "reqs",
+                            samples: 66,
+                            min: Some(
+                                1,
+                            ),
+                            max: Some(
+                                1,
+                            ),
+                            sum: Some(
+                                66,
+                            ),
+                            sumsquare: Some(
+                                66,
+                            ),
+                        },
+                        Stat {
+                            name: "ldlm_extent_enqueue",
+                            units: "reqs",
+                            samples: 16,
+                            min: Some(
+                                1,
+                            ),
+                            max: Some(
+                                1,
+                            ),
+                            sum: Some(
+                                16,
+                            ),
+                            sumsquare: Some(
+                                16,
+                            ),
+                        },
+                        Stat {
+                            name: "ost_create",
+                            units: "usec",
+                            samples: 32,
+                            min: Some(
+                                7,
+                            ),
+                            max: Some(
+                                428,
+                            ),
+                            sum: Some(
+                                4811,
+                            ),
+                            sumsquare: Some(
+                                1322695,
+                            ),
+                        },
+                        Stat {
+                            name: "ost_get_info",
+                            units: "usec",
+                            samples: 16,
+                            min: Some(
+                                567,
+                            ),
+                            max: Some(
+                                4781,
+                            ),
+                            sum: Some(
+                                21444,
+                            ),
+                            sumsquare: Some(
+                                58444726,
+                            ),
+                        },
+                        Stat {
+                            name: "ost_connect",
+                            units: "usec",
+                            samples: 58,
+                            min: Some(
+                                32,
+                            ),
+                            max: Some(
+                                158,
+                            ),
+                            sum: Some(
+                                3410,
+                            ),
+                            sumsquare: Some(
+                                227824,
+                            ),
+                        },
+                        Stat {
+                            name: "ost_disconnect",
+                            units: "usec",
+                            samples: 2,
+                            min: Some(
+                                66,
+                            ),
+                            max: Some(
+                                72,
+                            ),
+                            sum: Some(
+                                138,
+                            ),
+                            sumsquare: Some(
+                                9540,
+                            ),
+                        },
+                        Stat {
+                            name: "ost_sync",
+                            units: "usec",
+                            samples: 16,
+                            min: Some(
+                                240,
+                            ),
+                            max: Some(
+                                3889,
+                            ),
+                            sum: Some(
+                                29785,
+                            ),
+                            sumsquare: Some(
+                                76167573,
+                            ),
+                        },
+                        Stat {
+                            name: "obd_ping",
+                            units: "usec",
+                            samples: 13,
+                            min: Some(
+                                7,
+                            ),
+                            max: Some(
+                                28,
+                            ),
+                            sum: Some(
+                                225,
+                            ),
+                            sumsquare: Some(
+                                4327,
+                            ),
+                        },
+                    ],
+                },
+            ),
+        ),
+        Target(
+            Oss(
+                OssStat {
+                    param: Param(
+                        "ost_create",
+                    ),
+                    stats: [
+                        Stat {
+                            name: "req_waittime",
+                            units: "usec",
+                            samples: 239924,
+                            min: Some(
+                                6,
+                            ),
+                            max: Some(
+                                80519,
+                            ),
+                            sum: Some(
+                                23284390,
+                            ),
+                            sumsquare: Some(
+                                432682600300,
+                            ),
+                        },
+                        Stat {
+                            name: "req_qdepth",
+                            units: "reqs",
+                            samples: 239924,
+                            min: Some(
+                                0,
+                            ),
+                            max: Some(
+                                1,
+                            ),
+                            sum: Some(
+                                189,
+                            ),
+                            sumsquare: Some(
+                                189,
+                            ),
+                        },
+                        Stat {
+                            name: "req_active",
+                            units: "reqs",
+                            samples: 239924,
+                            min: Some(
+                                1,
+                            ),
+                            max: Some(
+                                3,
+                            ),
+                            sum: Some(
+                                282653,
+                            ),
+                            sumsquare: Some(
+                                368119,
+                            ),
+                        },
+                        Stat {
+                            name: "req_timeout",
+                            units: "sec",
+                            samples: 239924,
+                            min: Some(
+                                1,
+                            ),
+                            max: Some(
+                                15,
+                            ),
+                            sum: Some(
+                                3597962,
+                            ),
+                            sumsquare: Some(
+                                53968262,
+                            ),
+                        },
+                        Stat {
+                            name: "reqbuf_avail",
+                            units: "bufs",
+                            samples: 500525,
+                            min: Some(
+                                63,
+                            ),
+                            max: Some(
+                                64,
+                            ),
+                            sum: Some(
+                                32023877,
+                            ),
+                            sumsquare: Some(
+                                2048915579,
+                            ),
+                        },
+                        Stat {
+                            name: "ost_statfs",
+                            units: "usec",
+                            samples: 239924,
+                            min: Some(
+                                3,
+                            ),
+                            max: Some(
+                                95307,
+                            ),
+                            sum: Some(
+                                11187378,
+                            ),
+                            sumsquare: Some(
+                                188117229936,
+                            ),
+                        },
+                    ],
+                },
+            ),
+        ),
+        Target(
+            Oss(
+                OssStat {
+                    param: Param(
+                        "ost_io",
+                    ),
+                    stats: [
+                        Stat {
+                            name: "req_waittime",
+                            units: "usec",
+                            samples: 4690313,
+                            min: Some(
+                                4,
+                            ),
+                            max: Some(
+                                20340,
+                            ),
+                            sum: Some(
+                                100079668,
+                            ),
+                            sumsquare: Some(
+                                6817957300,
+                            ),
+                        },
+                        Stat {
+                            name: "req_qdepth",
+                            units: "reqs",
+                            samples: 4690313,
+                            min: Some(
+                                0,
+                            ),
+                            max: Some(
+                                7,
+                            ),
+                            sum: Some(
+                                16886,
+                            ),
+                            sumsquare: Some(
+                                22078,
+                            ),
+                        },
+                        Stat {
+                            name: "req_active",
+                            units: "reqs",
+                            samples: 4690313,
+                            min: Some(
+                                1,
+                            ),
+                            max: Some(
+                                45,
+                            ),
+                            sum: Some(
+                                30475809,
+                            ),
+                            sumsquare: Some(
+                                333897005,
+                            ),
+                        },
+                        Stat {
+                            name: "req_timeout",
+                            units: "sec",
+                            samples: 4690313,
+                            min: Some(
+                                15,
+                            ),
+                            max: Some(
+                                15,
+                            ),
+                            sum: Some(
+                                70354695,
+                            ),
+                            sumsquare: Some(
+                                1055320425,
+                            ),
+                        },
+                        Stat {
+                            name: "reqbuf_avail",
+                            units: "bufs",
+                            samples: 9577644,
+                            min: Some(
+                                63,
+                            ),
+                            max: Some(
+                                64,
+                            ),
+                            sum: Some(
+                                612800114,
+                            ),
+                            sumsquare: Some(
+                                39208553870,
+                            ),
+                        },
+                        Stat {
+                            name: "ost_read",
+                            units: "usec",
+                            samples: 2442845,
+                            min: Some(
+                                234,
+                            ),
+                            max: Some(
+                                49945,
+                            ),
+                            sum: Some(
+                                5185766973,
+                            ),
+                            sumsquare: Some(
+                                19501455670833,
+                            ),
+                        },
+                        Stat {
+                            name: "ost_write",
+                            units: "usec",
+                            samples: 2247452,
+                            min: Some(
+                                148,
+                            ),
+                            max: Some(
+                                69989,
+                            ),
+                            sum: Some(
+                                4660586823,
+                            ),
+                            sumsquare: Some(
+                                21667999297975,
+                            ),
+                        },
+                        Stat {
+                            name: "ost_punch",
+                            units: "usec",
+                            samples: 16,
+                            min: Some(
+                                21,
+                            ),
+                            max: Some(
+                                15664,
+                            ),
+                            sum: Some(
+                                16406,
+                            ),
+                            sumsquare: Some(
+                                245461540,
+                            ),
+                        },
+                    ],
+                },
+            ),
+        ),
+        Target(
+            Oss(
+                OssStat {
+                    param: Param(
+                        "ost_out",
+                    ),
+                    stats: [
+                        Stat {
+                            name: "req_waittime",
+                            units: "usec",
+                            samples: 64517,
+                            min: Some(
+                                6,
+                            ),
+                            max: Some(
+                                23811,
+                            ),
+                            sum: Some(
+                                2666187,
+                            ),
+                            sumsquare: Some(
+                                7395507999,
+                            ),
+                        },
+                        Stat {
+                            name: "req_qdepth",
+                            units: "reqs",
+                            samples: 64517,
+                            min: Some(
+                                0,
+                            ),
+                            max: Some(
+                                0,
+                            ),
+                            sum: Some(
+                                0,
+                            ),
+                            sumsquare: Some(
+                                0,
+                            ),
+                        },
+                        Stat {
+                            name: "req_active",
+                            units: "reqs",
+                            samples: 64517,
+                            min: Some(
+                                1,
+                            ),
+                            max: Some(
+                                2,
+                            ),
+                            sum: Some(
+                                64520,
+                            ),
+                            sumsquare: Some(
+                                64526,
+                            ),
+                        },
+                        Stat {
+                            name: "req_timeout",
+                            units: "sec",
+                            samples: 64517,
+                            min: Some(
+                                1,
+                            ),
+                            max: Some(
+                                15,
+                            ),
+                            sum: Some(
+                                966911,
+                            ),
+                            sumsquare: Some(
+                                14499851,
+                            ),
+                        },
+                        Stat {
+                            name: "reqbuf_avail",
+                            units: "bufs",
+                            samples: 130687,
+                            min: Some(
+                                63,
+                            ),
+                            max: Some(
+                                64,
+                            ),
+                            sum: Some(
+                                8362749,
+                            ),
+                            sumsquare: Some(
+                                535139139,
+                            ),
+                        },
+                        Stat {
+                            name: "mds_connect",
+                            units: "usec",
+                            samples: 44,
+                            min: Some(
+                                10,
+                            ),
+                            max: Some(
+                                1774,
+                            ),
+                            sum: Some(
+                                4146,
+                            ),
+                            sumsquare: Some(
+                                3299378,
+                            ),
+                        },
+                        Stat {
+                            name: "mds_statfs",
+                            units: "usec",
+                            samples: 64446,
+                            min: Some(
+                                6,
+                            ),
+                            max: Some(
+                                87,
+                            ),
+                            sum: Some(
+                                1723266,
+                            ),
+                            sumsquare: Some(
+                                50620388,
+                            ),
+                        },
+                        Stat {
+                            name: "obd_ping",
+                            units: "usec",
+                            samples: 4,
+                            min: Some(
+                                10,
+                            ),
+                            max: Some(
+                                16,
+                            ),
+                            sum: Some(
+                                50,
+                            ),
+                            sumsquare: Some(
+                                644,
+                            ),
+                        },
+                        Stat {
+                            name: "out_update",
+                            units: "usec",
+                            samples: 23,
+                            min: Some(
+                                7,
+                            ),
+                            max: Some(
+                                118,
+                            ),
+                            sum: Some(
+                                879,
+                            ),
+                            sumsquare: Some(
+                                59435,
+                            ),
+                        },
+                    ],
+                },
+            ),
+        ),
+        Target(
+            Oss(
+                OssStat {
+                    param: Param(
+                        "ost_seq",
+                    ),
+                    stats: [
+                        Stat {
+                            name: "req_waittime",
+                            units: "usec",
+                            samples: 62,
+                            min: Some(
+                                14,
+                            ),
+                            max: Some(
+                                584,
+                            ),
+                            sum: Some(
+                                2631,
+                            ),
+                            sumsquare: Some(
+                                425831,
+                            ),
+                        },
+                        Stat {
+                            name: "req_qdepth",
+                            units: "reqs",
+                            samples: 62,
+                            min: Some(
+                                0,
+                            ),
+                            max: Some(
+                                0,
+                            ),
+                            sum: Some(
+                                0,
+                            ),
+                            sumsquare: Some(
+                                0,
+                            ),
+                        },
+                        Stat {
+                            name: "req_active",
+                            units: "reqs",
+                            samples: 62,
+                            min: Some(
+                                1,
+                            ),
+                            max: Some(
+                                2,
+                            ),
+                            sum: Some(
+                                69,
+                            ),
+                            sumsquare: Some(
+                                83,
+                            ),
+                        },
+                        Stat {
+                            name: "req_timeout",
+                            units: "sec",
+                            samples: 62,
+                            min: Some(
+                                1,
+                            ),
+                            max: Some(
+                                10,
+                            ),
+                            sum: Some(
+                                125,
+                            ),
+                            sumsquare: Some(
+                                755,
+                            ),
+                        },
+                        Stat {
+                            name: "reqbuf_avail",
+                            units: "bufs",
+                            samples: 146,
+                            min: Some(
+                                64,
+                            ),
+                            max: Some(
+                                64,
+                            ),
+                            sum: Some(
+                                9344,
+                            ),
+                            sumsquare: Some(
+                                598016,
+                            ),
+                        },
+                        Stat {
+                            name: "seq_query",
+                            units: "usec",
+                            samples: 62,
+                            min: Some(
+                                3,
+                            ),
+                            max: Some(
+                                4561,
+                            ),
+                            sum: Some(
+                                28817,
+                            ),
+                            sumsquare: Some(
+                                101266449,
+                            ),
+                        },
+                    ],
+                },
+            ),
+        ),
+        Target(
             JobStatsMdt(
                 TargetStat {
                     kind: Mdt,
