@@ -173,7 +173,7 @@ expression: result
             ),
         ),
         Target(
-            BytesAvail(
+            KBytesAvail(
                 TargetStat {
                     kind: Mgt,
                     param: Param(
@@ -182,12 +182,12 @@ expression: result
                     target: Target(
                         "MGS",
                     ),
-                    value: 473628672,
+                    value: 462528,
                 },
             ),
         ),
         Target(
-            BytesAvail(
+            KBytesAvail(
                 TargetStat {
                     kind: Mdt,
                     param: Param(
@@ -196,12 +196,12 @@ expression: result
                     target: Target(
                         "fs-MDT0000",
                     ),
-                    value: 2422652928,
+                    value: 2365872,
                 },
             ),
         ),
         Target(
-            BytesAvail(
+            KBytesAvail(
                 TargetStat {
                     kind: Ost,
                     param: Param(
@@ -210,12 +210,12 @@ expression: result
                     target: Target(
                         "fs-OST0000",
                     ),
-                    value: 4134182912,
+                    value: 4037288,
                 },
             ),
         ),
         Target(
-            BytesAvail(
+            KBytesAvail(
                 TargetStat {
                     kind: Ost,
                     param: Param(
@@ -224,12 +224,12 @@ expression: result
                     target: Target(
                         "fs-OST0010",
                     ),
-                    value: 4134182912,
+                    value: 4037288,
                 },
             ),
         ),
         Target(
-            BytesFree(
+            KBytesFree(
                 TargetStat {
                     kind: Mgt,
                     param: Param(
@@ -238,12 +238,12 @@ expression: result
                     target: Target(
                         "MGS",
                     ),
-                    value: 500469760,
+                    value: 488740,
                 },
             ),
         ),
         Target(
-            BytesFree(
+            KBytesFree(
                 TargetStat {
                     kind: Mdt,
                     param: Param(
@@ -252,12 +252,12 @@ expression: result
                     target: Target(
                         "fs-MDT0000",
                     ),
-                    value: 2662379520,
+                    value: 2599980,
                 },
             ),
         ),
         Target(
-            BytesFree(
+            KBytesFree(
                 TargetStat {
                     kind: Ost,
                     param: Param(
@@ -266,12 +266,12 @@ expression: result
                     target: Target(
                         "fs-OST0000",
                     ),
-                    value: 4204646400,
+                    value: 4106100,
                 },
             ),
         ),
         Target(
-            BytesFree(
+            KBytesFree(
                 TargetStat {
                     kind: Ost,
                     param: Param(
@@ -280,12 +280,12 @@ expression: result
                     target: Target(
                         "fs-OST0010",
                     ),
-                    value: 4204646400,
+                    value: 4106100,
                 },
             ),
         ),
         Target(
-            BytesTotal(
+            KBytesTotal(
                 TargetStat {
                     kind: Mgt,
                     param: Param(
@@ -294,12 +294,12 @@ expression: result
                     target: Target(
                         "MGS",
                     ),
-                    value: 502878208,
+                    value: 491092,
                 },
             ),
         ),
         Target(
-            BytesTotal(
+            KBytesTotal(
                 TargetStat {
                     kind: Mdt,
                     param: Param(
@@ -308,12 +308,12 @@ expression: result
                     target: Target(
                         "fs-MDT0000",
                     ),
-                    value: 2665299968,
+                    value: 2602832,
                 },
             ),
         ),
         Target(
-            BytesTotal(
+            KBytesTotal(
                 TargetStat {
                     kind: Ost,
                     param: Param(
@@ -322,12 +322,12 @@ expression: result
                     target: Target(
                         "fs-OST0000",
                     ),
-                    value: 4206989312,
+                    value: 4108388,
                 },
             ),
         ),
         Target(
-            BytesTotal(
+            KBytesTotal(
                 TargetStat {
                     kind: Ost,
                     param: Param(
@@ -336,7 +336,7 @@ expression: result
                     target: Target(
                         "fs-OST0010",
                     ),
-                    value: 4206989312,
+                    value: 4108388,
                 },
             ),
         ),

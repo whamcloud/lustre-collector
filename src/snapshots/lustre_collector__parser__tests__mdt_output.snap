@@ -1,7 +1,6 @@
 ---
 source: src/parser.rs
 expression: result
-
 ---
 (
     [
@@ -560,7 +559,7 @@ expression: result
             ),
         ),
         Target(
-            BytesAvail(
+            KBytesAvail(
                 TargetStat {
                     kind: Mdt,
                     param: Param(
@@ -569,12 +568,12 @@ expression: result
                     target: Target(
                         "fs-MDT0000",
                     ),
-                    value: 1568641024,
+                    value: 1531876,
                 },
             ),
         ),
         Target(
-            BytesAvail(
+            KBytesAvail(
                 TargetStat {
                     kind: Mdt,
                     param: Param(
@@ -583,12 +582,12 @@ expression: result
                     target: Target(
                         "fs2-MDT0000",
                     ),
-                    value: 1568837632,
+                    value: 1532068,
                 },
             ),
         ),
         Target(
-            BytesFree(
+            KBytesFree(
                 TargetStat {
                     kind: Mdt,
                     param: Param(
@@ -597,12 +596,12 @@ expression: result
                     target: Target(
                         "fs-MDT0000",
                     ),
-                    value: 1836306432,
+                    value: 1793268,
                 },
             ),
         ),
         Target(
-            BytesFree(
+            KBytesFree(
                 TargetStat {
                     kind: Mdt,
                     param: Param(
@@ -611,12 +610,12 @@ expression: result
                     target: Target(
                         "fs2-MDT0000",
                     ),
-                    value: 1836503040,
+                    value: 1793460,
                 },
             ),
         ),
         Target(
-            BytesTotal(
+            KBytesTotal(
                 TargetStat {
                     kind: Mdt,
                     param: Param(
@@ -625,12 +624,12 @@ expression: result
                     target: Target(
                         "fs-MDT0000",
                     ),
-                    value: 1863647232,
+                    value: 1819968,
                 },
             ),
         ),
         Target(
-            BytesTotal(
+            KBytesTotal(
                 TargetStat {
                     kind: Mdt,
                     param: Param(
@@ -639,7 +638,7 @@ expression: result
                     target: Target(
                         "fs2-MDT0000",
                     ),
-                    value: 1863647232,
+                    value: 1819968,
                 },
             ),
         ),

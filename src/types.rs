@@ -476,11 +476,11 @@ pub enum TargetStats {
     /// Type of target
     FsType(TargetStat<String>),
     /// Available disk space
-    BytesAvail(TargetStat<u64>),
+    KBytesAvail(TargetStat<u64>),
     /// Free disk space
-    BytesFree(TargetStat<u64>),
+    KBytesFree(TargetStat<u64>),
     /// Total disk space
-    BytesTotal(TargetStat<u64>),
+    KBytesTotal(TargetStat<u64>),
     NumExports(TargetStat<u64>),
     TotDirty(TargetStat<u64>),
     TotGranted(TargetStat<u64>),

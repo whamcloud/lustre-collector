@@ -34,11 +34,11 @@ enum MdtStat {
     /// Total inodes
     FilesTotal(u64),
     /// Available disk space
-    BytesAvail(u64),
+    KBytesAvail(u64),
     /// Free disk space
-    BytesFree(u64),
+    KBytesFree(u64),
     /// Total disk space
-    BytesTotal(u64),
+    KBytesTotal(u64),
 }
 
 fn mdt_stat<I>() -> impl Parser<I, Output = (Param, MdtStat)>
@@ -64,24 +64,15 @@ where
         ),
         (
             param(KBYTES_AVAIL),
-            digits()
-                .skip(newline())
-                .map(|x| x * 1024)
-                .map(MdtStat::BytesAvail),
+            digits().skip(newline()).map(MdtStat::KBytesAvail),
         ),
         (
             param(KBYTES_FREE),
-            digits()
-                .skip(newline())
-                .map(|x| x * 1024)
-                .map(MdtStat::BytesFree),
+            digits().skip(newline()).map(MdtStat::KBytesFree),
         ),
         (
             param(KBYTES_TOTAL),
-            digits()
-                .skip(newline())
-                .map(|x| x * 1024)
-                .map(MdtStat::BytesTotal),
+            digits().skip(newline()).map(MdtStat::KBytesTotal),
         ),
     ))
 }
@@ -147,19 +138,19 @@ where
                 param,
                 value,
             }),
-            MdtStat::BytesAvail(value) => TargetStats::BytesAvail(TargetStat {
+            MdtStat::KBytesAvail(value) => TargetStats::KBytesAvail(TargetStat {
                 kind: TargetVariant::Mdt,
                 target,
                 param,
                 value,
             }),
-            MdtStat::BytesFree(value) => TargetStats::BytesFree(TargetStat {
+            MdtStat::KBytesFree(value) => TargetStats::KBytesFree(TargetStat {
                 kind: TargetVariant::Mdt,
                 target,
                 param,
                 value,
             }),
-            MdtStat::BytesTotal(value) => TargetStats::BytesTotal(TargetStat {
+            MdtStat::KBytesTotal(value) => TargetStats::KBytesTotal(TargetStat {
                 kind: TargetVariant::Mdt,
                 target,
                 param,

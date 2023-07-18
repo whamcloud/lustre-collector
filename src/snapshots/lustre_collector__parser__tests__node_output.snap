@@ -185,7 +185,7 @@ expression: result
             ),
         ),
         Target(
-            BytesAvail(
+            KBytesAvail(
                 TargetStat {
                     kind: Mdt,
                     param: Param(
@@ -194,12 +194,12 @@ expression: result
                     target: Target(
                         "ai400-MDT0000",
                     ),
-                    value: 111072735232,
+                    value: 108469468,
                 },
             ),
         ),
         Target(
-            BytesAvail(
+            KBytesAvail(
                 TargetStat {
                     kind: Ost,
                     param: Param(
@@ -208,12 +208,12 @@ expression: result
                     target: Target(
                         "ai400-OST0000",
                     ),
-                    value: 3927461543936,
+                    value: 3835411664,
                 },
             ),
         ),
         Target(
-            BytesAvail(
+            KBytesAvail(
                 TargetStat {
                     kind: Ost,
                     param: Param(
@@ -222,12 +222,12 @@ expression: result
                     target: Target(
                         "ai400-OST0001",
                     ),
-                    value: 4032319238144,
+                    value: 3937811756,
                 },
             ),
         ),
         Target(
-            BytesFree(
+            KBytesFree(
                 TargetStat {
                     kind: Mdt,
                     param: Param(
@@ -236,12 +236,12 @@ expression: result
                     target: Target(
                         "ai400-MDT0000",
                     ),
-                    value: 113271386112,
+                    value: 110616588,
                 },
             ),
         ),
         Target(
-            BytesFree(
+            KBytesFree(
                 TargetStat {
                     kind: Ost,
                     param: Param(
@@ -250,12 +250,12 @@ expression: result
                     target: Target(
                         "ai400-OST0000",
                     ),
-                    value: 3968710004736,
+                    value: 3875693364,
                 },
             ),
         ),
         Target(
-            BytesFree(
+            KBytesFree(
                 TargetStat {
                     kind: Ost,
                     param: Param(
@@ -264,12 +264,12 @@ expression: result
                     target: Target(
                         "ai400-OST0001",
                     ),
-                    value: 4073567698944,
+                    value: 3978093456,
                 },
             ),
         ),
         Target(
-            BytesTotal(
+            KBytesTotal(
                 TargetStat {
                     kind: Mdt,
                     param: Param(
@@ -278,12 +278,12 @@ expression: result
                     target: Target(
                         "ai400-MDT0000",
                     ),
-                    value: 113290567680,
+                    value: 110635320,
                 },
             ),
         ),
         Target(
-            BytesTotal(
+            KBytesTotal(
                 TargetStat {
                     kind: Ost,
                     param: Param(
@@ -292,12 +292,12 @@ expression: result
                     target: Target(
                         "ai400-OST0000",
                     ),
-                    value: 4073569452032,
+                    value: 3978095168,
                 },
             ),
         ),
         Target(
-            BytesTotal(
+            KBytesTotal(
                 TargetStat {
                     kind: Ost,
                     param: Param(
@@ -306,7 +306,7 @@ expression: result
                     target: Target(
                         "ai400-OST0001",
                     ),
-                    value: 4073569452032,
+                    value: 3978095168,
                 },
             ),
         ),
