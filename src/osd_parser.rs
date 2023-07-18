@@ -45,11 +45,11 @@ enum OsdStat {
     /// Type of target
     FsType(String),
     /// Available disk space
-    BytesAvail(u64),
+    KBytesAvail(u64),
     /// Free disk space
-    BytesFree(u64),
+    KBytesFree(u64),
     /// Total disk space
-    BytesTotal(u64),
+    KBytesTotal(u64),
     BrwStats(Vec<BrwStats>),
 }
 
@@ -97,24 +97,15 @@ where
             .message("while parsing fs type"),
         (
             param(KBYTES_AVAIL),
-            digits()
-                .skip(newline())
-                .map(|x| x * 1024)
-                .map(OsdStat::BytesAvail),
+            digits().skip(newline()).map(OsdStat::KBytesAvail),
         ),
         (
             param(KBYTES_FREE),
-            digits()
-                .skip(newline())
-                .map(|x| x * 1024)
-                .map(OsdStat::BytesFree),
+            digits().skip(newline()).map(OsdStat::KBytesFree),
         ),
         (
             param(KBYTES_TOTAL),
-            digits()
-                .skip(newline())
-                .map(|x| x * 1024)
-                .map(OsdStat::BytesTotal),
+            digits().skip(newline()).map(OsdStat::KBytesTotal),
         ),
     ))
 }
@@ -144,19 +135,19 @@ where
                 param,
                 value,
             }),
-            OsdStat::BytesAvail(value) => TargetStats::BytesAvail(TargetStat {
+            OsdStat::KBytesAvail(value) => TargetStats::KBytesAvail(TargetStat {
                 kind,
                 target,
                 param,
                 value,
             }),
-            OsdStat::BytesFree(value) => TargetStats::BytesFree(TargetStat {
+            OsdStat::KBytesFree(value) => TargetStats::KBytesFree(TargetStat {
                 kind,
                 target,
                 param,
                 value,
             }),
-            OsdStat::BytesTotal(value) => TargetStats::BytesTotal(TargetStat {
+            OsdStat::KBytesTotal(value) => TargetStats::KBytesTotal(TargetStat {
                 kind,
                 target,
                 param,
