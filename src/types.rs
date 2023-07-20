@@ -378,6 +378,14 @@ pub struct OssStat {
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+/// Stats from parsing `llite.*.stats`
+pub struct LliteStat {
+    pub target: Target,
+    pub param: Param,
+    pub stats: Vec<Stat>,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 /// Stats specific to a LNet Nid.
 pub struct LNetStat<T> {
     pub nid: String,
@@ -521,6 +529,7 @@ pub enum TargetStats {
     RecoveryConnectedClients(TargetStat<u64>),
     RecoveryCompletedClients(TargetStat<u64>),
     RecoveryEvictedClients(TargetStat<u64>),
+    Llite(LliteStat),
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
