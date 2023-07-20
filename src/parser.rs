@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 use crate::{
-    ldlm,
+    ldlm, llite,
     mds::{client_count_parser, mds_parser},
     mgs::mgs_parser,
     osd_parser, oss, top_level_parser,
@@ -21,6 +21,7 @@ pub fn params() -> Vec<String> {
         .chain(oss::params())
         .chain(mds_parser::params())
         .chain(ldlm::params())
+        .chain(llite::params())
         .collect()
 }
 
@@ -37,6 +38,7 @@ where
         mds_parser::parse().map(|x| vec![x]),
         oss::parse().map(|x| vec![x]),
         ldlm::parse().map(|x| vec![x]),
+        llite::parse().map(|x| vec![x]),
     )))
     .map(|xs: Vec<_>| xs.into_iter().flatten().collect())
 }
