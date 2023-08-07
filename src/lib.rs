@@ -9,6 +9,7 @@ pub(crate) mod exports_parser;
 pub(crate) mod ldlm;
 pub(crate) mod llite;
 mod lnetctl_parser;
+mod mdd_parser;
 mod mds;
 pub mod mgs;
 mod node_stats_parsers;
