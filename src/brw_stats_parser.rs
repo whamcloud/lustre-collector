@@ -57,6 +57,7 @@ where
         attempt(string_to("disk I/Os in flight", "rpc_hist")),
         attempt(string_to("I/O time (1/1000s)", "io_time")),
         attempt(string_to("disk I/O size", "disk_iosize")),
+        attempt(string_to("block maps msec", "block_maps_msec")),
     ]);
 
     (keys.skip(spaces()), word().skip(till_newline())).map(|(name, unit)| BrwStats {
