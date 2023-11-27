@@ -1654,6 +1654,24 @@ expression: result
                                     max: 0,
                                     sum: 0,
                                 },
+                                parallel_rename_dir: Some(
+                                    BytesStat {
+                                        samples: 0,
+                                        unit: "usecs",
+                                        min: 0,
+                                        max: 0,
+                                        sum: 0,
+                                    },
+                                ),
+                                parallel_rename_file: Some(
+                                    BytesStat {
+                                        samples: 0,
+                                        unit: "usecs",
+                                        min: 0,
+                                        max: 0,
+                                        sum: 0,
+                                    },
+                                ),
                             },
                             JobStatMdt {
                                 job_id: "df@0@co-es-pm-149.co-es.datadir",
@@ -1795,6 +1813,24 @@ expression: result
                                     max: 0,
                                     sum: 0,
                                 },
+                                parallel_rename_dir: Some(
+                                    BytesStat {
+                                        samples: 0,
+                                        unit: "usecs",
+                                        min: 0,
+                                        max: 0,
+                                        sum: 0,
+                                    },
+                                ),
+                                parallel_rename_file: Some(
+                                    BytesStat {
+                                        samples: 0,
+                                        unit: "usecs",
+                                        min: 0,
+                                        max: 0,
+                                        sum: 0,
+                                    },
+                                ),
                             },
                         ],
                     ),
