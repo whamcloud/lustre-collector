@@ -56,7 +56,7 @@ where
         .map(|xs| {
             let xs: Vec<(Target, FsName)> = xs
                 .into_iter()
-                .filter(|(_, name)| name.0 != "params")
+                .filter(|(_, name)| name.0 != "params" && name.0 != "nodemap")
                 .collect();
 
             xs
