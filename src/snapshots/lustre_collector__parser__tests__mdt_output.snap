@@ -40,7 +40,10 @@ expression: result
                     param: Param(
                         "health_check",
                     ),
-                    value: "healthy",
+                    value: HealthCheckStat {
+                        healthy: true,
+                        targets: [],
+                    },
                 },
             ),
         ),

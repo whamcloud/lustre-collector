@@ -162,4 +162,16 @@ osd-ldiskfs.fs2-MDT0000.kbytestotal=1819968
 
         assert_debug_snapshot!(result);
     }
+
+    #[test]
+    fn test_node_output_unhealthy_host() {
+        let x = include_str!("./fixtures/valid/valid_unhealthy_host.txt");
+
+        let result = parse()
+            .easy_parse(x)
+            .map_err(|err| err.map_position(|p| p.translate_position(x)))
+            .unwrap();
+
+        assert_debug_snapshot!(result);
+    }
 }

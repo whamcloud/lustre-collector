@@ -3,11 +3,17 @@
 // license that can be found in the LICENSE file.
 
 use crate::{
-    base_parsers::{digits, param, words},
+    base_parsers::{digits, param, target, words},
     types::{HostStat, HostStats, Param, Record},
+    HealthCheckStat, Target,
 };
 use combine::{
-    choice, error::ParseError, optional, parser::char::newline, stream::Stream, token, Parser,
+    choice,
+    error::ParseError,
+    many1, optional,
+    parser::char::{newline, space, string},
+    stream::Stream,
+    token, Parser,
 };
 
 pub(crate) const MEMUSED_MAX: &str = "memused_max";
@@ -25,7 +31,49 @@ enum TopLevelStat {
     Memused(u64),
     MemusedMax(u64),
     LnetMemused(u64),
-    HealthCheck(String),
+    HealthCheck(HealthCheckStat),
+}
+
+fn target_health<I>() -> impl Parser<I, Output = Target>
+where
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
+{
+    (
+        string("device"),
+        space(),
+        target(),
+        space(),
+        string("reported"),
+        space(),
+        words(),
+    )
+        .map(|(_, _, target, _, _, _, _health)| target)
+}
+
+fn targets_health<I>() -> impl Parser<I, Output = Vec<Target>>
+where
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
+{
+    many1(target_health().skip(newline()))
+}
+
+fn health_stats<I>() -> impl Parser<I, Output = HealthCheckStat>
+where
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
+{
+    choice((
+        (string("healthy").map(|_| HealthCheckStat {
+            healthy: true,
+            targets: vec![],
+        })),
+        ((targets_health(), string("NOT HEALTHY")).map(|(targets, _)| HealthCheckStat {
+            healthy: false,
+            targets,
+        })),
+    ))
 }
 
 fn top_level_stat<I>() -> impl Parser<I, Output = (Param, TopLevelStat)>
@@ -48,7 +96,11 @@ where
                 }
             }),
         ),
-        (param(HEALTH_CHECK), words().map(TopLevelStat::HealthCheck)),
+        // (param(HEALTH_CHECK), words().map(TopLevelStat::HealthCheck)),
+        (
+            param(HEALTH_CHECK),
+            health_stats().map(TopLevelStat::HealthCheck),
+        ),
     ))
     .skip(newline())
 }

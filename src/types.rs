@@ -436,7 +436,14 @@ pub enum HostStats {
     MemusedMax(HostStat<u64>),
     Memused(HostStat<u64>),
     LNetMemUsed(HostStat<u64>),
-    HealthCheck(HostStat<String>),
+    HealthCheck(HostStat<HealthCheckStat>),
+}
+
+/// A Stat specific to a node.
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct HealthCheckStat {
+    pub healthy: bool,
+    pub targets: Vec<Target>,
 }
 
 /// A Stat specific to a node.
