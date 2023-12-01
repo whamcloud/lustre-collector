@@ -40,15 +40,6 @@ where
     many1(alpha_num().or(token('_')))
 }
 
-#[allow(dead_code)]
-pub(crate) fn words<I>() -> impl Parser<I, Output = String>
-where
-    I: Stream<Token = char>,
-    I::Error: ParseError<I::Token, I::Range, I::Position>,
-{
-    many1(alpha_num().or(token('_').or(token(' '))))
-}
-
 /// Parses a target name
 pub(crate) fn target<I>() -> impl Parser<I, Output = Target>
 where
