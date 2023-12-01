@@ -182,4 +182,73 @@ mod tests {
             ))
         )
     }
+
+    #[test]
+    fn test_healthy_health_check() {
+        let result = parse().parse("health_check=healthy\n");
+
+        assert_eq!(
+            result,
+            Ok((
+                Record::Host(HostStats::HealthCheck(HostStat {
+                    param: Param(HEALTH_CHECK.to_string()),
+                    value: HealthCheckStat {
+                        healthy: true,
+                        targets: vec![]
+                    }
+                })),
+                ""
+            ))
+        )
+    }
+    #[test]
+    fn test_unhealthy_health_check() {
+        let result = parse().parse(
+            r#"health_check=device lustre-OST0012 reported unhealthy
+device lustre-OST0014 reported unhealthy
+device lustre-OST0016 reported unhealthy
+NOT HEALTHY
+"#,
+        );
+
+        assert_eq!(
+            result,
+            Ok((
+                Record::Host(HostStats::HealthCheck(HostStat {
+                    param: Param(HEALTH_CHECK.to_string()),
+                    value: HealthCheckStat {
+                        healthy: false,
+                        targets: vec![
+                            Target("lustre-OST0012".to_string()),
+                            Target("lustre-OST0014".to_string()),
+                            Target("lustre-OST0016".to_string())
+                        ]
+                    }
+                })),
+                ""
+            ))
+        )
+    }
+    #[test]
+    fn test_unhealthy_single_target_health_check() {
+        let result = parse().parse(
+            r#"health_check=device lustre-OST0012 reported unhealthy
+NOT HEALTHY
+"#,
+        );
+
+        assert_eq!(
+            result,
+            Ok((
+                Record::Host(HostStats::HealthCheck(HostStat {
+                    param: Param(HEALTH_CHECK.to_string()),
+                    value: HealthCheckStat {
+                        healthy: false,
+                        targets: vec![Target("lustre-OST0012".to_string()),]
+                    }
+                })),
+                ""
+            ))
+        )
+    }
 }
