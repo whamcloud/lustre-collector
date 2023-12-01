@@ -439,7 +439,6 @@ pub enum HostStats {
     HealthCheck(HostStat<HealthCheckStat>),
 }
 
-/// A Stat specific to a node.
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct HealthCheckStat {
     pub healthy: bool,

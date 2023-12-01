@@ -96,7 +96,6 @@ where
                 }
             }),
         ),
-        // (param(HEALTH_CHECK), words().map(TopLevelStat::HealthCheck)),
         (
             param(HEALTH_CHECK),
             health_stats().map(TopLevelStat::HealthCheck),
