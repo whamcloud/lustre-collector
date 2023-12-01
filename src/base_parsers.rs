@@ -40,6 +40,7 @@ where
     many1(alpha_num().or(token('_')))
 }
 
+#[allow(dead_code)]
 pub(crate) fn words<I>() -> impl Parser<I, Output = String>
 where
     I: Stream<Token = char>,

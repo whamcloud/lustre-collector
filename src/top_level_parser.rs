@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 use crate::{
-    base_parsers::{digits, param, target, words},
+    base_parsers::{digits, param, target},
     types::{HostStat, HostStats, Param, Record},
     HealthCheckStat, Target,
 };
@@ -40,15 +40,11 @@ where
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
-        string("device"),
-        space(),
-        target(),
-        space(),
-        string("reported"),
-        space(),
-        words(),
+        string("device").skip(space()),
+        target().skip(space()),
+        string("reported unhealthy"),
     )
-        .map(|(_, _, target, _, _, _, _health)| target)
+        .map(|(_, target, _)| target)
 }
 
 fn targets_health<I>() -> impl Parser<I, Output = Vec<Target>>
