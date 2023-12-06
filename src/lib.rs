@@ -39,6 +39,7 @@ fn check_output(records: Vec<Record>, state: &str) -> Result<Vec<Record>, Lustre
     Ok(records)
 }
 
+/// Must be called with output of `lctl get_params` for all params returned from `parser::parse()`
 pub fn parse_lctl_output(lctl_output: &[u8]) -> Result<Vec<Record>, LustreCollectorError> {
     let lctl_stats = str::from_utf8(lctl_output)?;
 
@@ -70,4 +71,20 @@ pub fn parse_recovery_status_output(
         .map_err(|err| err.map_position(|p| p.translate_position(recovery_status)))?;
 
     check_output(recovery_statuses, state)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{parse_lctl_output, Record};
+
+    #[test]
+    fn ex8761_job_stats() {
+        let xs = include_bytes!("./fixtures/valid/ex8761-lctl.txt");
+        let expected = parse_lctl_output(xs).unwrap();
+
+        let y = serde_json::to_string(&expected).unwrap();
+        let z: Vec<Record> = serde_json::from_str(&y).unwrap();
+
+        assert_eq!(expected, z);
+    }
 }
