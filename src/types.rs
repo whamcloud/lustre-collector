@@ -63,10 +63,16 @@ pub struct JobStatsOst {
 
 /// Used to represent an unsigned timestamp in Lustre.
 ///
-/// Only use this field whne you are sure that the timestamp is unsigned.
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
-#[serde(try_from = "String")]
+/// Only use this field when you are sure that the timestamp is unsigned.
+#[derive(PartialEq, Eq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+#[serde(try_from = "String", into = "String")]
 pub struct UnsignedLustreTimestamp(pub i64);
+
+impl From<UnsignedLustreTimestamp> for String {
+    fn from(x: UnsignedLustreTimestamp) -> String {
+        x.to_string()
+    }
+}
 
 impl TryFrom<String> for UnsignedLustreTimestamp {
     type Error = LustreCollectorError;
