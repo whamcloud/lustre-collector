@@ -328,3 +328,10 @@ req_active                1 samples [reqs] 1 1 1 1
 req_timeout               1 samples [secs] 15 15 15 225
 reqbuf_avail              3 samples [bufs] 1 1 3 3
 ldlm_bl_callback          1 samples [usecs] 16 16 16 256
+mdd.ai400x2-MDT0000.changelog_users=
+current_index: 0
+ID                            index (idle) mask
+cl1                               0 (327)
+mdd.ai400x2-MDT0001.changelog_users=
+current_index: 0
+ID                            index (idle) mask

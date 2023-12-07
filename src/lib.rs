@@ -7,6 +7,7 @@ pub(crate) mod brw_stats_parser;
 pub mod error;
 pub(crate) mod ldlm;
 mod lnetctl_parser;
+mod mdd_parser;
 mod mds;
 pub mod mgs;
 mod node_stats_parsers;

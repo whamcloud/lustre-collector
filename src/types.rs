@@ -390,6 +390,20 @@ pub struct LNetStatGlobal<T> {
     pub value: T,
 }
 
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+/// Changelog stats from parsing `mdd.*.changelog_users`.
+pub struct ChangelogStat {
+    pub current_index: u64,
+    pub users: Vec<ChangeLogUser>,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct ChangeLogUser {
+    pub user: String,
+    pub index: u64,
+    pub idle_secs: u64,
+}
+
 impl TryFrom<&Target> for TargetVariant {
     type Error = LustreCollectorError;
 
@@ -516,6 +530,7 @@ pub enum TargetStats {
     ThreadsStarted(TargetStat<u64>),
     RecoveryStatus(TargetStat<RecoveryStatus>),
     Oss(OssStat),
+    Changelog(TargetStat<ChangelogStat>),
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
