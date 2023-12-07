@@ -18,6 +18,7 @@ tracing-subscriber = "0.3"
 
 [dev-dependencies]
 insta = "1"
+include_dir = "0.7"
 
 [profile.release]
 lto = true
