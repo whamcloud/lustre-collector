@@ -41,7 +41,7 @@ expression: result
                         "health_check",
                     ),
                     value: HealthCheckStat {
-                        healthy: true,
+                        healthy: false,
                         targets: [],
                     },
                 },

@@ -1,7 +1,7 @@
 memused=242840621
 memused_max=244436941
 lnet_memused=66923896
-health_check=healthy
+health_check=NOT HEALTHY
 mdt.fs-MDT0000.exports.0@lo.uuid=
 fs-MDT0000-lwp-OST0000_UUID
 fs-MDT0000-lwp-MDT0000_UUID
