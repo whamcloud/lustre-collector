@@ -45,7 +45,26 @@ where
 mod tests {
     use super::*;
     use combine::parser::EasyParser;
+    use include_dir::{include_dir, Dir};
     use insta::assert_debug_snapshot;
+
+    static VALID_FIXTURES: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/src/fixtures/valid");
+
+    #[test]
+    fn test_valid_fixtures() {
+        for file in VALID_FIXTURES.files() {
+            let name = file.path().file_name().unwrap().to_string_lossy();
+
+            let contents = file.contents_utf8().unwrap();
+
+            let result = parse()
+                .easy_parse(contents)
+                .map_err(|err| err.map_position(|p| p.translate_position(contents)))
+                .unwrap();
+
+            assert_debug_snapshot!(format!("valid_fixture_{name}"), result);
+        }
+    }
 
     #[test]
     fn test_params() {
@@ -130,42 +149,6 @@ osd-ldiskfs.fs2-MDT0000.kbytesfree=1793460
 osd-ldiskfs.fs-MDT0000.kbytestotal=1819968
 osd-ldiskfs.fs2-MDT0000.kbytestotal=1819968
 "#;
-
-        let result = parse()
-            .easy_parse(x)
-            .map_err(|err| err.map_position(|p| p.translate_position(x)))
-            .unwrap();
-
-        assert_debug_snapshot!(result);
-    }
-
-    #[test]
-    fn test_node_output() {
-        let x = include_str!("./fixtures/valid/valid.txt");
-
-        let result = parse()
-            .easy_parse(x)
-            .map_err(|err| err.map_position(|p| p.translate_position(x)))
-            .unwrap();
-
-        assert_debug_snapshot!(result);
-    }
-
-    #[test]
-    fn test_node_output_no_new_line() {
-        let x = include_str!("./fixtures/valid/valid_no_newline.txt");
-
-        let result = parse()
-            .easy_parse(x)
-            .map_err(|err| err.map_position(|p| p.translate_position(x)))
-            .unwrap();
-
-        assert_debug_snapshot!(result);
-    }
-
-    #[test]
-    fn test_node_output_unhealthy_host() {
-        let x = include_str!("./fixtures/valid/valid_unhealthy_host.txt");
 
         let result = parse()
             .easy_parse(x)
