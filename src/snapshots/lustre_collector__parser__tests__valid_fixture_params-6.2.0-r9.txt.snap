@@ -10,7 +10,7 @@ expression: result
                     param: Param(
                         "memused",
                     ),
-                    value: 242840621,
+                    value: 243927005,
                 },
             ),
         ),
@@ -20,7 +20,7 @@ expression: result
                     param: Param(
                         "memused_max",
                     ),
-                    value: 244436941,
+                    value: 245019901,
                 },
             ),
         ),
@@ -30,7 +30,7 @@ expression: result
                     param: Param(
                         "lnet_memused",
                     ),
-                    value: 66923896,
+                    value: 67130162,
                 },
             ),
         ),
@@ -57,7 +57,7 @@ expression: result
                     target: Target(
                         "fs-MDT0000",
                     ),
-                    value: 0,
+                    value: 1,
                 },
             ),
         ),
@@ -85,7 +85,7 @@ expression: result
                     target: Target(
                         "fs-MDT0000",
                     ),
-                    value: 1885252,
+                    value: 1885250,
                 },
             ),
         ),
@@ -99,7 +99,7 @@ expression: result
                     target: Target(
                         "fs-OST0000",
                     ),
-                    value: 39844,
+                    value: 40134,
                 },
             ),
         ),
@@ -113,7 +113,7 @@ expression: result
                     target: Target(
                         "fs-OST0001",
                     ),
-                    value: 39876,
+                    value: 40134,
                 },
             ),
         ),
@@ -253,7 +253,7 @@ expression: result
                     target: Target(
                         "fs-MDT0000",
                     ),
-                    value: 2365496,
+                    value: 2365504,
                 },
             ),
         ),
@@ -267,7 +267,7 @@ expression: result
                     target: Target(
                         "fs-OST0000",
                     ),
-                    value: 4037172,
+                    value: 4037332,
                 },
             ),
         ),
@@ -281,7 +281,7 @@ expression: result
                     target: Target(
                         "fs-OST0001",
                     ),
-                    value: 4037172,
+                    value: 4037332,
                 },
             ),
         ),
@@ -309,7 +309,7 @@ expression: result
                     target: Target(
                         "fs-MDT0000",
                     ),
-                    value: 2599604,
+                    value: 2599612,
                 },
             ),
         ),
@@ -323,7 +323,7 @@ expression: result
                     target: Target(
                         "fs-OST0000",
                     ),
-                    value: 4105984,
+                    value: 4106144,
                 },
             ),
         ),
@@ -337,7 +337,7 @@ expression: result
                     target: Target(
                         "fs-OST0001",
                     ),
-                    value: 4105984,
+                    value: 4106144,
                 },
             ),
         ),
@@ -443,11 +443,6 @@ expression: result
                             unit: "ios",
                             buckets: [],
                         },
-                        BrwStats {
-                            name: "block_maps_msec",
-                            unit: "maps",
-                            buckets: [],
-                        },
                     ],
                 },
             ),
@@ -496,11 +491,6 @@ expression: result
                         BrwStats {
                             name: "disk_iosize",
                             unit: "ios",
-                            buckets: [],
-                        },
-                        BrwStats {
-                            name: "block_maps_msec",
-                            unit: "maps",
                             buckets: [],
                         },
                     ],
@@ -553,11 +543,6 @@ expression: result
                             unit: "ios",
                             buckets: [],
                         },
-                        BrwStats {
-                            name: "block_maps_msec",
-                            unit: "maps",
-                            buckets: [],
-                        },
                     ],
                 },
             ),
@@ -608,11 +593,6 @@ expression: result
                             unit: "ios",
                             buckets: [],
                         },
-                        BrwStats {
-                            name: "block_maps_msec",
-                            unit: "maps",
-                            buckets: [],
-                        },
                     ],
                 },
             ),
@@ -627,7 +607,7 @@ expression: result
                     target: Target(
                         "fs-MDT0000",
                     ),
-                    value: 0,
+                    value: 1,
                 },
             ),
         ),
@@ -644,59 +624,59 @@ expression: result
                     value: [
                         Stat {
                             name: "req_waittime",
-                            units: "usecs",
-                            samples: 732,
+                            units: "usec",
+                            samples: 7077,
                             min: Some(
-                                4,
+                                3,
                             ),
                             max: Some(
-                                11382,
+                                50384,
                             ),
                             sum: Some(
-                                126413,
+                                1412555,
                             ),
                             sumsquare: Some(
-                                467088731,
+                                6633863085,
                             ),
                         },
                         Stat {
                             name: "req_qdepth",
                             units: "reqs",
-                            samples: 732,
+                            samples: 7077,
                             min: Some(
                                 0,
                             ),
                             max: Some(
-                                0,
+                                1,
                             ),
                             sum: Some(
-                                0,
+                                1,
                             ),
                             sumsquare: Some(
-                                0,
+                                1,
                             ),
                         },
                         Stat {
                             name: "req_active",
                             units: "reqs",
-                            samples: 732,
+                            samples: 7077,
                             min: Some(
                                 1,
                             ),
                             max: Some(
-                                2,
+                                3,
                             ),
                             sum: Some(
-                                815,
+                                7146,
                             ),
                             sumsquare: Some(
-                                981,
+                                7294,
                             ),
                         },
                         Stat {
                             name: "req_timeout",
-                            units: "secs",
-                            samples: 732,
+                            units: "sec",
+                            samples: 7077,
                             min: Some(
                                 1,
                             ),
@@ -704,33 +684,33 @@ expression: result
                                 15,
                             ),
                             sum: Some(
-                                10653,
+                                90946,
                             ),
                             sumsquare: Some(
-                                159423,
+                                1348936,
                             ),
                         },
                         Stat {
                             name: "reqbuf_avail",
                             units: "bufs",
-                            samples: 1464,
+                            samples: 14163,
                             min: Some(
                                 61,
                             ),
                             max: Some(
-                                63,
+                                64,
                             ),
                             sum: Some(
-                                92056,
+                                892118,
                             ),
                             sumsquare: Some(
-                                5788618,
+                                56194126,
                             ),
                         },
                         Stat {
                             name: "ldlm_plain_enqueue",
                             units: "reqs",
-                            samples: 128,
+                            samples: 1084,
                             min: Some(
                                 1,
                             ),
@@ -738,129 +718,129 @@ expression: result
                                 1,
                             ),
                             sum: Some(
-                                128,
+                                1084,
                             ),
                             sumsquare: Some(
-                                128,
+                                1084,
                             ),
                         },
                         Stat {
                             name: "mgs_connect",
-                            units: "usecs",
-                            samples: 8,
+                            units: "usec",
+                            samples: 9,
                             min: Some(
                                 61,
                             ),
                             max: Some(
-                                131,
+                                218,
                             ),
                             sum: Some(
-                                795,
+                                1114,
                             ),
                             sumsquare: Some(
-                                82653,
+                                156882,
                             ),
                         },
                         Stat {
                             name: "mgs_target_reg",
-                            units: "usecs",
-                            samples: 48,
+                            units: "usec",
+                            samples: 44,
                             min: Some(
-                                73,
+                                109,
                             ),
                             max: Some(
-                                141239,
+                                192880,
                             ),
                             sum: Some(
-                                1052185,
+                                684875,
                             ),
                             sumsquare: Some(
-                                62203787475,
+                                63698978079,
                             ),
                         },
                         Stat {
                             name: "mgs_config_read",
-                            units: "usecs",
-                            samples: 39,
+                            units: "usec",
+                            samples: 28,
                             min: Some(
-                                32,
+                                31,
                             ),
                             max: Some(
-                                71093,
+                                1651,
                             ),
                             sum: Some(
-                                114396,
+                                12342,
                             ),
                             sumsquare: Some(
-                                5406804200,
+                                9274964,
                             ),
                         },
                         Stat {
                             name: "obd_ping",
-                            units: "usecs",
-                            samples: 21,
+                            units: "usec",
+                            samples: 2479,
                             min: Some(
-                                4,
+                                2,
                             ),
                             max: Some(
-                                45,
+                                403,
                             ),
                             sum: Some(
-                                515,
+                                92129,
                             ),
                             sumsquare: Some(
-                                15157,
+                                5738787,
                             ),
                         },
                         Stat {
                             name: "llog_origin_handle_open",
-                            units: "usecs",
-                            samples: 80,
+                            units: "usec",
+                            samples: 1047,
                             min: Some(
-                                10,
+                                5,
                             ),
                             max: Some(
-                                121,
+                                185,
                             ),
                             sum: Some(
-                                3274,
+                                29184,
                             ),
                             sumsquare: Some(
-                                169542,
+                                1410662,
                             ),
                         },
                         Stat {
                             name: "llog_origin_handle_next_block",
-                            units: "usecs",
-                            samples: 336,
+                            units: "usec",
+                            samples: 1480,
                             min: Some(
-                                7,
+                                6,
                             ),
                             max: Some(
-                                144265,
+                                18073,
                             ),
                             sum: Some(
-                                1944257,
+                                126444,
                             ),
                             sumsquare: Some(
-                                137912111925,
+                                808404604,
                             ),
                         },
                         Stat {
                             name: "llog_origin_handle_read_header",
-                            units: "usecs",
-                            samples: 72,
+                            units: "usec",
+                            samples: 906,
                             min: Some(
-                                10,
+                                6,
                             ),
                             max: Some(
-                                101465,
+                                23326,
                             ),
                             sum: Some(
-                                848171,
+                                136715,
                             ),
                             sumsquare: Some(
-                                51506020451,
+                                1386538557,
                             ),
                         },
                     ],
@@ -919,7 +899,7 @@ expression: result
                     target: Target(
                         "MGS",
                     ),
-                    value: 8,
+                    value: 9,
                 },
             ),
         ),
@@ -967,33 +947,33 @@ expression: result
                             units: "usecs",
                             samples: 16,
                             min: Some(
-                                1,
+                                0,
                             ),
                             max: Some(
-                                20538,
+                                37539,
                             ),
                             sum: Some(
-                                84170,
+                                88178,
                             ),
                             sumsquare: Some(
-                                1096533070,
+                                2725609146,
                             ),
                         },
                         Stat {
                             name: "statfs",
                             units: "usecs",
-                            samples: 104,
+                            samples: 10822,
                             min: Some(
                                 0,
                             ),
                             max: Some(
-                                17,
+                                319,
                             ),
                             sum: Some(
-                                323,
+                                69750,
                             ),
                             sumsquare: Some(
-                                2133,
+                                957530,
                             ),
                         },
                         Stat {
@@ -1001,16 +981,16 @@ expression: result
                             units: "usecs",
                             samples: 8,
                             min: Some(
-                                14962,
+                                453,
                             ),
                             max: Some(
-                                77399,
+                                26192,
                             ),
                             sum: Some(
-                                526421,
+                                70349,
                             ),
                             sumsquare: Some(
-                                37781669655,
+                                1272717255,
                             ),
                         },
                     ],
@@ -1036,30 +1016,30 @@ expression: result
                                 0,
                             ),
                             max: Some(
-                                30237,
+                                46653,
                             ),
                             sum: Some(
-                                107582,
+                                63391,
                             ),
                             sumsquare: Some(
-                                1897367894,
+                                2291099301,
                             ),
                         },
                         Stat {
                             name: "statfs",
                             units: "usecs",
-                            samples: 104,
+                            samples: 10822,
                             min: Some(
                                 0,
                             ),
                             max: Some(
-                                40,
+                                208,
                             ),
                             sum: Some(
-                                392,
+                                64901,
                             ),
                             sumsquare: Some(
-                                4404,
+                                826233,
                             ),
                         },
                         Stat {
@@ -1067,16 +1047,16 @@ expression: result
                             units: "usecs",
                             samples: 8,
                             min: Some(
-                                7528,
+                                732,
                             ),
                             max: Some(
-                                67836,
+                                96119,
                             ),
                             sum: Some(
-                                245760,
+                                381688,
                             ),
                             sumsquare: Some(
-                                10452380450,
+                                26464951586,
                             ),
                         },
                     ],
@@ -1204,25 +1184,25 @@ expression: result
                     stats: [
                         Stat {
                             name: "req_waittime",
-                            units: "usecs",
-                            samples: 102,
+                            units: "usec",
+                            samples: 118,
                             min: Some(
-                                10,
+                                6,
                             ),
                             max: Some(
-                                97123,
+                                37302,
                             ),
                             sum: Some(
-                                819241,
+                                187249,
                             ),
                             sumsquare: Some(
-                                52917251485,
+                                3863287049,
                             ),
                         },
                         Stat {
                             name: "req_qdepth",
                             units: "reqs",
-                            samples: 102,
+                            samples: 118,
                             min: Some(
                                 0,
                             ),
@@ -1239,41 +1219,41 @@ expression: result
                         Stat {
                             name: "req_active",
                             units: "reqs",
-                            samples: 102,
+                            samples: 118,
                             min: Some(
                                 1,
                             ),
                             max: Some(
-                                8,
+                                6,
                             ),
                             sum: Some(
-                                278,
+                                237,
                             ),
                             sumsquare: Some(
-                                1258,
+                                755,
                             ),
                         },
                         Stat {
                             name: "req_timeout",
-                            units: "secs",
-                            samples: 102,
+                            units: "sec",
+                            samples: 118,
                             min: Some(
-                                15,
+                                4,
                             ),
                             max: Some(
                                 15,
                             ),
                             sum: Some(
-                                1530,
+                                606,
                             ),
                             sumsquare: Some(
-                                22950,
+                                3984,
                             ),
                         },
                         Stat {
                             name: "reqbuf_avail",
                             units: "bufs",
-                            samples: 207,
+                            samples: 247,
                             min: Some(
                                 63,
                             ),
@@ -1281,78 +1261,95 @@ expression: result
                                 64,
                             ),
                             sum: Some(
-                                13154,
+                                15757,
                             ),
                             sumsquare: Some(
-                                835934,
+                                1005235,
                             ),
                         },
                         Stat {
                             name: "ost_create",
-                            units: "usecs",
+                            units: "usec",
                             samples: 32,
                             min: Some(
-                                10,
+                                4,
                             ),
                             max: Some(
-                                30255,
+                                46668,
                             ),
                             sum: Some(
-                                192363,
+                                151955,
                             ),
                             sumsquare: Some(
-                                3001709813,
+                                5024095321,
                             ),
                         },
                         Stat {
                             name: "ost_get_info",
-                            units: "usecs",
+                            units: "usec",
                             samples: 16,
                             min: Some(
-                                7556,
+                                463,
                             ),
                             max: Some(
-                                77419,
+                                96149,
                             ),
                             sum: Some(
-                                772613,
+                                452357,
                             ),
                             sumsquare: Some(
-                                48271976175,
+                                27754397689,
                             ),
                         },
                         Stat {
                             name: "ost_connect",
-                            units: "usecs",
-                            samples: 27,
+                            units: "usec",
+                            samples: 60,
                             min: Some(
-                                23,
+                                8,
                             ),
                             max: Some(
-                                1301,
+                                1950,
                             ),
                             sum: Some(
-                                4070,
+                                10886,
                             ),
                             sumsquare: Some(
-                                3081484,
+                                11179762,
+                            ),
+                        },
+                        Stat {
+                            name: "ost_disconnect",
+                            units: "usec",
+                            samples: 2,
+                            min: Some(
+                                212,
+                            ),
+                            max: Some(
+                                215,
+                            ),
+                            sum: Some(
+                                427,
+                            ),
+                            sumsquare: Some(
+                                91169,
                             ),
                         },
                         Stat {
                             name: "obd_ping",
-                            units: "usecs",
-                            samples: 27,
+                            units: "usec",
+                            samples: 8,
                             min: Some(
                                 2,
                             ),
                             max: Some(
-                                50,
+                                26,
                             ),
                             sum: Some(
-                                514,
+                                129,
                             ),
                             sumsquare: Some(
-                                14540,
+                                2763,
                             ),
                         },
                     ],
@@ -1378,25 +1375,138 @@ expression: result
                     stats: [
                         Stat {
                             name: "req_waittime",
-                            units: "usecs",
-                            samples: 208,
+                            units: "usec",
+                            samples: 21644,
                             min: Some(
-                                7,
+                                4,
                             ),
                             max: Some(
-                                3961,
+                                9738,
                             ),
                             sum: Some(
-                                25569,
+                                4952537,
                             ),
                             sumsquare: Some(
-                                38837139,
+                                10139816613,
                             ),
                         },
                         Stat {
                             name: "req_qdepth",
                             units: "reqs",
-                            samples: 208,
+                            samples: 21644,
+                            min: Some(
+                                0,
+                            ),
+                            max: Some(
+                                1,
+                            ),
+                            sum: Some(
+                                74,
+                            ),
+                            sumsquare: Some(
+                                74,
+                            ),
+                        },
+                        Stat {
+                            name: "req_active",
+                            units: "reqs",
+                            samples: 21644,
+                            min: Some(
+                                1,
+                            ),
+                            max: Some(
+                                2,
+                            ),
+                            sum: Some(
+                                27124,
+                            ),
+                            sumsquare: Some(
+                                38084,
+                            ),
+                        },
+                        Stat {
+                            name: "req_timeout",
+                            units: "sec",
+                            samples: 21644,
+                            min: Some(
+                                1,
+                            ),
+                            max: Some(
+                                15,
+                            ),
+                            sum: Some(
+                                323157,
+                            ),
+                            sumsquare: Some(
+                                4845807,
+                            ),
+                        },
+                        Stat {
+                            name: "reqbuf_avail",
+                            units: "bufs",
+                            samples: 43782,
+                            min: Some(
+                                63,
+                            ),
+                            max: Some(
+                                64,
+                            ),
+                            sum: Some(
+                                2800939,
+                            ),
+                            sumsquare: Some(
+                                179190229,
+                            ),
+                        },
+                        Stat {
+                            name: "ost_statfs",
+                            units: "usec",
+                            samples: 21644,
+                            min: Some(
+                                2,
+                            ),
+                            max: Some(
+                                1048,
+                            ),
+                            sum: Some(
+                                990253,
+                            ),
+                            sumsquare: Some(
+                                76226431,
+                            ),
+                        },
+                    ],
+                },
+            ),
+        ),
+        Target(
+            Oss(
+                OssStat {
+                    param: Param(
+                        "ost_out",
+                    ),
+                    stats: [
+                        Stat {
+                            name: "req_waittime",
+                            units: "usec",
+                            samples: 6735,
+                            min: Some(
+                                5,
+                            ),
+                            max: Some(
+                                130980,
+                            ),
+                            sum: Some(
+                                2497780,
+                            ),
+                            sumsquare: Some(
+                                35971276068,
+                            ),
+                        },
+                        Stat {
+                            name: "req_qdepth",
+                            units: "reqs",
+                            samples: 6735,
                             min: Some(
                                 0,
                             ),
@@ -1413,7 +1523,7 @@ expression: result
                         Stat {
                             name: "req_active",
                             units: "reqs",
-                            samples: 208,
+                            samples: 6735,
                             min: Some(
                                 1,
                             ),
@@ -1421,33 +1531,33 @@ expression: result
                                 2,
                             ),
                             sum: Some(
-                                262,
+                                6738,
                             ),
                             sumsquare: Some(
-                                370,
+                                6744,
                             ),
                         },
                         Stat {
                             name: "req_timeout",
-                            units: "secs",
-                            samples: 208,
+                            units: "sec",
+                            samples: 6735,
                             min: Some(
-                                15,
+                                4,
                             ),
                             max: Some(
                                 15,
                             ),
                             sum: Some(
-                                3120,
+                                99991,
                             ),
                             sumsquare: Some(
-                                46800,
+                                1495399,
                             ),
                         },
                         Stat {
                             name: "reqbuf_avail",
                             units: "bufs",
-                            samples: 428,
+                            samples: 13524,
                             min: Some(
                                 63,
                             ),
@@ -1455,27 +1565,78 @@ expression: result
                                 64,
                             ),
                             sum: Some(
-                                27386,
+                                865393,
                             ),
                             sumsquare: Some(
-                                1752326,
+                                55376143,
                             ),
                         },
                         Stat {
-                            name: "ost_statfs",
-                            units: "usecs",
-                            samples: 208,
+                            name: "mds_connect",
+                            units: "usec",
+                            samples: 30,
+                            min: Some(
+                                9,
+                            ),
+                            max: Some(
+                                1641,
+                            ),
+                            sum: Some(
+                                5607,
+                            ),
+                            sumsquare: Some(
+                                5233255,
+                            ),
+                        },
+                        Stat {
+                            name: "mds_statfs",
+                            units: "usec",
+                            samples: 6677,
                             min: Some(
                                 4,
                             ),
                             max: Some(
-                                365,
+                                420,
                             ),
                             sum: Some(
-                                5881,
+                                363867,
                             ),
                             sumsquare: Some(
-                                328547,
+                                27702321,
+                            ),
+                        },
+                        Stat {
+                            name: "obd_ping",
+                            units: "usec",
+                            samples: 7,
+                            min: Some(
+                                8,
+                            ),
+                            max: Some(
+                                26,
+                            ),
+                            sum: Some(
+                                112,
+                            ),
+                            sumsquare: Some(
+                                2020,
+                            ),
+                        },
+                        Stat {
+                            name: "out_update",
+                            units: "usec",
+                            samples: 21,
+                            min: Some(
+                                6,
+                            ),
+                            max: Some(
+                                750,
+                            ),
+                            sum: Some(
+                                2679,
+                            ),
+                            sumsquare: Some(
+                                1122351,
                             ),
                         },
                     ],
@@ -1486,19 +1647,112 @@ expression: result
             Oss(
                 OssStat {
                     param: Param(
-                        "ost_out",
-                    ),
-                    stats: [],
-                },
-            ),
-        ),
-        Target(
-            Oss(
-                OssStat {
-                    param: Param(
                         "ost_seq",
                     ),
-                    stats: [],
+                    stats: [
+                        Stat {
+                            name: "req_waittime",
+                            units: "usec",
+                            samples: 8,
+                            min: Some(
+                                9,
+                            ),
+                            max: Some(
+                                38539,
+                            ),
+                            sum: Some(
+                                38728,
+                            ),
+                            sumsquare: Some(
+                                1485260732,
+                            ),
+                        },
+                        Stat {
+                            name: "req_qdepth",
+                            units: "reqs",
+                            samples: 8,
+                            min: Some(
+                                0,
+                            ),
+                            max: Some(
+                                0,
+                            ),
+                            sum: Some(
+                                0,
+                            ),
+                            sumsquare: Some(
+                                0,
+                            ),
+                        },
+                        Stat {
+                            name: "req_active",
+                            units: "reqs",
+                            samples: 8,
+                            min: Some(
+                                1,
+                            ),
+                            max: Some(
+                                2,
+                            ),
+                            sum: Some(
+                                10,
+                            ),
+                            sumsquare: Some(
+                                14,
+                            ),
+                        },
+                        Stat {
+                            name: "req_timeout",
+                            units: "sec",
+                            samples: 8,
+                            min: Some(
+                                1,
+                            ),
+                            max: Some(
+                                10,
+                            ),
+                            sum: Some(
+                                26,
+                            ),
+                            sumsquare: Some(
+                                206,
+                            ),
+                        },
+                        Stat {
+                            name: "reqbuf_avail",
+                            units: "bufs",
+                            samples: 18,
+                            min: Some(
+                                64,
+                            ),
+                            max: Some(
+                                64,
+                            ),
+                            sum: Some(
+                                1152,
+                            ),
+                            sumsquare: Some(
+                                73728,
+                            ),
+                        },
+                        Stat {
+                            name: "seq_query",
+                            units: "usec",
+                            samples: 8,
+                            min: Some(
+                                6,
+                            ),
+                            max: Some(
+                                72676,
+                            ),
+                            sum: Some(
+                                90424,
+                            ),
+                            sumsquare: Some(
+                                5593607704,
+                            ),
+                        },
+                    ],
                 },
             ),
         ),
@@ -1515,9 +1769,9 @@ expression: result
                     value: Some(
                         [
                             JobStatMdt {
-                                job_id: "mount.lustre@0@co-es-pm-149.co-",
+                                job_id: "df.0",
                                 snapshot_time: UnsignedLustreTimestamp(
-                                    1701771260,
+                                    1702058368,
                                 ),
                                 start_time: None,
                                 elapsed_time: None,
@@ -1580,9 +1834,9 @@ expression: result
                                 getattr: BytesStat {
                                     samples: 1,
                                     unit: "usecs",
-                                    min: 20,
-                                    max: 20,
-                                    sum: 20,
+                                    min: 55,
+                                    max: 55,
+                                    sum: 55,
                                 },
                                 setattr: BytesStat {
                                     samples: 0,
@@ -1606,11 +1860,11 @@ expression: result
                                     sum: 0,
                                 },
                                 statfs: BytesStat {
-                                    samples: 2,
+                                    samples: 0,
                                     unit: "usecs",
-                                    min: 2,
-                                    max: 3,
-                                    sum: 5,
+                                    min: 0,
+                                    max: 0,
+                                    sum: 0,
                                 },
                                 sync: BytesStat {
                                     samples: 0,
@@ -1656,9 +1910,9 @@ expression: result
                                 },
                             },
                             JobStatMdt {
-                                job_id: "df@0@co-es-pm-149.co-es.datadir",
+                                job_id: "bash.0",
                                 snapshot_time: UnsignedLustreTimestamp(
-                                    1701771302,
+                                    1702058388,
                                 ),
                                 start_time: None,
                                 elapsed_time: None,
@@ -1719,11 +1973,11 @@ expression: result
                                     sum: 0,
                                 },
                                 getattr: BytesStat {
-                                    samples: 1,
+                                    samples: 2,
                                     unit: "usecs",
-                                    min: 30,
-                                    max: 30,
-                                    sum: 30,
+                                    min: 0,
+                                    max: 37,
+                                    sum: 37,
                                 },
                                 setattr: BytesStat {
                                     samples: 0,
@@ -1813,20 +2067,37 @@ expression: result
                     ),
                     value: [
                         Stat {
-                            name: "statfs",
+                            name: "getattr",
                             units: "usecs",
-                            samples: 133,
+                            samples: 4,
                             min: Some(
                                 0,
                             ),
                             max: Some(
-                                57,
+                                103,
                             ),
                             sum: Some(
-                                1609,
+                                195,
                             ),
                             sumsquare: Some(
-                                26831,
+                                15003,
+                            ),
+                        },
+                        Stat {
+                            name: "statfs",
+                            units: "usecs",
+                            samples: 9466,
+                            min: Some(
+                                0,
+                            ),
+                            max: Some(
+                                225,
+                            ),
+                            sum: Some(
+                                117415,
+                            ),
+                            sumsquare: Some(
+                                2170351,
                             ),
                         },
                     ],
@@ -1843,7 +2114,7 @@ expression: result
                     target: Target(
                         "fs-MDT0000",
                     ),
-                    value: 31,
+                    value: 32,
                 },
             ),
         ),
@@ -2025,7 +2296,7 @@ expression: result
                     target: Target(
                         "fs-MDT0000",
                     ),
-                    value: 96,
+                    value: 99,
                 },
             ),
         ),
@@ -2319,7 +2590,7 @@ expression: result
                     target: Target(
                         "fs-MDT0000",
                     ),
-                    value: 6,
+                    value: 8,
                 },
             ),
         ),
@@ -2356,104 +2627,104 @@ expression: result
                 [
                     Stat {
                         name: "req_waittime",
-                        units: "usecs",
-                        samples: 24,
+                        units: "usec",
+                        samples: 978,
                         min: Some(
-                            11,
+                            4,
                         ),
                         max: Some(
-                            9900,
+                            4633,
                         ),
                         sum: Some(
-                            19059,
+                            250696,
                         ),
                         sumsquare: Some(
-                            129214269,
+                            339222166,
                         ),
                     },
                     Stat {
                         name: "req_qdepth",
                         units: "reqs",
-                        samples: 24,
+                        samples: 978,
                         min: Some(
                             0,
                         ),
                         max: Some(
-                            0,
+                            1,
                         ),
                         sum: Some(
-                            0,
+                            11,
                         ),
                         sumsquare: Some(
-                            0,
+                            11,
                         ),
                     },
                     Stat {
                         name: "req_active",
                         units: "reqs",
-                        samples: 24,
+                        samples: 978,
                         min: Some(
                             1,
                         ),
                         max: Some(
-                            1,
+                            3,
                         ),
                         sum: Some(
-                            24,
+                            1368,
                         ),
                         sumsquare: Some(
-                            24,
+                            2266,
                         ),
                     },
                     Stat {
                         name: "req_timeout",
-                        units: "secs",
-                        samples: 24,
+                        units: "sec",
+                        samples: 978,
                         min: Some(
-                            15,
+                            1,
                         ),
                         max: Some(
                             15,
                         ),
                         sum: Some(
-                            360,
+                            12509,
                         ),
                         sumsquare: Some(
-                            5400,
+                            185429,
                         ),
                     },
                     Stat {
                         name: "reqbuf_avail",
                         units: "bufs",
-                        samples: 50,
+                        samples: 1974,
                         min: Some(
-                            63,
+                            56,
                         ),
                         max: Some(
                             64,
                         ),
                         sum: Some(
-                            3194,
+                            123563,
                         ),
                         sumsquare: Some(
-                            204038,
+                            7741359,
                         ),
                     },
                     Stat {
                         name: "ldlm_cancel",
-                        units: "usecs",
-                        samples: 24,
+                        units: "usec",
+                        samples: 978,
                         min: Some(
-                            8,
+                            2,
                         ),
                         max: Some(
-                            97845,
+                            753,
                         ),
                         sum: Some(
-                            98397,
+                            12126,
                         ),
                         sumsquare: Some(
-                            9573662057,
+                            997176,
                         ),
                     },
                 ],
@@ -2464,25 +2735,25 @@ expression: result
                 [
                     Stat {
                         name: "req_waittime",
-                        units: "usecs",
-                        samples: 4,
+                        units: "usec",
+                        samples: 134,
                         min: Some(
-                            22,
+                            16,
                         ),
                         max: Some(
-                            3563,
+                            496,
                         ),
                         sum: Some(
-                            3683,
+                            18754,
                         ),
                         sumsquare: Some(
-                            12701137,
+                            3942630,
                         ),
                     },
                     Stat {
                         name: "req_qdepth",
                         units: "reqs",
-                        samples: 4,
+                        samples: 134,
                         min: Some(
                             0,
                         ),
@@ -2499,69 +2770,69 @@ expression: result
                     Stat {
                         name: "req_active",
                         units: "reqs",
-                        samples: 4,
+                        samples: 134,
                         min: Some(
                             1,
                         ),
                         max: Some(
-                            1,
+                            2,
                         ),
                         sum: Some(
-                            4,
+                            175,
                         ),
                         sumsquare: Some(
-                            4,
+                            257,
                         ),
                     },
                     Stat {
                         name: "req_timeout",
-                        units: "secs",
-                        samples: 4,
+                        units: "sec",
+                        samples: 134,
                         min: Some(
-                            15,
+                            1,
                         ),
                         max: Some(
                             15,
                         ),
                         sum: Some(
-                            60,
+                            1753,
                         ),
                         sumsquare: Some(
-                            900,
+                            25993,
                         ),
                     },
                     Stat {
                         name: "reqbuf_avail",
                         units: "bufs",
-                        samples: 9,
+                        samples: 277,
                         min: Some(
-                            1,
+                            0,
                         ),
                         max: Some(
                             1,
                         ),
                         sum: Some(
-                            9,
+                            255,
                         ),
                         sumsquare: Some(
-                            9,
+                            255,
                         ),
                     },
                     Stat {
                         name: "ldlm_bl_callback",
-                        units: "usecs",
-                        samples: 4,
+                        units: "usec",
+                        samples: 134,
                         min: Some(
-                            14,
+                            3,
                         ),
                         max: Some(
-                            64,
+                            177,
                         ),
                         sum: Some(
-                            130,
+                            2678,
                         ),
                         sumsquare: Some(
-                            5694,
+                            115678,
                         ),
                     },
                 ],

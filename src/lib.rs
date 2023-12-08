@@ -87,4 +87,22 @@ mod tests {
 
         assert_eq!(expected, z);
     }
+
+    #[test]
+    fn es_6_2_0_job_stats_unhealthy() {
+        let xs = include_bytes!("./fixtures/valid/params-6.2.0-r9.txt");
+        let expected = parse_lctl_output(xs).unwrap();
+
+        let y = serde_json::to_string(&expected).unwrap();
+        let z: Vec<Record> = serde_json::from_str(&y).unwrap();
+
+        assert_eq!(expected, z);
+    }
+
+    #[test]
+    fn params() {
+        let xs = super::parser::params();
+
+        insta::assert_display_snapshot!(xs.join(" "));
+    }
 }

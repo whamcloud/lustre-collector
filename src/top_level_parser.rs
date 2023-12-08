@@ -65,6 +65,14 @@ where
             healthy: true,
             targets: vec![],
         })),
+        (string("LBUG").map(|_| HealthCheckStat {
+            healthy: false,
+            targets: vec![],
+        })),
+        (string("NOT HEALTHY").map(|_| HealthCheckStat {
+            healthy: false,
+            targets: vec![],
+        })),
         ((targets_health(), string("NOT HEALTHY")).map(|(targets, _)| HealthCheckStat {
             healthy: false,
             targets,
@@ -194,6 +202,42 @@ mod tests {
                     param: Param(HEALTH_CHECK.to_string()),
                     value: HealthCheckStat {
                         healthy: true,
+                        targets: vec![]
+                    }
+                })),
+                ""
+            ))
+        )
+    }
+    #[test]
+    fn test_unhealthy_old_health_check() {
+        let result = parse().parse("health_check=NOT HEALTHY\n");
+
+        assert_eq!(
+            result,
+            Ok((
+                Record::Host(HostStats::HealthCheck(HostStat {
+                    param: Param(HEALTH_CHECK.to_string()),
+                    value: HealthCheckStat {
+                        healthy: false,
+                        targets: vec![]
+                    }
+                })),
+                ""
+            ))
+        )
+    }
+    #[test]
+    fn test_lbug_health_check() {
+        let result = parse().parse("health_check=LBUG\n");
+
+        assert_eq!(
+            result,
+            Ok((
+                Record::Host(HostStats::HealthCheck(HostStat {
+                    param: Param(HEALTH_CHECK.to_string()),
+                    value: HealthCheckStat {
+                        healthy: false,
                         targets: vec![]
                     }
                 })),

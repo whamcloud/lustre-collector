@@ -1,11 +1,11 @@
-memused=242840621
-memused_max=244436941
-lnet_memused=66923896
+memused=243927005
+memused_max=245019901
+lnet_memused=67130162
 health_check=NOT HEALTHY
 mdt.fs-MDT0000.exports.0@lo.uuid=
+fs-MDT0000-lwp-OST0001_UUID
 fs-MDT0000-lwp-OST0000_UUID
 fs-MDT0000-lwp-MDT0000_UUID
-fs-MDT0000-lwp-OST0001_UUID
 mdt.fs-MDT0000.exports.10.73.20.12@tcp.uuid=
 fs-MDT0000-lwp-OST0003_UUID
 fs-MDT0000-lwp-OST0002_UUID
@@ -14,37 +14,38 @@ fs-MDT0001-mdtlov_UUID
 mdt.fs-MDT0000.exports.10.73.20.13@tcp.uuid=
 fs-MDT0000-lwp-OST0005_UUID
 fs-MDT0000-lwp-OST0004_UUID
-fs-MDT0000-lwp-MDT0002_UUID
 fs-MDT0002-mdtlov_UUID
+fs-MDT0000-lwp-MDT0002_UUID
 mdt.fs-MDT0000.exports.10.73.20.14@tcp.uuid=
-fs-MDT0000-lwp-OST0006_UUID
 fs-MDT0000-lwp-OST0007_UUID
-fs-MDT0000-lwp-MDT0003_UUID
 fs-MDT0003-mdtlov_UUID
+fs-MDT0000-lwp-OST0006_UUID
+fs-MDT0000-lwp-MDT0003_UUID
 mdt.fs-MDT0000.exports.10.73.20.15@tcp.uuid=
-fs-MDT0000-lwp-OST0009_UUID
-fs-MDT0000-lwp-OST0008_UUID
-fs-MDT0000-lwp-MDT0004_UUID
 fs-MDT0004-mdtlov_UUID
+fs-MDT0000-lwp-MDT0004_UUID
+fs-MDT0000-lwp-OST0008_UUID
+fs-MDT0000-lwp-OST0009_UUID
 mdt.fs-MDT0000.exports.10.73.20.16@tcp.uuid=
+fs-MDT0005-mdtlov_UUID
+fs-MDT0000-lwp-MDT0005_UUID
 fs-MDT0000-lwp-OST000b_UUID
 fs-MDT0000-lwp-OST000a_UUID
-fs-MDT0000-lwp-MDT0005_UUID
-fs-MDT0005-mdtlov_UUID
 mdt.fs-MDT0000.exports.10.73.20.17@tcp.uuid=
-fs-MDT0000-lwp-OST000c_UUID
-fs-MDT0000-lwp-OST000d_UUID
 fs-MDT0000-lwp-MDT0006_UUID
 fs-MDT0006-mdtlov_UUID
+fs-MDT0000-lwp-OST000d_UUID
+fs-MDT0000-lwp-OST000c_UUID
 mdt.fs-MDT0000.exports.10.73.20.18@tcp.uuid=
+fs-MDT0007-mdtlov_UUID
+fs-MDT0000-lwp-MDT0007_UUID
 fs-MDT0000-lwp-OST000e_UUID
 fs-MDT0000-lwp-OST000f_UUID
-fs-MDT0000-lwp-MDT0007_UUID
-fs-MDT0007-mdtlov_UUID
+mdt.fs-MDT0000.exports.10.73.20.2@tcp.uuid=80fe6b5a-68b9-4dfb-9967-948902c1a2a3
 osd-ldiskfs.MGS.filesfree=32555
-osd-ldiskfs.fs-MDT0000.filesfree=1885252
-osd-ldiskfs.fs-OST0000.filesfree=39844
-osd-ldiskfs.fs-OST0001.filesfree=39876
+osd-ldiskfs.fs-MDT0000.filesfree=1885250
+osd-ldiskfs.fs-OST0000.filesfree=40134
+osd-ldiskfs.fs-OST0001.filesfree=40134
 osd-ldiskfs.MGS.filestotal=32768
 osd-ldiskfs.fs-MDT0000.filestotal=1885696
 osd-ldiskfs.fs-OST0000.filestotal=40960
@@ -54,19 +55,19 @@ osd-ldiskfs.fs-MDT0000.fstype=ldiskfs
 osd-ldiskfs.fs-OST0000.fstype=ldiskfs
 osd-ldiskfs.fs-OST0001.fstype=ldiskfs
 osd-ldiskfs.MGS.kbytesavail=463060
-osd-ldiskfs.fs-MDT0000.kbytesavail=2365496
-osd-ldiskfs.fs-OST0000.kbytesavail=4037172
-osd-ldiskfs.fs-OST0001.kbytesavail=4037172
+osd-ldiskfs.fs-MDT0000.kbytesavail=2365504
+osd-ldiskfs.fs-OST0000.kbytesavail=4037332
+osd-ldiskfs.fs-OST0001.kbytesavail=4037332
 osd-ldiskfs.MGS.kbytesfree=489272
-osd-ldiskfs.fs-MDT0000.kbytesfree=2599604
-osd-ldiskfs.fs-OST0000.kbytesfree=4105984
-osd-ldiskfs.fs-OST0001.kbytesfree=4105984
+osd-ldiskfs.fs-MDT0000.kbytesfree=2599612
+osd-ldiskfs.fs-OST0000.kbytesfree=4106144
+osd-ldiskfs.fs-OST0001.kbytesfree=4106144
 osd-ldiskfs.MGS.kbytestotal=491092
 osd-ldiskfs.fs-MDT0000.kbytestotal=2602832
 osd-ldiskfs.fs-OST0000.kbytestotal=4108388
 osd-ldiskfs.fs-OST0001.kbytestotal=4108388
 osd-ldiskfs.MGS.brw_stats=
-snapshot_time:            1701885337.507664664 secs.nsecs
+snapshot_time:         1702058707.803059394 (secs.nsecs)
 
                            read      |     write
 pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
@@ -88,11 +89,8 @@ I/O time (1/1000s)     ios   % cum % |  ios         % cum %
 
                            read      |     write
 disk I/O size          ios   % cum % |  ios         % cum %
-
-                           read      |     write
-block maps msec        maps  % cum % |  maps        % cum %
 osd-ldiskfs.fs-MDT0000.brw_stats=
-snapshot_time:            1701885337.507682378 secs.nsecs
+snapshot_time:         1702058707.803076636 (secs.nsecs)
 
                            read      |     write
 pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
@@ -114,11 +112,8 @@ I/O time (1/1000s)     ios   % cum % |  ios         % cum %
 
                            read      |     write
 disk I/O size          ios   % cum % |  ios         % cum %
-
-                           read      |     write
-block maps msec        maps  % cum % |  maps        % cum %
 osd-ldiskfs.fs-OST0000.brw_stats=
-snapshot_time:            1701885337.507700872 secs.nsecs
+snapshot_time:         1702058707.803090953 (secs.nsecs)
 
                            read      |     write
 pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
@@ -140,11 +135,8 @@ I/O time (1/1000s)     ios   % cum % |  ios         % cum %
 
                            read      |     write
 disk I/O size          ios   % cum % |  ios         % cum %
-
-                           read      |     write
-block maps msec        maps  % cum % |  maps        % cum %
 osd-ldiskfs.fs-OST0001.brw_stats=
-snapshot_time:            1701885337.507714378 secs.nsecs
+snapshot_time:         1702058707.803110771 (secs.nsecs)
 
                            read      |     write
 pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
@@ -166,13 +158,10 @@ I/O time (1/1000s)     ios   % cum % |  ios         % cum %
 
                            read      |     write
 disk I/O size          ios   % cum % |  ios         % cum %
-
-                           read      |     write
-block maps msec        maps  % cum % |  maps        % cum %
 mdt.fs-MDT0000.exports.0@lo.uuid=
+fs-MDT0000-lwp-OST0001_UUID
 fs-MDT0000-lwp-OST0000_UUID
 fs-MDT0000-lwp-MDT0000_UUID
-fs-MDT0000-lwp-OST0001_UUID
 mdt.fs-MDT0000.exports.10.73.20.12@tcp.uuid=
 fs-MDT0000-lwp-OST0003_UUID
 fs-MDT0000-lwp-OST0002_UUID
@@ -181,64 +170,65 @@ fs-MDT0001-mdtlov_UUID
 mdt.fs-MDT0000.exports.10.73.20.13@tcp.uuid=
 fs-MDT0000-lwp-OST0005_UUID
 fs-MDT0000-lwp-OST0004_UUID
-fs-MDT0000-lwp-MDT0002_UUID
 fs-MDT0002-mdtlov_UUID
+fs-MDT0000-lwp-MDT0002_UUID
 mdt.fs-MDT0000.exports.10.73.20.14@tcp.uuid=
-fs-MDT0000-lwp-OST0006_UUID
 fs-MDT0000-lwp-OST0007_UUID
-fs-MDT0000-lwp-MDT0003_UUID
 fs-MDT0003-mdtlov_UUID
+fs-MDT0000-lwp-OST0006_UUID
+fs-MDT0000-lwp-MDT0003_UUID
 mdt.fs-MDT0000.exports.10.73.20.15@tcp.uuid=
-fs-MDT0000-lwp-OST0009_UUID
-fs-MDT0000-lwp-OST0008_UUID
-fs-MDT0000-lwp-MDT0004_UUID
 fs-MDT0004-mdtlov_UUID
+fs-MDT0000-lwp-MDT0004_UUID
+fs-MDT0000-lwp-OST0008_UUID
+fs-MDT0000-lwp-OST0009_UUID
 mdt.fs-MDT0000.exports.10.73.20.16@tcp.uuid=
+fs-MDT0005-mdtlov_UUID
+fs-MDT0000-lwp-MDT0005_UUID
 fs-MDT0000-lwp-OST000b_UUID
 fs-MDT0000-lwp-OST000a_UUID
-fs-MDT0000-lwp-MDT0005_UUID
-fs-MDT0005-mdtlov_UUID
 mdt.fs-MDT0000.exports.10.73.20.17@tcp.uuid=
-fs-MDT0000-lwp-OST000c_UUID
-fs-MDT0000-lwp-OST000d_UUID
 fs-MDT0000-lwp-MDT0006_UUID
 fs-MDT0006-mdtlov_UUID
+fs-MDT0000-lwp-OST000d_UUID
+fs-MDT0000-lwp-OST000c_UUID
 mdt.fs-MDT0000.exports.10.73.20.18@tcp.uuid=
+fs-MDT0007-mdtlov_UUID
+fs-MDT0000-lwp-MDT0007_UUID
 fs-MDT0000-lwp-OST000e_UUID
 fs-MDT0000-lwp-OST000f_UUID
-fs-MDT0000-lwp-MDT0007_UUID
-fs-MDT0007-mdtlov_UUID
+mdt.fs-MDT0000.exports.10.73.20.2@tcp.uuid=80fe6b5a-68b9-4dfb-9967-948902c1a2a3
 mgs.MGS.mgs.stats=
-snapshot_time             1701885337.507884456 secs.nsecs
-req_waittime              732 samples [usecs] 4 11382 126413 467088731
-req_qdepth                732 samples [reqs] 0 0 0 0
-req_active                732 samples [reqs] 1 2 815 981
-req_timeout               732 samples [secs] 1 15 10653 159423
-reqbuf_avail              1464 samples [bufs] 61 63 92056 5788618
-ldlm_plain_enqueue        128 samples [reqs] 1 1 128 128
-mgs_connect               8 samples [usecs] 61 131 795 82653
-mgs_target_reg            48 samples [usecs] 73 141239 1052185 62203787475
-mgs_config_read           39 samples [usecs] 32 71093 114396 5406804200
-obd_ping                  21 samples [usecs] 4 45 515 15157
-llog_origin_handle_open   80 samples [usecs] 10 121 3274 169542
-llog_origin_handle_next_block 336 samples [usecs] 7 144265 1944257 137912111925
-llog_origin_handle_read_header 72 samples [usecs] 10 101465 848171 51506020451
+snapshot_time             1702058707.803311327 secs.nsecs
+req_waittime              7077 samples [usec] 3 50384 1412555 6633863085
+req_qdepth                7077 samples [reqs] 0 1 1 1
+req_active                7077 samples [reqs] 1 3 7146 7294
+req_timeout               7077 samples [sec] 1 15 90946 1348936
+reqbuf_avail              14163 samples [bufs] 61 64 892118 56194126
+ldlm_plain_enqueue        1084 samples [reqs] 1 1 1084 1084
+mgs_connect               9 samples [usec] 61 218 1114 156882
+mgs_target_reg            44 samples [usec] 109 192880 684875 63698978079
+mgs_config_read           28 samples [usec] 31 1651 12342 9274964
+obd_ping                  2479 samples [usec] 2 403 92129 5738787
+llog_origin_handle_open   1047 samples [usec] 5 185 29184 1410662
+llog_origin_handle_next_block 1480 samples [usec] 6 18073 126444 808404604
+llog_origin_handle_read_header 906 samples [usec] 6 23326 136715 1386538557
 mgs.MGS.mgs.threads_max=32
 mgs.MGS.mgs.threads_min=3
 mgs.MGS.mgs.threads_started=4
-mgs.MGS.num_exports=8
+mgs.MGS.num_exports=9
 obdfilter.fs-OST0000.job_stats=job_stats:
 obdfilter.fs-OST0001.job_stats=job_stats:
 obdfilter.fs-OST0000.stats=
-snapshot_time             1701885337.508204687 secs.nsecs
-create                    16 samples [usecs] 1 20538 84170 1096533070
-statfs                    104 samples [usecs] 0 17 323 2133
-get_info                  8 samples [usecs] 14962 77399 526421 37781669655
+snapshot_time             1702058707.803624686 secs.nsecs
+create                    16 samples [usecs] 0 37539 88178 2725609146
+statfs                    10822 samples [usecs] 0 319 69750 957530
+get_info                  8 samples [usecs] 453 26192 70349 1272717255
 obdfilter.fs-OST0001.stats=
-snapshot_time             1701885337.508217561 secs.nsecs
-create                    16 samples [usecs] 0 30237 107582 1897367894
-statfs                    104 samples [usecs] 0 40 392 4404
-get_info                  8 samples [usecs] 7528 67836 245760 10452380450
+snapshot_time             1702058707.803642910 secs.nsecs
+create                    16 samples [usecs] 0 46653 63391 2291099301
+statfs                    10822 samples [usecs] 0 208 64901 826233
+get_info                  8 samples [usecs] 732 96119 381688 26464951586
 obdfilter.fs-OST0000.num_exports=8
 obdfilter.fs-OST0001.num_exports=8
 obdfilter.fs-OST0000.tot_dirty=0
@@ -248,31 +238,49 @@ obdfilter.fs-OST0001.tot_granted=272832
 obdfilter.fs-OST0000.tot_pending=0
 obdfilter.fs-OST0001.tot_pending=0
 ost.OSS.ost.stats=
-snapshot_time             1701885337.508468481 secs.nsecs
-req_waittime              102 samples [usecs] 10 97123 819241 52917251485
-req_qdepth                102 samples [reqs] 0 0 0 0
-req_active                102 samples [reqs] 1 8 278 1258
-req_timeout               102 samples [secs] 15 15 1530 22950
-reqbuf_avail              207 samples [bufs] 63 64 13154 835934
-ost_create                32 samples [usecs] 10 30255 192363 3001709813
-ost_get_info              16 samples [usecs] 7556 77419 772613 48271976175
-ost_connect               27 samples [usecs] 23 1301 4070 3081484
-obd_ping                  27 samples [usecs] 2 50 514 14540
-ost.OSS.ost_io.stats=snapshot_time             1701885337.508503457 secs.nsecs
+snapshot_time             1702058707.803904101 secs.nsecs
+req_waittime              118 samples [usec] 6 37302 187249 3863287049
+req_qdepth                118 samples [reqs] 0 0 0 0
+req_active                118 samples [reqs] 1 6 237 755
+req_timeout               118 samples [sec] 4 15 606 3984
+reqbuf_avail              247 samples [bufs] 63 64 15757 1005235
+ost_create                32 samples [usec] 4 46668 151955 5024095321
+ost_get_info              16 samples [usec] 463 96149 452357 27754397689
+ost_connect               60 samples [usec] 8 1950 10886 11179762
+ost_disconnect            2 samples [usec] 212 215 427 91169
+obd_ping                  8 samples [usec] 2 26 129 2763
+ost.OSS.ost_io.stats=snapshot_time             1702058707.803943735 secs.nsecs
 ost.OSS.ost_create.stats=
-snapshot_time             1701885337.508530317 secs.nsecs
-req_waittime              208 samples [usecs] 7 3961 25569 38837139
-req_qdepth                208 samples [reqs] 0 0 0 0
-req_active                208 samples [reqs] 1 2 262 370
-req_timeout               208 samples [secs] 15 15 3120 46800
-reqbuf_avail              428 samples [bufs] 63 64 27386 1752326
-ost_statfs                208 samples [usecs] 4 365 5881 328547
-ost.OSS.ost_out.stats=snapshot_time             1701885337.508561656 secs.nsecs
-ost.OSS.ost_seq.stats=snapshot_time             1701885337.508587755 secs.nsecs
+snapshot_time             1702058707.803971587 secs.nsecs
+req_waittime              21644 samples [usec] 4 9738 4952537 10139816613
+req_qdepth                21644 samples [reqs] 0 1 74 74
+req_active                21644 samples [reqs] 1 2 27124 38084
+req_timeout               21644 samples [sec] 1 15 323157 4845807
+reqbuf_avail              43782 samples [bufs] 63 64 2800939 179190229
+ost_statfs                21644 samples [usec] 2 1048 990253 76226431
+ost.OSS.ost_out.stats=
+snapshot_time             1702058707.804007254 secs.nsecs
+req_waittime              6735 samples [usec] 5 130980 2497780 35971276068
+req_qdepth                6735 samples [reqs] 0 0 0 0
+req_active                6735 samples [reqs] 1 2 6738 6744
+req_timeout               6735 samples [sec] 4 15 99991 1495399
+reqbuf_avail              13524 samples [bufs] 63 64 865393 55376143
+mds_connect               30 samples [usec] 9 1641 5607 5233255
+mds_statfs                6677 samples [usec] 4 420 363867 27702321
+obd_ping                  7 samples [usec] 8 26 112 2020
+out_update                21 samples [usec] 6 750 2679 1122351
+ost.OSS.ost_seq.stats=
+snapshot_time             1702058707.804042951 secs.nsecs
+req_waittime              8 samples [usec] 9 38539 38728 1485260732
+req_qdepth                8 samples [reqs] 0 0 0 0
+req_active                8 samples [reqs] 1 2 10 14
+req_timeout               8 samples [sec] 1 10 26 206
+reqbuf_avail              18 samples [bufs] 64 64 1152 73728
+seq_query                 8 samples [usec] 6 72676 90424 5593607704
 mdt.fs-MDT0000.job_stats=
 job_stats:
-- job_id:          mount.lustre@0@co-es-pm-149.co-
-  snapshot_time:   1701771260
+- job_id:          df.0
+  snapshot_time:   1702058368
   open:            { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   close:           { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   mknod:           { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
@@ -281,11 +289,11 @@ job_stats:
   mkdir:           { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   rmdir:           { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   rename:          { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
-  getattr:         { samples:           1, unit: usecs, min:       20, max:       20, sum:               20, sumsq:                400 }
+  getattr:         { samples:           1, unit: usecs, min:       55, max:       55, sum:               55, sumsq:               3025 }
   setattr:         { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   getxattr:        { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   setxattr:        { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
-  statfs:          { samples:           2, unit: usecs, min:        2, max:        3, sum:                5, sumsq:                 13 }
+  statfs:          { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   sync:            { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   samedir_rename:  { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   parallel_rename_file: { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
@@ -297,8 +305,8 @@ job_stats:
   write_bytes:     { samples:           0, unit: bytes, min:        0, max:        0, sum:                0, sumsq:                  0 }
   punch:           { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   migrate:         { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
-- job_id:          df@0@co-es-pm-149.co-es.datadir
-  snapshot_time:   1701771302
+- job_id:          bash.0
+  snapshot_time:   1702058388
   open:            { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   close:           { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   mknod:           { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
@@ -307,7 +315,7 @@ job_stats:
   mkdir:           { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   rmdir:           { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   rename:          { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
-  getattr:         { samples:           1, unit: usecs, min:       30, max:       30, sum:               30, sumsq:                900 }
+  getattr:         { samples:           2, unit: usecs, min:        0, max:       37, sum:               37, sumsq:               1369 }
   setattr:         { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   getxattr:        { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   setxattr:        { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
@@ -324,9 +332,10 @@ job_stats:
   punch:           { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
   migrate:         { samples:           0, unit: usecs, min:        0, max:        0, sum:                0, sumsq:                  0 }
 mdt.fs-MDT0000.md_stats=
-snapshot_time             1701885337.508665891 secs.nsecs
-statfs                    133 samples [usecs] 0 57 1609 26831
-mdt.fs-MDT0000.num_exports=31
+snapshot_time             1702058707.804217238 secs.nsecs
+getattr                   4 samples [usecs] 0 103 195 15003
+statfs                    9466 samples [usecs] 0 225 117415 2170351
+mdt.fs-MDT0000.num_exports=32
 ldlm.namespaces.mdt-fs-MDT0000_UUID.contended_locks=32
 ldlm.namespaces.filter-fs-OST0000_UUID.contended_locks=32
 ldlm.namespaces.filter-fs-OST0001_UUID.contended_locks=32
@@ -339,7 +348,7 @@ ldlm.namespaces.filter-fs-OST0001_UUID.ctime_age_limit=10
 ldlm.namespaces.mdt-fs-MDT0000_UUID.early_lock_cancel=0
 ldlm.namespaces.filter-fs-OST0000_UUID.early_lock_cancel=0
 ldlm.namespaces.filter-fs-OST0001_UUID.early_lock_cancel=0
-ldlm.namespaces.mdt-fs-MDT0000_UUID.lock_count=96
+ldlm.namespaces.mdt-fs-MDT0000_UUID.lock_count=99
 ldlm.namespaces.filter-fs-OST0000_UUID.lock_count=0
 ldlm.namespaces.filter-fs-OST0001_UUID.lock_count=0
 ldlm.namespaces.mdt-fs-MDT0000_UUID.lock_timeouts=0
@@ -360,22 +369,22 @@ ldlm.namespaces.filter-fs-OST0001_UUID.max_nolock_bytes=0
 ldlm.namespaces.mdt-fs-MDT0000_UUID.max_parallel_ast=1024
 ldlm.namespaces.filter-fs-OST0000_UUID.max_parallel_ast=1024
 ldlm.namespaces.filter-fs-OST0001_UUID.max_parallel_ast=1024
-ldlm.namespaces.mdt-fs-MDT0000_UUID.resource_count=6
+ldlm.namespaces.mdt-fs-MDT0000_UUID.resource_count=8
 ldlm.namespaces.filter-fs-OST0000_UUID.resource_count=0
 ldlm.namespaces.filter-fs-OST0001_UUID.resource_count=0
 ldlm.services.ldlm_canceld.stats=
-snapshot_time             1701885337.510331694 secs.nsecs
-req_waittime              24 samples [usecs] 11 9900 19059 129214269
-req_qdepth                24 samples [reqs] 0 0 0 0
-req_active                24 samples [reqs] 1 1 24 24
-req_timeout               24 samples [secs] 15 15 360 5400
-reqbuf_avail              50 samples [bufs] 63 64 3194 204038
-ldlm_cancel               24 samples [usecs] 8 97845 98397 9573662057
+snapshot_time             1702058707.805922508 secs.nsecs
+req_waittime              978 samples [usec] 4 4633 250696 339222166
+req_qdepth                978 samples [reqs] 0 1 11 11
+req_active                978 samples [reqs] 1 3 1368 2266
+req_timeout               978 samples [sec] 1 15 12509 185429
+reqbuf_avail              1974 samples [bufs] 56 64 123563 7741359
+ldlm_cancel               978 samples [usec] 2 753 12126 997176
 ldlm.services.ldlm_cbd.stats=
-snapshot_time             1701885337.510366790 secs.nsecs
-req_waittime              4 samples [usecs] 22 3563 3683 12701137
-req_qdepth                4 samples [reqs] 0 0 0 0
-req_active                4 samples [reqs] 1 1 4 4
-req_timeout               4 samples [secs] 15 15 60 900
-reqbuf_avail              9 samples [bufs] 1 1 9 9
-ldlm_bl_callback          4 samples [usecs] 14 64 130 5694
+snapshot_time             1702058707.805962424 secs.nsecs
+req_waittime              134 samples [usec] 16 496 18754 3942630
+req_qdepth                134 samples [reqs] 0 0 0 0
+req_active                134 samples [reqs] 1 2 175 257
+req_timeout               134 samples [sec] 1 15 1753 25993
+reqbuf_avail              277 samples [bufs] 0 1 255 255
+ldlm_bl_callback          134 samples [usec] 3 177 2678 115678
