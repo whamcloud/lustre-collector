@@ -201,6 +201,8 @@ mod tests {
                     max: 0,
                     sum: 0,
                 },
+                parallel_rename_dir: None,
+                parallel_rename_file: None,
             }]),
         };
 

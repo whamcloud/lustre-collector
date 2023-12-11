@@ -167,6 +167,8 @@ pub struct JobStatMdt {
     pub read_bytes: BytesStat,
     pub write_bytes: BytesStat,
     pub punch: BytesStat,
+    pub parallel_rename_dir: Option<BytesStat>,
+    pub parallel_rename_file: Option<BytesStat>,
 }
 
 pub mod lnet_exports {
