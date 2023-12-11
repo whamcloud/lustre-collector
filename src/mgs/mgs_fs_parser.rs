@@ -56,7 +56,7 @@ where
         .map(|xs| {
             let xs: Vec<(Target, FsName)> = xs
                 .into_iter()
-                .filter(|(_, name)| name.0 != "params")
+                .filter(|(_, name)| !matches!(name.0.as_str(), "params" | "nodemap"))
                 .collect();
 
             xs
@@ -107,6 +107,7 @@ mod tests {
     #[test]
     fn test_single_mounted_fs() {
         let x = r#"mgs.MGS.live.fs
+mgs.MGS.live.nodemap
 mgs.MGS.live.params
 "#;
 
@@ -127,6 +128,7 @@ mgs.MGS.live.params
     fn test_multi_mounted_fs() {
         let x = r#"mgs.MGS.live.fs
 mgs.MGS.live.fs2
+mgs.MGS.live.nodemap
 mgs.MGS.live.params
 "#;
 
@@ -148,6 +150,7 @@ mgs.MGS.live.params
         let x = r#"mgs.MGS.live.fs
 mgs.MGS2.live.mgs2fs1
 mgs.MGS.live.fs2
+mgs.MGS.live.nodemap
 mgs.MGS.live.params
 mgs.MGS2.live.mgs2fs2
 "#;
