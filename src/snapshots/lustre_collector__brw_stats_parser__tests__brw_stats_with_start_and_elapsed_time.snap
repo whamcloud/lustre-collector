@@ -39,6 +39,11 @@ expression: result
             unit: "ios",
             buckets: [],
         },
+        BrwStats {
+            name: "block_maps_msec",
+            unit: "maps",
+            buckets: [],
+        },
     ],
     "",
 )
