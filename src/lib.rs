@@ -28,10 +28,12 @@ use std::{io, str};
 pub use types::*;
 
 fn check_output(records: Vec<Record>, state: &str) -> Result<Vec<Record>, LustreCollectorError> {
+    let params = crate::parser::params().join(" ");
+
     if !state.is_empty() {
         return Err(io::Error::new(
             io::ErrorKind::InvalidInput,
-            format!("Content left in input buffer: {}", state),
+            format!("Content left in input buffer. Please run and supply to support: `lctl get_param {params}`"),
         )
         .into());
     }

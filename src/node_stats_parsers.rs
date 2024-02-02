@@ -28,10 +28,12 @@ pub fn parse_cpustats_output(output: &[u8]) -> Result<Vec<Record>, LustreCollect
         .easy_parse(output)
         .map_err(|err| err.map_position(|p| p.translate_position(output)))?;
 
+    let params = crate::parser::params().join(" ");
+
     if !state.is_empty() {
         return Err(io::Error::new(
             io::ErrorKind::InvalidInput,
-            format!("Content left in input buffer: {}", state),
+            format!("Content left in input buffer. Please run and supply output to support: `lctl get_param {params}`"),
         )
         .into());
     }
@@ -80,10 +82,12 @@ pub fn parse_meminfo_output(output: &[u8]) -> Result<Vec<Record>, LustreCollecto
         .easy_parse(output)
         .map_err(|err| err.map_position(|p| p.translate_position(output)))?;
 
+    let params = crate::parser::params().join(" ");
+
     if !state.is_empty() {
         return Err(io::Error::new(
             io::ErrorKind::InvalidInput,
-            format!("Content left in input buffer: {}", state),
+            format!("Content left in input buffer. Please run and supply output to support: `lctl get_param {params}`"),
         )
         .into());
     }
