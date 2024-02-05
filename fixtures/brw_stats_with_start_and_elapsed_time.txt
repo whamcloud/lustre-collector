@@ -23,3 +23,6 @@ I/O time (1/1000s)     ios   % cum % |  ios         % cum %
 
                            read      |     write
 disk I/O size          ios   % cum % |  ios         % cum %
+
+                           read      |     write
+block maps msec        maps  % cum % |  maps        % cum %

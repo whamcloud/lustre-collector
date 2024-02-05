@@ -259,30 +259,7 @@ pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
 
     #[test]
     fn test_empty_brw_stats() {
-        let x = r#"
-snapshot_time:         1534429278.185762481 (secs.nsecs)
-
-                           read      |     write
-pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
-
-                           read      |     write
-discontiguous pages    rpcs  % cum % |  rpcs        % cum %
-
-                           read      |     write
-discontiguous blocks   rpcs  % cum % |  rpcs        % cum %
-
-                           read      |     write
-disk fragmented I/Os   ios   % cum % |  ios         % cum %
-
-                           read      |     write
-disk I/Os in flight    ios   % cum % |  ios         % cum %
-
-                           read      |     write
-I/O time (1/1000s)     ios   % cum % |  ios         % cum %
-
-                           read      |     write
-disk I/O size          ios   % cum % |  ios         % cum %
-"#;
+        let x = include_str!("../fixtures/brw_stats_empty.txt");
 
         let result = brw_stats().parse(x);
 
@@ -325,6 +302,11 @@ disk I/O size          ios   % cum % |  ios         % cum %
                         unit: "ios".to_string(),
                         buckets: vec![],
                     },
+                    BrwStats {
+                        name: "block_maps_msec".to_string(),
+                        unit: "maps".to_string(),
+                        buckets: vec![],
+                    },
                 ],
                 ""
             ))
@@ -333,64 +315,7 @@ disk I/O size          ios   % cum % |  ios         % cum %
 
     #[test]
     fn test_brw_stats() {
-        let x = r#"
-snapshot_time:         1534158712.738772898 (secs.nsecs)
-
-                           read      |     write
-pages per bulk r/w     rpcs  % cum % |  rpcs        % cum %
-32:		         0   0   0   |    1  11  11
-64:		         0   0   0   |    0   0  11
-128:		         0   0   0   |    0   0  11
-256:		         1   2   3   |    0   0  11
-512:		         0   0   0   |    0   0  11
-1K:		         0   0   0   |    8  88 100
-
-                           read      |     write
-discontiguous pages    rpcs  % cum % |  rpcs        % cum %
-0:		         0   0   0   |    6  66  66
-1:		         0   0   0   |    3  33 100
-
-                           read      |     write
-discontiguous blocks   rpcs  % cum % |  rpcs        % cum %
-0:		         0   0   0   |    9 100 100
-
-                           read      |     write
-disk fragmented I/Os   ios   % cum % |  ios         % cum %
-1:		         0   0   0   |    1  11  11
-2:		         0   0   0   |    0   0  11
-3:		         0   0   0   |    0   0  11
-4:		         0   0   0   |    8  88 100
-
-                           read      |     write
-disk I/Os in flight    ios   % cum % |  ios         % cum %
-1:		         0   0   0   |    3   9   9
-2:		         0   0   0   |    3   9  18
-3:		         0   0   0   |    3   9  27
-4:		         0   0   0   |    3   9  36
-5:		         0   0   0   |    3   9  45
-6:		         0   0   0   |    3   9  54
-7:		         0   0   0   |    3   9  63
-8:		         0   0   0   |    3   9  72
-9:		         0   0   0   |    2   6  78
-10:		         0   0   0   |    2   6  84
-11:		         0   0   0   |    2   6  90
-12:		         0   0   0   |    2   6  96
-13:		         0   0   0   |    1   3 100
-
-                           read      |     write
-I/O time (1/1000s)     ios   % cum % |  ios         % cum %
-32:		         0   0   0   |    1  11  11
-64:		         0   0   0   |    0   0  11
-128:		         0   0   0   |    2  22  33
-256:		         0   0   0   |    6  66 100
-
-                           read      |     write
-disk I/O size          ios   % cum % |  ios         % cum %
-128K:		         0   0   0   |    1   3   3
-256K:		         0   0   0   |    0   0   3
-512K:		         0   0   0   |    0   0   3
-1M:		         0   0   0   |   32  96 100
-"#;
+        let x = include_str!("../fixtures/brw_stats_with_data.txt");
 
         let result: (Vec<_>, _) = brw_stats().parse(x).unwrap();
 
@@ -399,7 +324,7 @@ disk I/O size          ios   % cum % |  ios         % cum %
 
     #[test]
     fn test_brw_stats_with_start_and_elapsed_time() {
-        let x = include_str!("../fixtures/brw_stats.txt");
+        let x = include_str!("../fixtures/brw_stats_with_start_and_elapsed_time.txt");
 
         let result = brw_stats().parse(x).unwrap();
 

@@ -216,6 +216,17 @@ expression: result
                 },
             ],
         },
+        BrwStats {
+            name: "block_maps_msec",
+            unit: "maps",
+            buckets: [
+                BrwStatsBucket {
+                    name: 1,
+                    read: 12689,
+                    write: 0,
+                },
+            ],
+        },
     ],
     "",
 )
