@@ -185,62 +185,6 @@ obdfilter.ai400-OST0000.tot_granted=1887764159
 obdfilter.ai400-OST0001.tot_granted=278208
 obdfilter.ai400-OST0000.tot_pending=0
 obdfilter.ai400-OST0001.tot_pending=0
-obdfilter.ai400x2-OST0000.exports.0@lo.stats=
-snapshot_time             1687448377.140066624 secs.nsecs
-create                    10 samples [usecs] 44 4724 8911 25377661
-statfs                    5842 samples [usecs] 0 32132 77736 1248293008
-get_info                  1 samples [usecs] 3541 3541 3541 12538681
-obdfilter.ai400x2-OST0000.exports.172.16.240.130@o2ib.stats=
-snapshot_time             1687448377.140115041 secs.nsecs
-create                    2 samples [usecs] 1 389 390 151322
-statfs                    5841 samples [usecs] 0 62 13812 69042
-get_info                  1 samples [usecs] 622 622 622 386884
-obdfilter.ai400x2-OST0000.exports.172.16.240.131@o2ib.stats=
-snapshot_time             1687448377.140142119 secs.nsecs
-create                    2 samples [usecs] 2 255 257 65029
-statfs                    5841 samples [usecs] 0 34 10078 33920
-get_info                  1 samples [usecs] 629 629 629 395641
-obdfilter.ai400x2-OST0000.exports.172.16.240.132@o2ib.stats=
-snapshot_time             1687448377.140170939 secs.nsecs
-create                    2 samples [usecs] 1 228 229 51985
-statfs                    5841 samples [usecs] 0 40 10622 35572
-get_info                  1 samples [usecs] 567 567 567 321489
-obdfilter.ai400x2-OST0000.exports.172.16.67.87@o2ib.stats=
-snapshot_time             1687448377.140194771 secs.nsecs
-read_bytes                107577035 samples [bytes] 4096 1048576 81479562702848 8320232521438593024
-write_bytes               29075888 samples [bytes] 4096 1048576 24761003618304 6804030488517279744
-read                      107577035 samples [usecs] 12 83702 199439280448 599777200106672
-write                     29075888 samples [usecs] 1 58976 11063054274 11687540810422
-punch                     256 samples [usecs] 12 4872 11892 26649796
-sync                      256 samples [usecs] 0 8117 213794 439664352
-obdfilter.ai400x2-OST0001.exports.0@lo.stats=
-snapshot_time             1687448377.140228326 secs.nsecs
-create                    10 samples [usecs] 46 4253 8459 21219179
-statfs                    5842 samples [usecs] 0 15452 43854 238950292
-get_info                  1 samples [usecs] 3583 3583 3583 12837889
-obdfilter.ai400x2-OST0001.exports.172.16.240.130@o2ib.stats=
-snapshot_time             1687448377.140267031 secs.nsecs
-create                    2 samples [usecs] 0 244 244 59536
-statfs                    5841 samples [usecs] 0 53 12887 56549
-get_info                  1 samples [usecs] 837 837 837 700569
-obdfilter.ai400x2-OST0001.exports.172.16.240.131@o2ib.stats=
-snapshot_time             1687448377.140291963 secs.nsecs
-create                    2 samples [usecs] 1 253 254 64010
-statfs                    5841 samples [usecs] 0 35 9813 34577
-get_info                  1 samples [usecs] 560 560 560 313600
-obdfilter.ai400x2-OST0001.exports.172.16.240.132@o2ib.stats=
-snapshot_time             1687448377.140315446 secs.nsecs
-create                    2 samples [usecs] 1 241 242 58082
-statfs                    5841 samples [usecs] 0 67 10736 40894
-get_info                  1 samples [usecs] 533 533 533 284089
-obdfilter.ai400x2-OST0001.exports.172.16.67.87@o2ib.stats=
-snapshot_time             1687448377.140341383 secs.nsecs
-read_bytes                134061108 samples [bytes] 4096 1048576 100430434398208 9589617164080381952
-write_bytes               35563179 samples [bytes] 4096 1048576 31043924631552 13380320504942952448
-read                      134061108 samples [usecs] 11 85796 212314090599 612123348028333
-write                     35563179 samples [usecs] 1 70953 12502225306 12332383204112
-punch                     256 samples [usecs] 12 207 5489 158987
-sync                      256 samples [usecs] 0 8733 220742 490874780
 ost.OSS.ost.stats=
 snapshot_time             1689060419.303756478 secs.nsecs
 req_waittime              219 samples [usec] 11 753 6162 771804
