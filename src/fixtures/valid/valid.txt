@@ -159,32 +159,6 @@ I/O time (1/1000s)     ios   % cum % |  ios         % cum %
 
                            read      |     write
 disk I/O size          ios   % cum % |  ios         % cum %
-osd-ldiskfs.testfs-MDT0000.quota_slave.acct_group=
-grp_accounting:
-- id:      0
-  usage:   { inodes:                  396, kbytes:               529400 }
-osd-ldiskfs.testfs-MDT0001.quota_slave.acct_group=
-grp_accounting:
-- id:      0
-  usage:   { inodes:                  265, kbytes:               356672 }
-osd-ldiskfs.testfs-MDT0000.quota_slave.acct_user=
-usr_accounting:
-- id:      0
-  usage:   { inodes:                  396, kbytes:               529400 }
-osd-ldiskfs.testfs-MDT0001.quota_slave.acct_user=
-usr_accounting:
-- id:      0
-  usage:   { inodes:                  265, kbytes:               356672 }
-osd-ldiskfs.testfs-MDT0000.quota_slave.acct_project=
-prj_accounting:
-- id:      0
-  usage:   { inodes:                  393, kbytes:               529396 }
-- id:      1337
-  usage:   { inodes:                    3, kbytes:                    4 }
-osd-ldiskfs.testfs-MDT0001.quota_slave.acct_project=
-prj_accounting:
-- id:      0
-  usage:   { inodes:                  265, kbytes:               356672 }
 mdt.ai400-MDT0000.exports.0@lo.uuid=
 52cb8dca-ba5c-4725-9cff-41cd0d45e3e7
 ai400-MDT0000-lwp-OST0000_UUID
@@ -298,62 +272,6 @@ getattr                   23 samples [usecs] 2 192 629 52487
 getxattr                  2 samples [usecs] 18 29 47 1165
 statfs                    44863 samples [usecs] 0 43 323074 3055172
 mdt.ai400-MDT0000.num_exports=19
-qmt.testfs-QMT0000.dt-0x0.glb-grp=
-global_pool0_dt_grp
-- id:      0
-  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
-qmt.testfs-QMT0000.dt-0x0.glb-prj=
-global_pool0_dt_prj
-- id:      0
-  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
-- id:      1337
-  limits:  { hard:               309200, soft:               307200, granted:              1025032, time:           1687277628 }
-qmt.testfs-QMT0000.dt-0x0.glb-usr=
-global_pool0_dt_usr
-- id:      0
-  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
-qmt.testfs-QMT0000.dt-ddn_ssd.glb-grp=
-global_index_copy:
-- id:      0
-  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
-qmt.testfs-QMT0000.dt-ddn_ssd.glb-prj=
-global_index_copy:
-- id:      0
-  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
-- id:      1337
-  limits:  { hard:                    0, soft:                    0, granted:              1024004, time:      281474976710656 }
-qmt.testfs-QMT0000.dt-ddn_ssd.glb-usr=
-global_index_copy:
-- id:      0
-  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
-qmt.testfs-QMT0000.dt-pool_1.glb-grp=
-global_index_copy:
-- id:      0
-  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
-qmt.testfs-QMT0000.dt-pool_1.glb-prj=
-global_index_copy:
-- id:      0
-  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
-- id:      1337
-  limits:  { hard:                    0, soft:                    0, granted:              1024004, time:      281474976710656 }
-qmt.testfs-QMT0000.dt-pool_1.glb-usr=
-global_index_copy:
-- id:      0
-  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
-qmt.testfs-QMT0000.md-0x0.glb-grp=
-global_pool0_md_grp
-- id:      0
-  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
-qmt.testfs-QMT0000.md-0x0.glb-prj=
-global_pool0_md_prj
-- id:      0
-  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
-- id:      1337
-  limits:  { hard:                11000, soft:                10000, granted:                 1024, time:                    0 }
-qmt.testfs-QMT0000.md-0x0.glb-usr=
-global_pool0_md_usr
-- id:      0
-  limits:  { hard:                    0, soft:                    0, granted:                    0, time:               604800 }
 ldlm.namespaces.mdt-ai400-MDT0000_UUID.contended_locks=32
 ldlm.namespaces.filter-ai400-OST0000_UUID.contended_locks=32
 ldlm.namespaces.filter-ai400-OST0001_UUID.contended_locks=32
