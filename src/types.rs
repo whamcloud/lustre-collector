@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 use crate::LustreCollectorError;
+use get_size::GetSize;
 use std::{fmt, ops::Deref, time::Duration};
 
 #[derive(Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
@@ -17,7 +18,7 @@ impl Deref for Host {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, GetSize, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
 /// The Lustre target cooresponding to these stats.
 pub struct Target(pub String);
 
@@ -29,7 +30,7 @@ impl Deref for Target {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, GetSize, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 /// The name of the stat.
 pub struct Param(pub String);
 
@@ -41,13 +42,13 @@ impl Deref for Param {
     }
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct ReqsStat {
     pub samples: i64,
     pub unit: String,
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct BytesStat {
     pub samples: i64,
     pub unit: String,
@@ -64,7 +65,7 @@ pub struct JobStatsOst {
 /// Used to represent an unsigned timestamp in Lustre.
 ///
 /// Only use this field when you are sure that the timestamp is unsigned.
-#[derive(PartialEq, Eq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(GetSize, PartialEq, Eq, Clone, Debug, serde::Serialize, serde::Deserialize)]
 #[serde(try_from = "String", into = "String")]
 pub struct UnsignedLustreTimestamp(pub i64);
 
@@ -117,7 +118,7 @@ impl fmt::Display for UnsignedLustreTimestamp {
     }
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct JobStatOst {
     pub job_id: String,
     pub snapshot_time: UnsignedLustreTimestamp,
@@ -142,7 +143,7 @@ pub struct JobStatsMdt {
     pub job_stats: Option<Vec<JobStatMdt>>,
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct JobStatMdt {
     pub job_id: String,
     pub snapshot_time: UnsignedLustreTimestamp,
@@ -314,7 +315,7 @@ pub mod lnet_exports {
     }
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct Stat {
     pub name: String,
     pub units: String,
@@ -325,14 +326,14 @@ pub struct Stat {
     pub sumsquare: Option<u64>,
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 /// A Stat specific to a host.
 pub struct HostStat<T> {
     pub param: Param,
     pub value: T,
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub enum TargetVariant {
     Ost,
     Mgt,
@@ -361,7 +362,7 @@ impl Deref for TargetVariant {
     }
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 /// Stats specific to a target.
 pub struct TargetStat<T> {
     pub kind: TargetVariant,
@@ -370,14 +371,14 @@ pub struct TargetStat<T> {
     pub value: T,
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 /// Stats from parsing `ost.OSS.<PARAM>.stats`
 pub struct OssStat {
     pub param: Param,
     pub stats: Vec<Stat>,
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 /// Stats specific to a LNet Nid.
 pub struct LNetStat<T> {
     pub nid: String,
@@ -385,7 +386,7 @@ pub struct LNetStat<T> {
     pub value: T,
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 /// Stats global across LNet Nids.
 pub struct LNetStatGlobal<T> {
     pub param: Param,
@@ -415,21 +416,21 @@ impl TryFrom<&Target> for TargetVariant {
     }
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct BrwStatsBucket {
     pub name: u64,
     pub read: u64,
     pub write: u64,
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct BrwStats {
     pub name: String,
     pub unit: String,
     pub buckets: Vec<BrwStatsBucket>,
 }
 
-#[derive(PartialEq, Eq, Clone, Copy, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(GetSize, PartialEq, Eq, Clone, Copy, Debug, serde::Serialize, serde::Deserialize)]
 pub enum RecoveryStatus {
     Complete,
     Inactive,
@@ -439,7 +440,7 @@ pub enum RecoveryStatus {
     Unknown,
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub enum HostStats {
     MemusedMax(HostStat<u64>),
     Memused(HostStat<u64>),
@@ -447,20 +448,20 @@ pub enum HostStats {
     HealthCheck(HostStat<HealthCheckStat>),
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct HealthCheckStat {
     pub healthy: bool,
     pub targets: Vec<Target>,
 }
 
 /// A Stat specific to a node.
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub struct NodeStat<T> {
     pub param: Param,
     pub value: T,
 }
 /// Top level node stats (not directly Lustre related)
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub enum NodeStats {
     CpuUser(NodeStat<u64>),
     CpuSystem(NodeStat<u64>),
@@ -472,11 +473,11 @@ pub enum NodeStats {
     SwapFree(NodeStat<u64>),
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, GetSize, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub struct FsName(pub String);
 
 /// The target stats currently collected
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub enum TargetStats {
     /// Operations per OST. Read and write data is particularly interesting
     JobStatsOst(TargetStat<Option<Vec<JobStatOst>>>),
@@ -520,7 +521,7 @@ pub enum TargetStats {
     Oss(OssStat),
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub enum LNetStats {
     SendCount(LNetStat<i64>),
     RecvCount(LNetStat<i64>),
@@ -530,13 +531,13 @@ pub enum LNetStats {
     DropLength(LNetStatGlobal<i64>),
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub enum LustreServiceStats {
     LdlmCanceld(Vec<Stat>),
     LdlmCbd(Vec<Stat>),
 }
 
-#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, GetSize, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub enum Record {
     Host(HostStats),
     LNetStat(LNetStats),

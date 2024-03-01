@@ -7,6 +7,7 @@ name = "lustre_collector"
 version = "0.7.8"
 
 [dependencies]
+get-size = { version = "0.1.4", features = ["derive"] }
 clap = {version = "4", features = ["derive"]}
 combine = "=4.6.6"
 serde = {version = "1", features = ["derive"]}
