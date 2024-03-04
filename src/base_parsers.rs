@@ -133,4 +133,11 @@ mod tests {
 
         assert_eq!(result, Ok((Param("memused".to_string()), "77991501\n")))
     }
+
+    #[test]
+    fn test_param_period() {
+        let result = param_period("exports").parse("exports.1.2.3.130@o2ib.stats=Y\n");
+
+        assert_eq!(result, Ok((Param("exports".to_string()), "1.2.3.130@o2ib.stats=Y\n")))
+    }
 }
