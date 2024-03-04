@@ -187,8 +187,10 @@ where
 
 #[cfg(test)]
 mod tests {
+    use crate::recovery_status_parser::{clients_line, target_recovery_stats};
+
     use super::parse;
-    use combine::{parser::EasyParser, stream::position};
+    use combine::{parser::EasyParser, stream::position, Parser};
 
     #[test]
     fn test_multiple() {
@@ -220,6 +222,49 @@ mod tests {
         let x = include_str!("../fixtures/recovery-waiting-for-clients.txt");
 
         let (records, _): (Vec<_>, _) = parse().easy_parse(position::Stream::new(x)).unwrap();
+
+        insta::assert_debug_snapshot!(records);
+    }
+
+    #[test]
+    fn test_clients_line() {
+        let result = clients_line("completed_clients").parse("completed_clients: 3/7\n");
+        assert_eq!(result, Ok((3, "")));
+        let result = clients_line("connected_clients").parse("connected_clients: 3/7\n");
+        assert_eq!(result, Ok((3, "")));
+        let result = clients_line("completed_clients").parse("completed_clients: 3\n");
+        assert_eq!(result, Ok((3, "")));
+    }
+
+    #[test]
+    fn test_target_recovery_stats() {
+        let x = r#"status: COMPLETE
+recovery_start: 1620410016
+recovery_duration: 150
+completed_clients: 4/8
+replayed_requests: 0
+last_transno: 4294967296
+VBR: ENABLED
+IR: ENABLED
+"#;
+
+        let (records, _): (Vec<_>, _) = target_recovery_stats().parse(x).unwrap();
+
+        insta::assert_debug_snapshot!(records);
+    }
+
+    #[test]
+    fn test_target_recovery_stats2() {
+        let x = r#"status: RECOVERING
+recovery_start: 1620920843
+time_remaining: 119
+connected_clients: 3/7
+req_replay_clients: 0
+lock_repay_clients: 0
+completed_clients: 3
+"#;
+
+        let (records, _): (Vec<_>, _) = target_recovery_stats().parse(x).unwrap();
 
         insta::assert_debug_snapshot!(records);
     }
