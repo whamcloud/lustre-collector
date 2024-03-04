@@ -187,9 +187,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::recovery_status_parser::{clients_line, target_recovery_stats};
-
-    use super::parse;
+    use crate::recovery_status_parser::{clients_line, parse, target_recovery_stats};
     use combine::{parser::EasyParser, stream::position, Parser};
 
     #[test]
