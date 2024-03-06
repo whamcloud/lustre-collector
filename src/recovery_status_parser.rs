@@ -7,9 +7,9 @@ use crate::{
     types::{Param, Record, RecoveryStatus, Target, TargetStat, TargetStats, TargetVariant},
 };
 use combine::{
-    attempt, choice, eof, many, optional,
+    attempt, choice, eof, many, many1, one_of, optional,
     parser::{
-        char::{newline, spaces, string},
+        char::{alpha_num, newline, spaces, string},
         repeat::{skip_until, take_until},
     },
     stream::Stream,
@@ -94,6 +94,17 @@ enum RecoveryStat {
     Evicted(u64),
 }
 
+pub struct StatName(pub String);
+
+/// Parses a stat name
+pub(crate) fn stat_name<I>() -> impl Parser<I, Output = StatName>
+where
+    I: Stream<Token = char>,
+    I::Error: ParseError<I::Token, I::Range, I::Position>,
+{
+    many1(alpha_num().or(one_of("_-".chars()))).map(StatName)
+}
+
 fn target_recovery_stats<I>() -> impl Parser<I, Output = Vec<RecoveryStat>>
 where
     I: Stream<Token = char>,
@@ -117,7 +128,7 @@ where
             .map(RecoveryStat::Evicted)
             .map(Some),
         // This will ignore line/field we don't care
-        attempt((target(), token(':'), till_newline().skip(newline()))).map(|_| None),
+        attempt((stat_name(), token(':'), till_newline().skip(newline()))).map(|_| None),
     )))
     .map(|xs: Vec<_>| xs.into_iter().flatten().collect())
 }
