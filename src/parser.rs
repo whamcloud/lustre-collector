@@ -16,7 +16,6 @@ pub fn params() -> Vec<String> {
         .into_iter()
         .chain(client_count_parser::params())
         .chain(osd_parser::params())
-        .chain(client_count_parser::params())
         .chain(mgs_parser::params())
         .chain(oss::params())
         .chain(mds_parser::params())

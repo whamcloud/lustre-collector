@@ -3,7 +3,8 @@
 // license that can be found in the LICENSE file.
 
 use crate::{
-    base_parsers::{equals, period, till_equals},
+    base_parsers::{equals, period},
+    exports_parser::nid,
     types::{Param, Record, Target, TargetStat, TargetStats, TargetVariant},
 };
 use combine::{
@@ -82,7 +83,15 @@ where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
-    (string("exports"), period(), till_equals(), equals()).map(drop)
+    (
+        string("exports"),
+        period(),
+        nid(),
+        period(),
+        string("uuid"),
+        equals(),
+    )
+        .map(drop)
 }
 
 fn mdt_interface<I>() -> impl Parser<I, Output = String>
