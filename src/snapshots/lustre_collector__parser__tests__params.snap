@@ -49,4 +49,5 @@ expression: params()
     "ldlm.namespaces.{mdt-,filter-}*.resource_count",
     "ldlm.services.ldlm_canceld.stats",
     "ldlm.services.ldlm_cbd.stats",
+    "llite.*.stats",
 ]
