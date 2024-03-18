@@ -50,21 +50,26 @@ mod tests {
     use include_dir::{include_dir, Dir};
     use insta::assert_debug_snapshot;
 
-    static VALID_FIXTURES: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/src/fixtures/valid");
+    static VALID_FIXTURES: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/src/fixtures/valid/");
 
     #[test]
     fn test_valid_fixtures() {
-        for file in VALID_FIXTURES.files() {
-            let name = file.path().file_name().unwrap().to_string_lossy();
+        for dir in VALID_FIXTURES.find("*").unwrap() {
+            match dir {
+                include_dir::DirEntry::Dir(_) => {},
+                include_dir::DirEntry::File(file) => {
+                    let name = file.path().to_string_lossy();
 
-            let contents = file.contents_utf8().unwrap();
+                    let contents = file.contents_utf8().unwrap();
 
-            let result = parse()
-                .easy_parse(contents)
-                .map_err(|err| err.map_position(|p| p.translate_position(contents)))
-                .unwrap();
+                    let result = parse()
+                        .easy_parse(contents)
+                        .map_err(|err| err.map_position(|p| p.translate_position(contents)))
+                        .unwrap();
 
-            assert_debug_snapshot!(format!("valid_fixture_{name}"), result);
+                    assert_debug_snapshot!(format!("valid_fixture_{name}"), result);
+                }
+            }
         }
     }
 

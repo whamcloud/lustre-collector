@@ -7,7 +7,7 @@ use crate::{
     stats_parser::stats,
     Param, Record, Stat, Target, TargetStats,
 };
-use combine::{attempt, choice, parser::char::string, ParseError, Parser, Stream};
+use combine::{parser::char::string, ParseError, Parser, Stream};
 
 pub(crate) const LLITE: &str = "llite";
 pub(crate) const STATS: &str = "stats";
@@ -25,7 +25,7 @@ where
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
-        attempt(string(LLITE)).skip(period()),
+        string(LLITE).skip(period()),
         target().skip(period()),
     )
         .map(|(_, x)| x)
@@ -41,7 +41,7 @@ where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
-    choice(((param(STATS), stats().map(LliteStat::Stats)).message("while parsing llite_stat"),))
+    (param(STATS), stats().map(LliteStat::Stats)).message("while parsing llite_stat")
 }
 
 pub(crate) fn parse<I>() -> impl Parser<I, Output = Record>
