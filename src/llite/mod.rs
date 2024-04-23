@@ -24,10 +24,7 @@ where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
-    (
-        string(LLITE).skip(period()),
-        target().skip(period()),
-    )
+    (string(LLITE).skip(period()), target().skip(period()))
         .map(|(_, x)| x)
         .message("while parsing llite target_name")
 }

@@ -56,7 +56,7 @@ mod tests {
     fn test_valid_fixtures() {
         for dir in VALID_FIXTURES.find("*").unwrap() {
             match dir {
-                include_dir::DirEntry::Dir(_) => {},
+                include_dir::DirEntry::Dir(_) => {}
                 include_dir::DirEntry::File(file) => {
                     let name = file.path().to_string_lossy();
 
