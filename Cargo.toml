@@ -22,7 +22,7 @@ tracing = "0.1"
 tracing-subscriber = "0.3"
 
 [dev-dependencies]
-include_dir = {version = "0.7", features = ["glob"]}
+include_dir = {version  = "0.7", features = ["glob"]}
 insta = "1"
 
 [profile.release]

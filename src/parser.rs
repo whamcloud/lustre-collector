@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 use crate::{
-    ldlm,
+    ldlm, llite,
     mds::{client_count_parser, mds_parser},
     mgs::mgs_parser,
     osd_parser, oss, top_level_parser,
@@ -21,6 +21,7 @@ pub fn params() -> Vec<String> {
         .chain(oss::params())
         .chain(mds_parser::params())
         .chain(ldlm::params())
+        .chain(llite::params())
         .collect()
 }
 
@@ -37,6 +38,7 @@ where
         mds_parser::parse().map(|x| vec![x]),
         oss::parse().map(|x| vec![x]),
         ldlm::parse().map(|x| vec![x]),
+        llite::parse().map(|x| vec![x]),
     )))
     .map(|xs: Vec<_>| xs.into_iter().flatten().collect())
 }
@@ -48,21 +50,26 @@ mod tests {
     use include_dir::{include_dir, Dir};
     use insta::assert_debug_snapshot;
 
-    static VALID_FIXTURES: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/src/fixtures/valid");
+    static VALID_FIXTURES: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/src/fixtures/valid/");
 
     #[test]
     fn test_valid_fixtures() {
-        for file in VALID_FIXTURES.files() {
-            let name = file.path().file_name().unwrap().to_string_lossy();
+        for dir in VALID_FIXTURES.find("*").unwrap() {
+            match dir {
+                include_dir::DirEntry::Dir(_) => {}
+                include_dir::DirEntry::File(file) => {
+                    let name = file.path().to_string_lossy();
 
-            let contents = file.contents_utf8().unwrap();
+                    let contents = file.contents_utf8().unwrap();
 
-            let result = parse()
-                .easy_parse(contents)
-                .map_err(|err| err.map_position(|p| p.translate_position(contents)))
-                .unwrap();
+                    let result = parse()
+                        .easy_parse(contents)
+                        .map_err(|err| err.map_position(|p| p.translate_position(contents)))
+                        .unwrap();
 
-            assert_debug_snapshot!(format!("valid_fixture_{name}"), result);
+                    assert_debug_snapshot!(format!("valid_fixture_{name}"), result);
+                }
+            }
         }
     }
 
