@@ -5,6 +5,7 @@
 mod base_parsers;
 pub(crate) mod brw_stats_parser;
 pub mod error;
+pub(crate) mod exports_parser;
 pub(crate) mod ldlm;
 pub(crate) mod llite;
 mod lnetctl_parser;
