@@ -6,9 +6,14 @@ license = "MIT"
 name = "lustre_collector"
 version = "0.7.9"
 
+[workspace.lints.clippy]
+cast_lossless = "warn"
+cast_possible_wrap = "warn"
+unwrap_used = "warn"
+
 [dependencies]
 clap = {version = "4", features = ["derive"]}
-combine = "=4.6.6"
+combine = "=4.6.7"
 serde = {version = "1", features = ["derive"]}
 serde_json = "1"
 serde_yaml = "0.9"
@@ -17,7 +22,7 @@ tracing = "0.1"
 tracing-subscriber = "0.3"
 
 [dev-dependencies]
-include_dir = "0.7"
+include_dir = {version = "0.7", features = ["glob"]}
 insta = "1"
 
 [profile.release]

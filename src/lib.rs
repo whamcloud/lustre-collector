@@ -105,6 +105,6 @@ mod tests {
     fn params() {
         let xs = super::parser::params();
 
-        insta::assert_display_snapshot!(xs.join(" "));
+        insta::assert_snapshot!(xs.join(" "));
     }
 }
