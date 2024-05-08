@@ -59,4 +59,5 @@ expression: params()
     "ldlm.services.ldlm_canceld.stats",
     "ldlm.services.ldlm_cbd.stats",
     "llite.*.stats",
+    "mdd.*.changelog_users",
 ]
