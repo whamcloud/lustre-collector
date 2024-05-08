@@ -49,7 +49,7 @@ where
     attempt(string(x).skip(period()))
         .skip(string(STATS).skip(equals()))
         .map(|x| Param(x.to_string()))
-        .message("while getting non final param")
+        .message("while parsing `oss_suffix`")
 }
 
 fn oss_stat<I>() -> impl Parser<I, Output = (Param, Vec<Stat>)>

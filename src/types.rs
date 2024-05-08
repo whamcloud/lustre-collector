@@ -1,4 +1,4 @@
-// Copyright (c) 2021 DDN. All rights reserved.
+// Copyright (c) 2024 DDN. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
@@ -80,6 +80,12 @@ impl From<UnsignedLustreTimestamp> for String {
     }
 }
 
+/// Attempts to convert a string into an `UnsignedLustreTimestamp`.
+///
+/// The lustre timestamp can be in two formats:
+/// 1. An `i64` representing the number of milliseconds since the Unix epoch.
+/// 2. A string in the format "seconds.factional_seconds secs.[u|n]secs". For example,
+/// "1409777887.590578 secs.usecs".
 impl TryFrom<String> for UnsignedLustreTimestamp {
     type Error = LustreCollectorError;
 
@@ -88,11 +94,15 @@ impl TryFrom<String> for UnsignedLustreTimestamp {
             return Ok(Self(i));
         }
 
-        let (time, _) = s
+        let (time, format) = s
             .split_once(' ')
             .ok_or_else(|| LustreCollectorError::InvalidTime(s.to_string()))?;
 
-        let (secs, ns) = time
+        let (_unit, fractional_unit) = format
+            .split_once('.')
+            .ok_or_else(|| LustreCollectorError::InvalidTime(s.to_string()))?;
+
+        let (secs, ss) = time
             .split_once('.')
             .ok_or_else(|| LustreCollectorError::InvalidTime(s.to_string()))?;
 
@@ -100,9 +110,15 @@ impl TryFrom<String> for UnsignedLustreTimestamp {
             .parse::<u64>()
             .map_err(|_| LustreCollectorError::InvalidTime(s.to_string()))?;
 
-        let ns = ns
+        let ss = ss
             .parse::<u32>()
             .map_err(|_| LustreCollectorError::InvalidTime(s.to_string()))?;
+
+        let ns = match fractional_unit {
+            "usecs" => ss * 1_000,
+            "nsecs" => ss,
+            _ => return Err(LustreCollectorError::InvalidTime(s.to_string())),
+        };
 
         let d = Duration::new(secs, ns);
 
@@ -392,6 +408,13 @@ pub struct LliteStat {
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+/// Stats from parsing `mds.MDS.<PARAM>.stats`
+pub struct MdsStat {
+    pub param: Param,
+    pub stats: Vec<Stat>,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 /// Stats specific to a LNet Nid.
 pub struct LNetStat<T> {
     pub nid: String,
@@ -537,6 +560,7 @@ pub enum TargetStats {
     RecoveryEvictedClients(TargetStat<u64>),
     Llite(LliteStat),
     ExportStats(TargetStat<Vec<ExportStats>>),
+    Mds(MdsStat),
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
@@ -562,4 +586,37 @@ pub enum Record {
     LustreService(LustreServiceStats),
     Node(NodeStats),
     Target(TargetStats),
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::convert::TryInto;
+
+    #[test]
+    fn test_unsigned_lustre_timestamp_try_from() {
+        let s = "0.590578 secs.usecs".to_string();
+        let timestamp: Result<UnsignedLustreTimestamp, _> = s.try_into();
+
+        match timestamp {
+            Ok(t) => assert_eq!((t.0), 590),
+            Err(e) => panic!("Error occurred: {:?}", e),
+        }
+
+        let s = "1709305846.694991088 secs.nsecs".to_string();
+        let timestamp: Result<UnsignedLustreTimestamp, _> = s.try_into();
+
+        match timestamp {
+            Ok(t) => assert_eq!((t.0), 1709305846694),
+            Err(e) => panic!("Error occurred: {:?}", e),
+        }
+
+        let s = "1709305846694".to_string();
+        let timestamp: Result<UnsignedLustreTimestamp, _> = s.try_into();
+
+        match timestamp {
+            Ok(t) => assert_eq!((t.0), 1709305846694),
+            Err(e) => panic!("Error occurred: {:?}", e),
+        }
+    }
 }
