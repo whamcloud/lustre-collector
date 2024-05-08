@@ -11,7 +11,7 @@ use crate::{
 use combine::{
     attempt, choice, eof,
     error::{ParseError, StreamError},
-    many, one_of, optional,
+    optional,
     parser::{
         char::{alpha_num, newline, string},
         repeat::take_until,
@@ -67,7 +67,7 @@ where
 {
     (
         optional(newline()), // If quota stats are present, the whole yaml blob will start on a newline
-        many::<Vec<_>, _, _>(alpha_num().or(one_of("_-:".chars()))), // But yaml header might not be indented, ignore it
+        take_until::<Vec<_>, _, _>(newline()), // But yaml header might not be indented, ignore it
         newline(),
         take_until(attempt((newline(), alpha_num()).map(drop).or(eof()))),
     )
@@ -85,7 +85,7 @@ where
 {
     (
         optional(newline()), // If quota stats are present, the whole yaml blob will start on a newline
-        many::<Vec<_>, _, _>(alpha_num().or(one_of("_-:".chars()))), // But yaml header might not be indented, ignore it
+        take_until::<Vec<_>, _, _>(newline()), // But yaml header might not be indented, ignore it
         newline(),
         take_until(attempt((newline(), alpha_num()).map(drop).or(eof()))),
     )
