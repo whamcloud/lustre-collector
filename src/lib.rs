@@ -16,6 +16,7 @@ mod node_stats_parsers;
 mod osd_parser;
 mod oss;
 pub mod parser;
+pub(crate) mod quota;
 pub mod recovery_status_parser;
 mod stats_parser;
 mod time;

@@ -9,6 +9,7 @@ use crate::{
     mdd_parser::MDD,
     mds::mds_parser::MDS,
     oss::oss_parser::OST,
+    quota::QMT,
     time::time_triple,
     types::Stat,
 };
@@ -30,7 +31,7 @@ where
     I::Error: ParseError<I::Token, I::Range, I::Position>,
 {
     (
-        not_words(&["obdfilter", "mgs", "mdt", LDLM, OST, LLITE, MDS, MDD]).skip(spaces()),
+        not_words(&["obdfilter", "mgs", "mdt", LDLM, OST, LLITE, MDS, MDD, QMT]).skip(spaces()),
         digits(),
         spaces().with(string("samples")),
         spaces().with(between(token('['), token(']'), word())),
@@ -58,7 +59,7 @@ where
     spaces().with(digits())
 }
 
-fn stat<I>() -> impl Parser<I, Output = Stat>
+pub(crate) fn stat<I>() -> impl Parser<I, Output = Stat>
 where
     I: Stream<Token = char>,
     I::Error: ParseError<I::Token, I::Range, I::Position>,

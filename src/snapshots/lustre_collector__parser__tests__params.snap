@@ -15,6 +15,9 @@ expression: params()
     "osd-*.*.kbytesfree",
     "osd-*.*.kbytestotal",
     "osd-*.*.brw_stats",
+    "osd-*.*.quota_slave.acct_group",
+    "osd-*.*.quota_slave.acct_user",
+    "osd-*.*.quota_slave.acct_project",
     "mgs.*.mgs.stats",
     "mgs.*.mgs.threads_max",
     "mgs.*.mgs.threads_min",
@@ -60,4 +63,7 @@ expression: params()
     "ldlm.services.ldlm_cbd.stats",
     "llite.*.stats",
     "mdd.*.changelog_users",
+    "qmt.*.*.glb-usr",
+    "qmt.*.*.glb-prj",
+    "qmt.*.*.glb-grp",
 ]

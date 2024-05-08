@@ -415,6 +415,16 @@ pub struct MdsStat {
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+/// Stats specific to a quota target.
+pub struct TargetQuotaStat<T> {
+    pub pool: String,
+    pub manager: String,
+    pub param: Param,
+    pub target: Target,
+    pub value: T,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 /// Stats specific to a LNet Nid.
 pub struct LNetStat<T> {
     pub nid: String,
@@ -576,6 +586,8 @@ pub enum TargetStats {
     ExportStats(TargetStat<Vec<ExportStats>>),
     Mds(MdsStat),
     Changelog(TargetStat<ChangelogStat>),
+    QuotaStats(TargetQuotaStat<QuotaStats>),
+    QuotaStatsOsd(TargetStat<QuotaStatsOsd>),
 }
 
 #[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
@@ -601,6 +613,51 @@ pub enum Record {
     LustreService(LustreServiceStats),
     Node(NodeStats),
     Target(TargetStats),
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct QuotaStatLimits {
+    pub hard: u64,
+    pub soft: u64,
+    pub granted: u64,
+    pub time: u64,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct QuotaStatUsage {
+    pub inodes: u64,
+    pub kbytes: u64,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct QuotaStat {
+    pub id: u64,
+    pub limits: QuotaStatLimits,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct QuotaStatOsd {
+    pub id: u64,
+    pub usage: QuotaStatUsage,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct QuotaStats {
+    pub kind: QuotaKind,
+    pub stats: Vec<QuotaStat>,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub struct QuotaStatsOsd {
+    pub kind: QuotaKind,
+    pub stats: Vec<QuotaStatOsd>,
+}
+
+#[derive(PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+pub enum QuotaKind {
+    Usr,
+    Grp,
+    Prj,
 }
 
 #[cfg(test)]
