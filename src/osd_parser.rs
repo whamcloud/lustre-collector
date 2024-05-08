@@ -5,7 +5,9 @@
 use crate::{
     base_parsers::{digits, param, period, target, till_newline, till_period},
     brw_stats_parser::brw_stats,
+    quota::quota_parser::quota_stats_osd,
     types::{BrwStats, Param, Record, Target, TargetStat, TargetStats, TargetVariant},
+    QuotaKind, QuotaStatsOsd,
 };
 use combine::{
     attempt, choice,
@@ -24,6 +26,10 @@ pub(crate) const FS_TYPE: &str = "fstype";
 
 pub(crate) const BRW_STATS: &str = "brw_stats";
 
+pub(crate) const QUOTA_ACCT_GRP: &str = "quota_slave.acct_group";
+pub(crate) const QUOTA_ACCT_USR: &str = "quota_slave.acct_user";
+pub(crate) const QUOTA_ACCT_PRJ: &str = "quota_slave.acct_project";
+
 pub(crate) fn params() -> Vec<String> {
     vec![
         format!("osd-*.*.{FILES_FREE}"),
@@ -33,6 +39,9 @@ pub(crate) fn params() -> Vec<String> {
         format!("osd-*.*.{KBYTES_FREE}"),
         format!("osd-*.*.{KBYTES_TOTAL}"),
         format!("osd-*.*.{BRW_STATS}"),
+        format!("osd-*.*.{QUOTA_ACCT_GRP}"),
+        format!("osd-*.*.{QUOTA_ACCT_USR}"),
+        format!("osd-*.*.{QUOTA_ACCT_PRJ}"),
     ]
 }
 
@@ -51,6 +60,7 @@ enum OsdStat {
     /// Total disk space
     KBytesTotal(u64),
     BrwStats(Vec<BrwStats>),
+    QuotaStats(QuotaStatsOsd),
 }
 
 fn target_and_variant<I>() -> impl Parser<I, Output = (Target, TargetVariant)>
@@ -107,6 +117,33 @@ where
             param(KBYTES_TOTAL),
             digits().skip(newline()).map(OsdStat::KBytesTotal),
         ),
+        (
+            param(QUOTA_ACCT_GRP),
+            quota_stats_osd().map(|stats| {
+                OsdStat::QuotaStats(QuotaStatsOsd {
+                    kind: QuotaKind::Grp,
+                    stats,
+                })
+            }),
+        ),
+        (
+            param(QUOTA_ACCT_PRJ),
+            quota_stats_osd().map(|stats| {
+                OsdStat::QuotaStats(QuotaStatsOsd {
+                    kind: QuotaKind::Prj,
+                    stats,
+                })
+            }),
+        ),
+        (
+            param(QUOTA_ACCT_USR),
+            quota_stats_osd().map(|stats| {
+                OsdStat::QuotaStats(QuotaStatsOsd {
+                    kind: QuotaKind::Usr,
+                    stats,
+                })
+            }),
+        ),
     ))
 }
 
@@ -154,6 +191,12 @@ where
                 value,
             }),
             OsdStat::BrwStats(value) => TargetStats::BrwStats(TargetStat {
+                kind,
+                target,
+                param,
+                value,
+            }),
+            OsdStat::QuotaStats(value) => TargetStats::QuotaStatsOsd(TargetStat {
                 kind,
                 target,
                 param,
