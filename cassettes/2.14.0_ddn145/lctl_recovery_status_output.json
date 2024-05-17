@@ -1,0 +1,1 @@
+{"command":"lctl","args":["get_param","-N","obdfilter.*OST*.recovery_status","mdt.*MDT*.recovery_status"],"stdout":"obdfilter.fs-OST0000.recovery_status\nobdfilter.fs-OST0001.recovery_status\nmdt.fs-MDT0000.recovery_status\n","stderr":""}ection closed by UNKNOWN port 65535\r\n"}

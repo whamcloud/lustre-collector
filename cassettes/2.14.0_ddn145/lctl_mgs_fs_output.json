@@ -1,0 +1,1 @@
+{"command":"lctl","args":["get_param","-N","mgs.*.live.*"],"stdout":"mgs.MGS.live.fs\nmgs.MGS.live.params\n","stderr":""}is.whamcloud.int: nodename nor servname provided, or not known\r\nConnection closed by UNKNOWN port 65535\r\n"}
