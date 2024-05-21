@@ -1,8 +1,8 @@
 # Lustre Collector
 
-![rust](https://github.com/whamcloud/lustre-collector/workflows/rust/badge.svg?branch=master)
+## This Repo has Moved!
 
-![Crates.io](https://img.shields.io/crates/v/lustre_collector) ![docs.rs](https://docs.rs/lustre_collector/badge.svg)
+This repo is now part of [LustreFS Exporter](https://github.com/whamcloud/lustrefs-exporter)
 
 This repo provides a parsed representation of common Lustre statistics.
 
